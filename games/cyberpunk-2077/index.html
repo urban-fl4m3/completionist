@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cyberpunk 2077 — Completionist</title>
-<meta name="description" content="Цели комплишениста по Cyberpunk 2077: сюжет, Phantom Liberty, фиксеры и коллекционные предметы.">
+<meta name="description" content="Разбор прохождения Cyberpunk 2077: боссы, маршрут по актам, концовки и цели комплишениста с пометкой душного контента.">
 <meta name="theme-color" content="#07070a">
 
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://static.wikia.nocookie.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap">
 <link rel="stylesheet" href="../../assets/css/base.css">
 <link rel="stylesheet" href="style.css">
@@ -29,89 +30,331 @@
   </defs>
 </svg>
 
-<a class="back" href="../../">
-  <span aria-hidden="true">&lt;&lt;</span> EXIT_TO_COLLECTION
-</a>
+<a class="back" href="../../"><span aria-hidden="true">&lt;&lt;</span> EXIT</a>
 
-<!-- ========================= HUD-шапка ========================= -->
-<header class="hud">
-  <div class="hud__frame">
-    <span class="hud__corner hud__corner--tl" aria-hidden="true"></span>
-    <span class="hud__corner hud__corner--tr" aria-hidden="true"></span>
-    <span class="hud__corner hud__corner--bl" aria-hidden="true"></span>
-    <span class="hud__corner hud__corner--br" aria-hidden="true"></span>
+<!-- ======================= Шапка во весь экран ======================= -->
+<header class="deck">
+  <div class="deck__art" aria-hidden="true"></div>
 
-    <!-- Кадр из игры как картинка на мониторе -->
-    <div class="hud__feed" aria-hidden="true">
-      <span class="hud__feed-label">// VISUAL FEED</span>
-    </div>
-
-    <p class="hud__tag">
-      <span class="hud__dot" aria-hidden="true"></span>
-      STATUS: IN_PROGRESS
+  <div class="deck__inner">
+    <p class="deck__tag">
+      <span class="deck__dot" aria-hidden="true"></span> STATUS: IN_PROGRESS
     </p>
 
-    <div class="hud__logo" data-logo></div>
+    <div class="deck__logo" data-logo></div>
     <h1 class="glitch" data-text="CYBERPUNK 2077">
       <span>CYBERPUNK</span><b>2077</b>
     </h1>
 
-    <p class="hud__sub">CD PROJEKT RED // 2020 // PC</p>
+    <p class="deck__sub">CD PROJEKT RED // 2020 // PC // ИДЁТ ВТОРОЙ АКТ</p>
 
-    <nav class="hud__links" data-links aria-label="Ссылки по игре"></nav>
+    <nav class="deck__links" data-links aria-label="Ссылки по игре"></nav>
 
-    <div class="hud__grid">
-      <!-- Левая колонка: телеметрия -->
-      <dl class="telemetry">
-        <div><dt>TIME_PLAYED</dt><dd>61<span>h</span></dd></div>
-        <div><dt>RATING</dt><dd>9<span>/10</span></dd></div>
-        <div><dt>STARTED</dt><dd>04.09.26</dd></div>
-        <div><dt>STREET_CRED</dt><dd>43<span>/60</span></dd></div>
-      </dl>
-
-      <!-- Правая колонка: кольцо -->
-      <div class="meter">
-        <div class="meter__ring" data-ring data-ring-size="178" data-ring-width="5"></div>
-        <div class="meter__core">
-          <span class="meter__pct" data-progress-pct>0</span>
-          <span class="meter__unit">% COMPLETE</span>
-          <span class="meter__sub">
-            <b data-progress-done>0</b>/<span data-progress-total>0</span> OBJECTIVES
-          </span>
+    <!-- Сводка прогресса -->
+    <div class="hud">
+      <div class="hud__ring">
+        <div data-ring data-ring-size="132" data-ring-width="5"></div>
+        <div class="hud__core">
+          <span class="hud__pct" data-progress-pct>0</span>
+          <span class="hud__unit">%</span>
         </div>
       </div>
-    </div>
 
-    <p class="hud__note">// Идёт второй акт. Phantom Liberty ещё не трогал.</p>
+      <dl class="hud__stats">
+        <div>
+          <dt>Обязательных целей</dt>
+          <dd><b data-progress-done>0</b> / <span data-progress-total>0</span></dd>
+        </div>
+        <div>
+          <dt>Стоит того</dt>
+          <dd data-count-worth>0/0</dd>
+        </div>
+        <div class="is-grind">
+          <dt>Душнина</dt>
+          <dd data-count-grind>0/0</dd>
+        </div>
+        <div>
+          <dt>Наиграно</dt>
+          <dd>61<span>ч</span></dd>
+        </div>
+      </dl>
+    </div>
   </div>
 </header>
 
-<!-- ========================= Контракты ========================= -->
-<main class="deck">
-  <div class="deck__head">
-    <h2 class="deck__title">
-      <span aria-hidden="true">▚</span> OBJECTIVE_LIST
-    </h2>
+<main class="net">
 
-    <div class="deck__tools">
-      <span class="local" data-local-badge hidden>
-        <i aria-hidden="true"></i>UNSAVED_LOCAL
-      </span>
-      <button type="button" class="btn" data-export>COPY_STATE</button>
-      <button type="button" class="btn btn--ghost" data-reset>RESET</button>
+  <!-- ======================= Как закрыть игру ======================= -->
+  <section class="brief" id="brief">
+    <h2 class="h"><span aria-hidden="true">▚</span> КАК ЗАКРЫТЬ ИГРУ</h2>
+
+    <div class="brief__grid">
+      <article class="note note--ok">
+        <h3>Каноничная сложность</h3>
+        <p>
+          <b>Hard.</b> Боевая система после патча 2.0 держит баланс именно на
+          нём: билды имеют смысл, враги не губки. Very Hard превращает ранний
+          акт в перестрелки из-за угла и ничего не добавляет к сюжету.
+        </p>
+      </article>
+
+      <article class="note note--must">
+        <h3>Что обязательно</h3>
+        <p>
+          Основной сюжет, <b>Phantom Liberty</b> и линии Джонни, Джуди, Панам и
+          Ривера. Это не «сайды» — именно они дают концовки и лучшие сцены игры.
+        </p>
+      </article>
+
+      <article class="note note--grind">
+        <h3>Что душно</h3>
+        <p>
+          Точки NCPD (их больше сотни, и они копируют друг друга), скупка всех
+          машин у Autofixer и выбивание 100% ачивок. На прохождение не влияет —
+          помечено как душнина и пропускается без потерь.
+        </p>
+      </article>
     </div>
-  </div>
+  </section>
 
-  <div class="deck__bar" aria-hidden="true">
-    <div class="deck__fill" data-progress-bar></div>
-  </div>
+  <!-- ========================== База боссов ========================== -->
+  <section class="dossier" id="bosses">
+    <h2 class="h"><span aria-hidden="true">▚</span> БАЗА ДАННЫХ: БОССЫ</h2>
+    <p class="h__sub">
+      Восемь боёв на всю игру, и больше половины можно вообще не увидеть —
+      они зависят от диалогов. Обязательные помечены красным.
+    </p>
 
-  <div class="deck__body" data-goals></div>
+    <div class="roster">
+
+      <article class="unit" data-kind="optional">
+        <div class="unit__shot">
+          <img src="https://static.wikia.nocookie.net/cyberpunk/images/c/c3/Royce_Database_CP2077.png/revision/latest/scale-to-width-down/420"
+               alt="Ройс" loading="lazy" decoding="async">
+          <span class="unit__no">01</span>
+        </div>
+        <div class="unit__body">
+          <h3 class="unit__name">Ройс <i>Royce</i></h3>
+          <p class="unit__quest">The Pickup · Акт 1</p>
+          <p class="unit__text">
+            Главарь Мальстрёма в заводе Всёсвято. Боя не будет, если заплатить
+            своими эдди или договориться через Мередит Стаут.
+          </p>
+          <a class="unit__link" href="https://cyberpunk.fandom.com/wiki/Simon_Randall"
+             target="_blank" rel="noopener noreferrer">Досье</a>
+        </div>
+        <span class="unit__flag">можно избежать</span>
+      </article>
+
+      <article class="unit" data-kind="optional">
+        <div class="unit__shot">
+          <img src="https://static.wikia.nocookie.net/cyberpunk/images/4/49/OswaldWoodmanForrest_Database_CP2077.png/revision/latest/scale-to-width-down/420"
+               alt="Вудман" loading="lazy" decoding="async">
+          <span class="unit__no">02</span>
+        </div>
+        <div class="unit__body">
+          <h3 class="unit__name">Вудман <i>Woodman</i></h3>
+          <p class="unit__quest">Automatic Love · Акт 2</p>
+          <p class="unit__text">
+            Управляющий «Клоуз-ап». Дерётся, только если выбрать агрессивную
+            реплику вместо того, чтобы купить информацию.
+          </p>
+          <a class="unit__link" href="https://cyberpunk.fandom.com/wiki/Oswald_Forrest"
+             target="_blank" rel="noopener noreferrer">Досье</a>
+        </div>
+        <span class="unit__flag">можно избежать</span>
+      </article>
+
+      <article class="unit" data-kind="required">
+        <div class="unit__shot">
+          <img src="https://static.wikia.nocookie.net/cyberpunk/images/9/97/Sasquatchrender.jpeg/revision/latest/scale-to-width-down/420"
+               alt="Саскватч" loading="lazy" decoding="async">
+          <span class="unit__no">03</span>
+        </div>
+        <div class="unit__body">
+          <h3 class="unit__name">Саскватч <i>Matilda K. Rose</i></h3>
+          <p class="unit__quest">I Walk the Line · Акт 2</p>
+          <p class="unit__text">
+            Вождь Животных в «Тоталимморталь». Бой неизбежен. Молот за спиной —
+            её слабое место: выстрел туда снимает броню.
+          </p>
+          <a class="unit__link" href="https://cyberpunk.fandom.com/wiki/Matilda_K._Rose"
+             target="_blank" rel="noopener noreferrer">Досье</a>
+        </div>
+        <span class="unit__flag">обязательный</span>
+      </article>
+
+      <article class="unit" data-kind="optional">
+        <div class="unit__shot">
+          <img src="https://static.wikia.nocookie.net/cyberpunk/images/0/01/Placiderender.png/revision/latest/scale-to-width-down/420"
+               alt="Пласид" loading="lazy" decoding="async">
+          <span class="unit__no">04</span>
+        </div>
+        <div class="unit__body">
+          <h3 class="unit__name">Пласид <i>Placide</i></h3>
+          <p class="unit__quest">Transmission · Акт 2</p>
+          <p class="unit__text">
+            Второй в Вудуистах. Станет врагом или нет — решает выбор насчёт
+            агента NetWatch этажом выше.
+          </p>
+          <a class="unit__link" href="https://cyberpunk.fandom.com/wiki/Placide"
+             target="_blank" rel="noopener noreferrer">Досье</a>
+        </div>
+        <span class="unit__flag">можно избежать</span>
+      </article>
+
+      <article class="unit" data-kind="required">
+        <div class="unit__shot">
+          <img src="https://static.wikia.nocookie.net/cyberpunk/images/1/16/Oda_Sandayu_Infobox_CP2077.png/revision/latest/scale-to-width-down/420"
+               alt="Ода" loading="lazy" decoding="async">
+          <span class="unit__no">05</span>
+        </div>
+        <div class="unit__body">
+          <h3 class="unit__name">Сандаю Ода <i>Oda</i></h3>
+          <p class="unit__quest">Play It Safe · Акт 2</p>
+          <p class="unit__text">
+            Телохранитель Ханако. Запускается автоматически, когда выдернешь
+            кабель из нетраннера. Его можно оставить в живых.
+          </p>
+          <a class="unit__link" href="https://cyberpunk.fandom.com/wiki/Sandayu_Oda"
+             target="_blank" rel="noopener noreferrer">Досье</a>
+        </div>
+        <span class="unit__flag">обязательный</span>
+      </article>
+
+      <article class="unit unit--final" data-kind="required">
+        <div class="unit__shot">
+          <img src="https://static.wikia.nocookie.net/cyberpunk/images/7/78/Adam_Smasher_Database_CP2077.png/revision/latest/scale-to-width-down/420"
+               alt="Адам Смэшер" loading="lazy" decoding="async">
+          <span class="unit__no">06</span>
+        </div>
+        <div class="unit__body">
+          <h3 class="unit__name">Адам Смэшер</h3>
+          <p class="unit__quest">Финал · зависит от концовки</p>
+          <p class="unit__text">
+            Полный борг «Арасаки» и убийца Джонни. Встречается в финале любого
+            маршрута — конкретная арена зависит от выбранной концовки.
+          </p>
+          <a class="unit__link" href="https://cyberpunk.fandom.com/wiki/Adam_Smasher"
+             target="_blank" rel="noopener noreferrer">Досье</a>
+        </div>
+        <span class="unit__flag">финальный</span>
+      </article>
+
+      <article class="unit unit--dlc" data-kind="required">
+        <div class="unit__shot">
+          <img src="https://static.wikia.nocookie.net/cyberpunk/images/5/54/Screenshot_008_CP2077PL.jpeg/revision/latest/scale-to-width-down/420"
+               alt="Химера" loading="lazy" decoding="async">
+          <span class="unit__no">07</span>
+        </div>
+        <div class="unit__body">
+          <h3 class="unit__name">Химера <i>Militech Chimera</i></h3>
+          <p class="unit__quest">Phantom Liberty</p>
+          <p class="unit__text">
+            Танк с ИИ и первый обязательный босс дополнения. Бой идёт по фазам,
+            между ними надо разрывать дистанцию.
+          </p>
+          <a class="unit__link" href="https://cyberpunk.fandom.com/wiki/Militech_Chimera"
+             target="_blank" rel="noopener noreferrer">Досье</a>
+        </div>
+        <span class="unit__flag">обязательный</span>
+      </article>
+
+      <article class="unit unit--dlc" data-kind="required">
+        <div class="unit__shot">
+          <img src="https://static.wikia.nocookie.net/cyberpunk/images/1/11/Screenshot_005_CP2077PL.jpeg/revision/latest/scale-to-width-down/420"
+               alt="Курт Хансен" loading="lazy" decoding="async">
+          <span class="unit__no">08</span>
+        </div>
+        <div class="unit__body">
+          <h3 class="unit__name">Курт Хансен</h3>
+          <p class="unit__quest">Phantom Liberty · Догтаун</p>
+          <p class="unit__text">
+            Хозяин Догтауна. Нашпигован военной имплантацией, так что
+            нетраннерские приёмы против него работают плохо.
+          </p>
+          <a class="unit__link" href="https://cyberpunk.fandom.com/wiki/Kurt_Hansen"
+             target="_blank" rel="noopener noreferrer">Досье</a>
+        </div>
+        <span class="unit__flag">обязательный</span>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============================ Маршрут ============================ -->
+  <section class="route" id="route">
+    <h2 class="h"><span aria-hidden="true">▚</span> МАРШРУТ</h2>
+    <p class="h__sub">
+      Порядок, в котором игру стоит закрывать, чтобы не упереться в точку
+      невозврата с незакрытыми линиями.
+    </p>
+
+    <ol class="path">
+      <li class="path__step is-done">
+        <span class="path__num">I</span>
+        <div>
+          <h3>Акт 1 — Пролог</h3>
+          <p>Пролог за выбранную предысторию, «Налёт» и The Pickup. Короткий
+          акт, развилок почти нет.</p>
+        </div>
+      </li>
+      <li class="path__step is-active">
+        <span class="path__num">II</span>
+        <div>
+          <h3>Акт 2 — Найт-Сити</h3>
+          <p>Основной объём игры. <b>Здесь надо закрыть линии Джуди, Панам,
+          Ривера и Керри</b> — после точки невозврата они станут недоступны,
+          а без них часть концовок не откроется.</p>
+        </div>
+      </li>
+      <li class="path__step">
+        <span class="path__num">PL</span>
+        <div>
+          <h3>Phantom Liberty</h3>
+          <p>Отдельная сюжетная ветка в Догтауне. Запускается из акта 2 и даёт
+          собственную развилку с двумя концовками.</p>
+        </div>
+      </li>
+      <li class="path__step">
+        <span class="path__num">III</span>
+        <div>
+          <h3>Точка невозврата</h3>
+          <p>«Ночной город» закрывает побочки. Перед входом игра честно
+          предупреждает — это момент выбрать концовку.</p>
+        </div>
+      </li>
+      <li class="path__step">
+        <span class="path__num">END</span>
+        <div>
+          <h3>Концовки</h3>
+          <p>Маршруты через Панам, Ханако, Роуг и одиночку плюс секретная,
+          которая открывается только при максимуме отношений с Джонни.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============================== Цели ============================== -->
+  <section class="objectives" id="goals">
+    <h2 class="h"><span aria-hidden="true">▚</span> ЦЕЛИ</h2>
+    <p class="h__sub">
+      Процент считается только по обязательным. «Стоит того» и «душнина»
+      на него не влияют.
+    </p>
+
+    <div class="objectives__bar" aria-hidden="true">
+      <div class="objectives__fill" data-progress-bar></div>
+    </div>
+
+    <div data-goals></div>
+  </section>
+
 </main>
 
 <footer class="foot">
-  <span>COMPLETIONIST_OS v1.0</span>
-  <a href="../../">&lt;&lt; RETURN</a>
+  <span>COMPLETIONIST_OS</span>
+  <a href="../../">&lt;&lt; К КОЛЛЕКЦИИ</a>
 </footer>
 
 <script src="../../data/games.js"></script>

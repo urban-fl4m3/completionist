@@ -86,23 +86,32 @@ input, select { font: inherit; color: inherit; }
 
 .g-list { display: grid; gap: 0.5rem; }
 
-/* Цель — это строка: кнопка-переключатель, метка «бонус» и ссылка.
-   Ссылка лежит СНАРУЖИ кнопки: <a> внутри <button> невалиден. */
+/* Цель — статическая строка: индикатор, текст, метка и ссылка.
+   Кликать нечего: состояние приходит из data/games.js. */
 .g-goal {
   display: flex;
-  align-items: stretch;
-  gap: 0.2rem;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 0.8rem 1rem;
 }
 
-.g-goal__toggle {
+.g-goal__state {
+  display: block;
+  flex: none;
+  margin-top: 0.1rem;
+}
+
+.g-goal__body {
   display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: start;
-  gap: 0.9rem;
+  gap: 0.2rem;
   flex: 1 1 auto;
   min-width: 0;
-  padding: 0.85rem 1rem;
-  text-align: left;
+}
+
+/* Совместимость: часть страниц ещё оформляет строку
+   через .g-goal__toggle. */
+.g-goal__toggle {
+  display: contents;
 }
 
 /* Ссылка на вики/гайд по этой цели. */
@@ -159,8 +168,6 @@ input, select { font: inherit; color: inherit; }
   opacity: 1;
   transform: scale(1);
 }
-
-.g-goal__body { display: grid; gap: 0.2rem; min-width: 0; }
 
 .g-goal__title {
   display: block;

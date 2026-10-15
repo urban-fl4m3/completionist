@@ -1,17 +1,20 @@
 /*  ============================================================
- *  CYBERPUNK 2077 — неон, глитч, сканлайны, терминал
+ *  CYBERPUNK 2077 — сетевой терминал Найт-Сити
+ *  ------------------------------------------------------------
+ *  Страница построена как база данных, а не как карточка игры:
+ *  шапка во весь экран, досье боссов, маршрут и цели.
  *  ============================================================ */
 
 :root {
-  --yellow: #fcee0a;
-  --cyan:   #00f0ff;
-  --magenta:#ff0055;
-  --bg:     #07070a;
-  --bg-2:   #0c0c12;
-  --panel:  rgba(252, 238, 10, 0.035);
-  --text:   #d6dde3;
-  --muted:  #78818d;
-  --faint:  #4a525c;
+  --yellow:  #fcee0a;
+  --cyan:    #00f0ff;
+  --magenta: #ff0055;
+  --bg:      #07070a;
+  --bg-2:    #0c0c12;
+  --text:    #d6dde3;
+  --muted:   #78818d;
+  --faint:   #4a525c;
+  --shell:   1240px;
 }
 
 body {
@@ -25,13 +28,7 @@ body {
 
 /*  ---------- Атмосфера ------------------------------------- */
 
-#rain {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  opacity: 0.5;
-  pointer-events: none;
-}
+#rain { position: fixed; inset: 0; z-index: 0; opacity: 0.4; pointer-events: none; }
 
 .glow {
   position: fixed;
@@ -39,23 +36,19 @@ body {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(800px 500px at 82% -4%, rgba(0, 240, 255, 0.16), transparent 62%),
-    radial-gradient(760px 520px at 8% 8%,  rgba(252, 238, 10, 0.11), transparent 62%),
-    radial-gradient(900px 600px at 50% 110%, rgba(255, 0, 85, 0.12), transparent 64%),
+    radial-gradient(800px 500px at 82% -4%, rgba(0, 240, 255, 0.14), transparent 62%),
+    radial-gradient(760px 520px at 8% 8%,  rgba(252, 238, 10, 0.1), transparent 62%),
+    radial-gradient(900px 600px at 50% 110%, rgba(255, 0, 85, 0.1), transparent 64%),
     linear-gradient(180deg, var(--bg-2), var(--bg));
 }
 
-/* Горизонтальные сканлайны + медленный сдвиг развёртки. */
 .scanlines {
   position: fixed;
   inset: 0;
   z-index: 60;
   pointer-events: none;
   background: repeating-linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0) 0 2px,
-    rgba(0, 0, 0, 0.26) 2px 4px
-  );
+    180deg, rgba(0, 0, 0, 0) 0 2px, rgba(0, 0, 0, 0.22) 2px 4px);
   mix-blend-mode: multiply;
 }
 
@@ -63,9 +56,9 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg,
-    transparent 0%, rgba(0, 240, 255, 0.045) 50%, transparent 100%);
   height: 40%;
+  background: linear-gradient(180deg,
+    transparent, rgba(0, 240, 255, 0.04) 50%, transparent);
   animation: sweep 7s linear infinite;
 }
 
@@ -74,67 +67,62 @@ body {
   to   { transform: translateY(360%); }
 }
 
-/*  ---------- Навигация ------------------------------------- */
-
 .back {
   position: fixed;
   left: clamp(12px, 3vw, 28px);
   top: clamp(12px, 3vw, 24px);
   z-index: 70;
-  padding: 0.4rem 0.85rem;
+  padding: 0.4rem 0.9rem;
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-decoration: none;
   color: var(--bg);
   background: var(--yellow);
-  clip-path: polygon(0 0, 100% 0, 100% 68%, 93% 100%, 0 100%);
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  clip-path: polygon(0 0, 100% 0, 100% 68%, 92% 100%, 0 100%);
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
-.back:hover {
-  background: var(--cyan);
-  box-shadow: 0 0 24px rgba(0, 240, 255, 0.7);
-}
+.back:hover { background: var(--cyan); box-shadow: 0 0 24px rgba(0, 240, 255, 0.7); }
 
-/*  ---------- HUD-шапка ------------------------------------- */
+/*  ---------- Шапка во весь экран --------------------------- */
 
-.hud {
+.deck {
   position: relative;
+  /* Свой контекст наложения: иначе кадр с z-index ниже нуля
+     уходит под фоновый слой .glow. */
   z-index: 3;
-  padding: clamp(4.5rem, 11vh, 7rem) clamp(16px, 5vw, 40px) clamp(2rem, 5vw, 3.5rem);
+  display: grid;
+  align-content: center;
+  min-height: 92vh;
+  padding: clamp(5rem, 12vh, 8rem) clamp(16px, 5vw, 48px) clamp(3rem, 7vh, 5rem);
 }
 
-.hud__frame {
-  position: relative;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: clamp(1.6rem, 4vw, 2.8rem);
-  background:
-    linear-gradient(135deg, rgba(252, 238, 10, 0.045), transparent 55%),
-    rgba(7, 7, 10, 0.62);
-  border: 1px solid rgba(252, 238, 10, 0.26);
-  backdrop-filter: blur(3px);
-}
-
-/*  ---------- Кадр из игры как «видеопоток» ----------------
- *  Арт приходит как --art-hero. Прогоняем его через
- *  хроматический сдвиг и сканлайны, чтобы он выглядел
- *  картинкой с монитора, а не вставленной иллюстрацией.
- * --------------------------------------------------------- */
-
-.hud__feed {
-  position: relative;
-  margin-bottom: 1.4rem;
-  aspect-ratio: 32 / 9;
-  overflow: hidden;
+/* Кадр из игры во всю шапку. */
+.deck__art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   background-image: var(--art-hero, none);
   background-size: cover;
-  background-position: center 32%;
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  filter: contrast(1.15) saturate(1.25) brightness(0.8);
+  /* library_hero скомпонован с героем справа и пустым центром
+     под интерфейс библиотеки Steam — прижимаем кадр вправо. */
+  background-position: 86% 32%;
+  filter: contrast(1.08) saturate(1.25) brightness(0.72);
+  mask-image: linear-gradient(180deg, #000 38%, transparent 96%);
+  -webkit-mask-image: linear-gradient(180deg, #000 38%, transparent 96%);
   opacity: 0;
-  animation: feedIn 1.3s steps(5) 0.2s forwards;
+  animation: feedIn 1.4s steps(5) 0.2s forwards;
+}
+
+.deck__art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Затемняем левую треть под текст, но не гасим кадр целиком. */
+  background:
+    linear-gradient(90deg, rgba(7, 7, 10, 0.88) 8%, rgba(7, 7, 10, 0.25) 46%, transparent 68%),
+    linear-gradient(180deg, transparent 50%, rgba(7, 7, 10, 0.92));
 }
 
 @keyframes feedIn {
@@ -142,55 +130,65 @@ body {
   to   { opacity: 1; transform: none; }
 }
 
-/* Жёлто-бирюзовая засветка поверх кадра. */
-.hud__feed::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(252, 238, 10, 0.16), transparent 42%),
-    linear-gradient(270deg, rgba(0, 240, 255, 0.2), transparent 48%),
-    linear-gradient(180deg, transparent 55%, rgba(7, 7, 10, 0.92));
+.deck__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--shell);
+  margin: 0 auto;
 }
 
-/* Собственные сканлайны «монитора». */
-.hud__feed::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    180deg, rgba(0, 0, 0, 0.34) 0 1px, transparent 1px 3px);
-}
-
-.hud__feed-label {
-  position: absolute;
-  left: 0.6rem;
-  bottom: 0.45rem;
-  z-index: 2;
+.deck__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+  padding: 0.22rem 0.7rem;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  color: var(--cyan);
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.9);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--bg);
+  background: var(--yellow);
 }
 
-/* Нет арта — прячем «монитор», а не показываем пустую рамку. */
-.hud__feed { display: none; }
-body.has-art .hud__feed { display: block; }
+.deck__dot {
+  width: 7px;
+  height: 7px;
+  background: var(--magenta);
+  animation: blink 1.3s steps(2) infinite;
+}
 
-/*  ---------- Логотип --------------------------------------- */
+@keyframes blink { 50% { opacity: 0.15; } }
 
-.hud__logo { display: none; }
+.deck__logo { display: none; }
 
-body.has-logo .hud__logo {
+body.has-logo .deck__logo {
   display: block;
-  max-width: min(520px, 76vw);
-  margin-bottom: 0.3rem;
+  max-width: min(560px, 80vw);
+  margin-bottom: 0.4rem;
   animation: feedIn 1s steps(4) 0.35s backwards;
 }
 
-body.has-logo .hud__logo .game-logo {
-  filter: drop-shadow(0 0 26px rgba(252, 238, 10, 0.45));
+body.has-logo .deck__logo .game-logo {
+  filter: drop-shadow(0 0 30px rgba(252, 238, 10, 0.45));
+}
+
+.glitch {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.45em;
+  font-size: clamp(2.2rem, 7vw, 4.4rem);
+  font-weight: 700;
+  line-height: 0.95;
+  color: var(--text);
+}
+
+.glitch b {
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 400;
+  color: var(--yellow);
 }
 
 body.has-logo .glitch {
@@ -199,12 +197,422 @@ body.has-logo .glitch {
   height: 1px;
   overflow: hidden;
   clip-path: inset(50%);
-  white-space: nowrap;
 }
 
-/*  ---------- Ссылки по игре -------------------------------- */
+.deck__sub {
+  margin-top: 0.6rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
 
-.hud__links { margin-top: 1rem; }
+.deck__links { margin-top: 1.1rem; }
+
+/* --- Сводка прогресса --- */
+
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1.2rem, 3vw, 2.6rem);
+  margin-top: clamp(1.6rem, 4vh, 2.6rem);
+  padding: 1.1rem clamp(1rem, 2.5vw, 1.6rem);
+  background: rgba(7, 7, 10, 0.72);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-left: 3px solid var(--yellow);
+  backdrop-filter: blur(6px);
+}
+
+.hud__ring { position: relative; display: grid; place-items: center; flex: none; }
+
+.hud__ring .ring__track { stroke: rgba(0, 240, 255, 0.12); }
+
+.hud__ring .ring__value {
+  stroke: url(#cpGrad);
+  filter: drop-shadow(0 0 8px rgba(252, 238, 10, 0.65));
+}
+
+.hud__core {
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--yellow);
+}
+
+.hud__pct { font-size: 2.1rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.hud__unit { font-size: 0.8rem; color: var(--muted); }
+
+.hud__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 1rem 1.4rem;
+  flex: 1 1 320px;
+}
+
+.hud__stats dt {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.hud__stats dd {
+  margin: 0.15rem 0 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cyan);
+  font-variant-numeric: tabular-nums;
+}
+
+.hud__stats dd b { color: var(--yellow); }
+.hud__stats dd span { font-size: 0.55em; color: var(--faint); }
+.hud__stats .is-grind dd { color: var(--magenta); }
+
+/*  ---------- Общая сетка контента -------------------------- */
+
+.net {
+  position: relative;
+  z-index: 3;
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 5vw, 48px);
+}
+
+.net > section { margin-bottom: clamp(3rem, 8vh, 5rem); }
+
+.h {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.05rem;
+  letter-spacing: 0.16em;
+  color: var(--yellow);
+}
+
+.h span { color: var(--magenta); }
+
+.h__sub {
+  max-width: 62ch;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/*  ---------- Разбор: как закрыть игру ---------------------- */
+
+.brief__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+}
+
+.note {
+  padding: 1.1rem 1.2rem;
+  background: rgba(255, 255, 255, 0.022);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 2px solid var(--nc, var(--muted));
+}
+
+.note h3 {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nc, var(--muted));
+}
+
+.note p { margin-top: 0.5rem; font-size: 0.97rem; color: var(--muted); }
+.note p b { color: var(--text); }
+
+.note--ok    { --nc: var(--cyan); }
+.note--must  { --nc: var(--yellow); }
+.note--grind { --nc: var(--magenta); }
+
+/*  ---------- Досье боссов ---------------------------------- */
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+}
+
+.unit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.022);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.unit:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.9),
+              0 0 36px -14px rgba(0, 240, 255, 0.5);
+}
+
+.unit__shot {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(150deg, #14141d, #08080c);
+}
+
+.unit__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  filter: contrast(1.08) saturate(1.1);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.unit:hover .unit__shot img { transform: scale(1.06); }
+
+/* Затемнение снизу, чтобы номер и имя читались. */
+.unit__shot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(7, 7, 10, 0.9));
+}
+
+.unit__no {
+  position: absolute;
+  left: 0.6rem;
+  bottom: 0.4rem;
+  z-index: 2;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.5rem;
+  color: rgba(252, 238, 10, 0.75);
+}
+
+.unit__body { display: grid; gap: 0.35rem; padding: 0.9rem 1rem 1.1rem; }
+
+.unit__name { font-size: 1.15rem; font-weight: 700; color: var(--text); }
+
+.unit__name i {
+  font-style: normal;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+}
+
+.unit__quest {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+}
+
+.unit__text { font-size: 0.92rem; line-height: 1.5; color: var(--muted); }
+
+.unit__link {
+  justify-self: start;
+  margin-top: 0.2rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--yellow);
+  border-bottom: 1px solid rgba(252, 238, 10, 0.35);
+  transition: color 0.25s, border-color 0.25s;
+}
+
+.unit__link:hover { color: var(--cyan); border-color: var(--cyan); }
+
+.unit__flag {
+  position: absolute;
+  right: 0;
+  top: 0.7rem;
+  padding: 0.18rem 0.6rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--muted);
+}
+
+.unit[data-kind='required'] .unit__flag { background: var(--magenta); color: #fff; }
+.unit[data-kind='optional'] .unit__flag { background: var(--faint); }
+
+.unit--final { border-color: rgba(252, 238, 10, 0.35); }
+.unit--final .unit__flag { background: var(--yellow); color: var(--bg); }
+.unit--dlc .unit__quest { color: var(--magenta); }
+
+/*  ---------- Маршрут --------------------------------------- */
+
+.path {
+  display: grid;
+  gap: 0;
+  margin-top: 1.4rem;
+  padding-left: 0;
+}
+
+.path__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.1rem;
+  padding: 1rem 0 1.2rem 0;
+}
+
+/* Вертикальная линия маршрута. */
+.path__step::before {
+  content: '';
+  position: absolute;
+  left: 21px;
+  top: 2.9rem;
+  bottom: -0.3rem;
+  width: 1px;
+  background: rgba(0, 240, 255, 0.22);
+}
+
+.path__step:last-child::before { display: none; }
+
+.path__num {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--faint);
+  background: rgba(7, 7, 10, 0.9);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  border-radius: 50%;
+}
+
+.path__step.is-done .path__num {
+  color: var(--bg);
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.path__step.is-active .path__num {
+  color: var(--bg);
+  background: var(--yellow);
+  border-color: var(--yellow);
+  box-shadow: 0 0 22px rgba(252, 238, 10, 0.55);
+}
+
+.path__step h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.path__step.is-active h3 { color: var(--yellow); }
+
+.path__step p {
+  margin-top: 0.25rem;
+  max-width: 68ch;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.path__step p b { color: var(--text); }
+
+/*  ---------- Цели ------------------------------------------ */
+
+.objectives__bar {
+  height: 4px;
+  margin: 1.3rem 0 1.8rem;
+  background: rgba(0, 240, 255, 0.1);
+}
+
+.objectives__fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--cyan), var(--yellow));
+  box-shadow: 0 0 14px rgba(252, 238, 10, 0.75);
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.g-group__head {
+  padding: 0.35rem 0.7rem;
+  background: rgba(0, 240, 255, 0.06);
+  border-left: 3px solid var(--cyan);
+}
+
+.g-group__name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+}
+
+.g-group__count { font-family: 'Share Tech Mono', monospace; color: var(--faint); }
+.g-group__count b { color: var(--yellow); }
+
+.g-list { gap: 0.25rem; }
+
+.g-goal {
+  background: rgba(255, 255, 255, 0.016);
+  border-left: 2px solid rgba(120, 129, 141, 0.25);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.g-goal:hover { background: rgba(0, 240, 255, 0.04); }
+
+/* Квадратный «сокет» состояния. */
+.g-goal__box {
+  display: grid;
+  place-items: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--bg);
+  border: 1px solid rgba(120, 129, 141, 0.5);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 76% 100%, 0 100%);
+}
+
+.g-goal.is-done .g-goal__box {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  box-shadow: 0 0 14px rgba(252, 238, 10, 0.7);
+}
+
+.g-goal.is-done { border-left-color: var(--yellow); }
+
+.g-goal__title { font-size: 1.02rem; font-weight: 600; }
+.g-goal.is-done .g-goal__title { color: var(--yellow); }
+
+.g-goal__note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.74rem;
+  color: var(--faint);
+}
+
+/* Градация целей: «стоит того» и «душнина» видны сразу. */
+.g-goal__flag {
+  font-family: 'Share Tech Mono', monospace;
+  border: 1px solid currentColor;
+}
+
+.g-goal__flag[data-tier='worth'] { color: var(--cyan); }
+.g-goal__flag[data-tier='grind'] { color: var(--magenta); }
+
+.g-goal[data-tier='grind'] { opacity: 0.62; }
+.g-goal[data-tier='grind'] .g-goal__title { font-weight: 500; }
+.g-goal[data-tier='grind']:hover { opacity: 1; }
+
+.g-goal__link { color: var(--faint); }
+.g-goal:hover .g-goal__link { color: var(--cyan); }
+.g-goal__link:hover { color: var(--bg); background: var(--cyan); }
+
+/*  ---------- Ссылки игры ----------------------------------- */
 
 .g-link {
   padding: 0.34rem 0.8rem;
@@ -222,7 +630,7 @@ body.has-logo .glitch {
 .g-link:hover {
   color: var(--bg);
   background: var(--cyan);
-  box-shadow: 0 0 22px rgba(0, 240, 255, 0.65);
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.6);
 }
 
 .g-link[data-kind='store'] {
@@ -231,418 +639,9 @@ body.has-logo .glitch {
   border-color: rgba(252, 238, 10, 0.4);
 }
 
-.g-link[data-kind='store']:hover {
-  color: var(--bg);
-  background: var(--yellow);
-  box-shadow: 0 0 22px rgba(252, 238, 10, 0.6);
-}
+.g-link[data-kind='store']:hover { color: var(--bg); background: var(--yellow); }
 
-/* Угловые скобки HUD. */
-.hud__corner {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--cyan);
-}
-
-.hud__corner--tl { left: -2px;  top: -2px;    border-width: 2px 0 0 2px; }
-.hud__corner--tr { right: -2px; top: -2px;    border-width: 2px 2px 0 0; }
-.hud__corner--bl { left: -2px;  bottom: -2px; border-width: 0 0 2px 2px; }
-.hud__corner--br { right: -2px; bottom: -2px; border-width: 0 2px 2px 0; }
-
-.hud__tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  margin-bottom: 1rem;
-  padding: 0.22rem 0.7rem;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  color: var(--bg);
-  background: var(--yellow);
-}
-
-.hud__dot {
-  width: 7px;
-  height: 7px;
-  background: var(--magenta);
-  animation: blink 1.3s steps(2) infinite;
-}
-
-@keyframes blink { 50% { opacity: 0.15; } }
-
-/* --- Глитч-заголовок --- */
-
-.glitch {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0 0.45em;
-  font-size: clamp(2.2rem, 8vw, 5rem);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.015em;
-  color: var(--text);
-}
-
-.glitch b {
-  font-family: 'Share Tech Mono', monospace;
-  font-weight: 400;
-  color: var(--yellow);
-  text-shadow: 0 0 22px rgba(252, 238, 10, 0.55);
-}
-
-/* Два смещённых цветных дубля — классическое RGB-расщепление. */
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  pointer-events: none;
-  opacity: 0.85;
-}
-
-.glitch::before {
-  color: var(--cyan);
-  animation: glitchA 3.6s steps(2, end) infinite;
-  clip-path: inset(0 0 58% 0);
-}
-
-.glitch::after {
-  color: var(--magenta);
-  animation: glitchB 4.3s steps(2, end) infinite;
-  clip-path: inset(62% 0 0 0);
-}
-
-@keyframes glitchA {
-  0%, 92%, 100% { transform: none; opacity: 0; }
-  93% { transform: translate(-3px, -2px); opacity: 0.8; }
-  96% { transform: translate(2px, 1px);   opacity: 0.6; }
-}
-
-@keyframes glitchB {
-  0%, 90%, 100% { transform: none; opacity: 0; }
-  91% { transform: translate(3px, 2px);  opacity: 0.75; }
-  95% { transform: translate(-2px, -1px); opacity: 0.5; }
-}
-
-.hud__sub {
-  margin-top: 0.7rem;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.16em;
-  color: var(--muted);
-}
-
-/* --- Сетка телеметрии --- */
-
-.hud__grid {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: clamp(1.5rem, 4vw, 3rem);
-  margin-top: clamp(1.6rem, 4vw, 2.4rem);
-  padding-top: clamp(1.4rem, 3vw, 2rem);
-  border-top: 1px solid rgba(0, 240, 255, 0.18);
-}
-
-.telemetry {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
-  gap: 1.1rem 1.4rem;
-}
-
-.telemetry dt {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.64rem;
-  letter-spacing: 0.14em;
-  color: var(--faint);
-}
-
-.telemetry dd {
-  margin: 0.1rem 0 0;
-  font-size: 1.7rem;
-  font-weight: 700;
-  line-height: 1.1;
-  color: var(--cyan);
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
-}
-
-.telemetry dd span {
-  font-size: 0.5em;
-  font-weight: 500;
-  color: var(--faint);
-  text-shadow: none;
-}
-
-/* --- Кольцо --- */
-
-.meter {
-  position: relative;
-  display: grid;
-  place-items: center;
-  flex: none;
-}
-
-.meter__ring .ring__track { stroke: rgba(0, 240, 255, 0.1); }
-
-.meter__ring .ring__value {
-  stroke: url(#cpGrad);
-  filter: drop-shadow(0 0 10px rgba(252, 238, 10, 0.7));
-}
-
-.meter__core {
-  position: absolute;
-  display: grid;
-  justify-items: center;
-  text-align: center;
-}
-
-.meter__pct {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 2.9rem;
-  line-height: 1;
-  color: var(--yellow);
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 26px rgba(252, 238, 10, 0.6);
-}
-
-.meter__unit {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  color: var(--muted);
-}
-
-.meter__sub {
-  margin-top: 0.35rem;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  color: var(--faint);
-}
-
-.meter__sub b { color: var(--cyan); }
-
-.hud__note {
-  margin-top: 1.4rem;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-/*  ---------- Список целей ---------------------------------- */
-
-.deck {
-  position: relative;
-  z-index: 3;
-  max-width: 1000px;
-  margin: 0 auto clamp(3rem, 8vw, 5rem);
-  padding: 0 clamp(16px, 5vw, 40px);
-}
-
-.deck__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.9rem;
-}
-
-.deck__title {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 1rem;
-  letter-spacing: 0.17em;
-  color: var(--yellow);
-}
-
-.deck__title span { color: var(--magenta); }
-
-.deck__tools {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-.local {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  color: var(--magenta);
-}
-
-.local i {
-  width: 6px;
-  height: 6px;
-  background: var(--magenta);
-  animation: blink 1s steps(2) infinite;
-}
-
-.btn {
-  padding: 0.38rem 0.85rem;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  color: var(--yellow);
-  background: transparent;
-  border: 1px solid rgba(252, 238, 10, 0.4);
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-}
-
-.btn:hover {
-  color: var(--bg);
-  background: var(--yellow);
-  box-shadow: 0 0 20px rgba(252, 238, 10, 0.5);
-}
-
-.btn.is-ok {
-  color: var(--bg);
-  background: var(--cyan);
-  border-color: var(--cyan);
-}
-
-.btn--ghost { color: var(--faint); border-color: rgba(120, 129, 141, 0.3); }
-
-.btn--ghost:hover {
-  color: var(--bg);
-  background: var(--muted);
-  box-shadow: none;
-}
-
-.deck__bar {
-  position: relative;
-  height: 4px;
-  margin-bottom: 2rem;
-  background: rgba(0, 240, 255, 0.1);
-  clip-path: polygon(0 0, 100% 0, 99.4% 100%, 0 100%);
-}
-
-.deck__fill {
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, var(--cyan), var(--yellow));
-  box-shadow: 0 0 14px rgba(252, 238, 10, 0.75);
-  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/*  ---------- Оформление целей ------------------------------ */
-
-.g-group { position: relative; }
-
-.g-group__head {
-  padding: 0.35rem 0.7rem;
-  background: rgba(0, 240, 255, 0.07);
-  border-left: 3px solid var(--cyan);
-}
-
-.g-group__name {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  color: var(--cyan);
-}
-
-.g-group__count {
-  font-family: 'Share Tech Mono', monospace;
-  color: var(--faint);
-}
-
-.g-group__count b { color: var(--yellow); }
-
-.g-list { gap: 0.3rem; }
-
-.g-goal__toggle {
-  position: relative;
-  padding: 0.7rem 0.9rem;
-  background: rgba(255, 255, 255, 0.018);
-  border-left: 2px solid rgba(120, 129, 141, 0.28);
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
-}
-
-.g-goal__toggle:hover {
-  background: rgba(0, 240, 255, 0.055);
-  border-left-color: var(--cyan);
-  transform: translateX(4px);
-}
-
-/* Квадратный «сокет» вместо чекбокса. */
-.g-goal__box {
-  width: 1.2rem;
-  height: 1.2rem;
-  margin-top: 0.15rem;
-  color: var(--bg);
-  border: 1px solid rgba(120, 129, 141, 0.5);
-  clip-path: polygon(0 0, 100% 0, 100% 72%, 76% 100%, 0 100%);
-  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
-}
-
-.g-goal.is-done .g-goal__box {
-  background: var(--yellow);
-  border-color: var(--yellow);
-  box-shadow: 0 0 16px rgba(252, 238, 10, 0.75);
-}
-
-.g-goal.is-done .g-goal__toggle { border-left-color: var(--yellow); }
-
-.g-goal__title {
-  font-size: 1.02rem;
-  font-weight: 600;
-  transition: color 0.25s;
-}
-
-.g-goal.is-done .g-goal__title { color: var(--yellow); }
-
-.g-goal__note {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.74rem;
-  color: var(--faint);
-}
-
-.g-goal__flag {
-  font-family: 'Share Tech Mono', monospace;
-  color: var(--magenta);
-  border: 1px solid rgba(255, 0, 85, 0.45);
-}
-
-/* Ссылка на вики у цели — как кнопка доступа к базе данных. */
-.g-goal__link {
-  color: var(--faint);
-  background: rgba(0, 240, 255, 0.04);
-}
-
-.g-goal:hover .g-goal__link { color: var(--cyan); }
-
-.g-goal__link:hover {
-  color: var(--bg);
-  background: var(--cyan);
-}
-
-/* Глитч-вспышка при закрытии цели (ставится из fx.js). */
-.g-goal.just-done .g-goal__toggle {
-  animation: glitchHit 0.42s steps(3) 1;
-}
-
-@keyframes glitchHit {
-  0%   { transform: translateX(4px);  filter: none; }
-  33%  { transform: translateX(-7px); filter: hue-rotate(80deg) saturate(2.5); }
-  66%  { transform: translateX(6px);  filter: invert(0.18); }
-  100% { transform: translateX(4px);  filter: none; }
-}
-
-/*  ---------- Подвал --------------------------------------- */
+/*  ---------- Подвал ---------------------------------------- */
 
 .foot {
   position: relative;
@@ -652,9 +651,9 @@ body.has-logo .glitch {
   align-items: center;
   justify-content: space-between;
   gap: 0.8rem;
-  max-width: 1000px;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 1.4rem clamp(16px, 5vw, 40px) clamp(2.5rem, 6vw, 4rem);
+  padding: 1.4rem clamp(16px, 5vw, 48px) clamp(2.5rem, 6vw, 4rem);
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.68rem;
   letter-spacing: 0.14em;
@@ -665,14 +664,12 @@ body.has-logo .glitch {
 .foot a { color: var(--yellow); text-decoration: none; }
 .foot a:hover { color: var(--cyan); }
 
-/*  ---------- Адаптив ------------------------------------- */
+/*  ---------- Адаптив --------------------------------------- */
 
-@media (max-width: 820px) {
-  .hud__grid { grid-template-columns: 1fr; justify-items: start; }
-  .meter { justify-self: center; }
-}
-
-@media (max-width: 560px) {
+@media (max-width: 620px) {
+  .deck { min-height: auto; }
   .glitch { font-size: clamp(1.9rem, 11vw, 3rem); }
-  .hud__corner { display: none; }
+  .roster { grid-template-columns: 1fr; }
+  .path__step { grid-template-columns: 1fr; gap: 0.5rem; }
+  .path__step::before { display: none; }
 }

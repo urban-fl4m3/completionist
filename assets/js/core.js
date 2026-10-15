@@ -11,8 +11,6 @@
 window.Completionist = (function () {
   'use strict';
 
-  var STORE_KEY = 'completionist:v1:progress';
-
   /* ---------- Статусы --------------------------------------- */
 
   var STATUSES = [
@@ -30,90 +28,79 @@ window.Completionist = (function () {
     return STATUS_MAP[id] || { id: id, label: id, verb: id, accent: '#8b90a3', order: 99 };
   }
 
-  /* ---------- Локальный слой отметок ------------------------
-   *  data/games.js — это «закоммиченная» правда. Галочки,
-   *  которые ты ставишь на сайте, живут в localStorage как
-   *  наложение сверху, чтобы ничего не терялось между
-   *  коммитами. Кнопка «Экспорт» на странице игры отдаёт их
-   *  в виде готового патча.
+  /* ---------- Состояние цели --------------------------------
+   *  Сайт НЕ интерактивный: отметки не ставятся мышкой и нигде
+   *  не хранятся в браузере. Единственный источник правды —
+   *  data/games.js, который обновляется по твоим отчётам.
    * --------------------------------------------------------- */
 
-  function readStore() {
-    try {
-      return JSON.parse(localStorage.getItem(STORE_KEY)) || {};
-    } catch (e) {
-      return {};
-    }
-  }
-
-  function writeStore(store) {
-    try {
-      localStorage.setItem(STORE_KEY, JSON.stringify(store));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function overlayFor(slug) {
-    var store = readStore();
-    return store[slug] || {};
-  }
-
-  function setGoalLocal(slug, goalId, value) {
-    var store = readStore();
-    if (!store[slug]) store[slug] = {};
-    store[slug][goalId] = !!value;
-    writeStore(store);
-  }
-
-  function clearLocal(slug) {
-    var store = readStore();
-    delete store[slug];
-    writeStore(store);
-  }
-
-  function hasLocalChanges(game) {
-    var ov = overlayFor(game.slug);
-    return game.goals.some(function (g) {
-      return ov.hasOwnProperty(g.id) && ov[g.id] !== !!g.done;
-    });
-  }
-
-  /** Итоговое состояние цели: локальная отметка важнее файла. */
   function isDone(game, goal) {
-    var ov = overlayFor(game.slug);
-    return ov.hasOwnProperty(goal.id) ? !!ov[goal.id] : !!goal.done;
+    return !!goal.done;
+  }
+
+  /* ---------- Градация целей --------------------------------
+   *  tier отвечает на вопрос «надо ли это вообще делать»:
+   *
+   *    must    — без этого игра не считается пройденной.
+   *              Только эти цели формируют процент.
+   *    worth   — не обязательно, но сильно улучшает прохождение:
+   *              хорошие сайды, уникальные боссы, важные концовки.
+   *    grind   — душный контент: гринд, сбор сотни одинаковых точек,
+   *              платиновые ачивки ради ачивок. Помечается явно,
+   *              чтобы можно было осознанно пропустить.
+   *
+   *  Старое поле optional:true читается как worth — чтобы ранее
+   *  заведённые игры не ломались.
+   * --------------------------------------------------------- */
+
+  var TIERS = {
+    must:  { id: 'must',  label: 'Обязательно', short: 'маст' },
+    worth: { id: 'worth', label: 'Стоит того',  short: 'стоит' },
+    grind: { id: 'grind', label: 'Душнина',     short: 'душно' },
+  };
+
+  function tier(goal) {
+    if (goal.tier && TIERS[goal.tier]) return TIERS[goal.tier];
+    if (goal.optional) return TIERS.worth;
+    return TIERS.must;
   }
 
   /* ---------- Прогресс -------------------------------------- */
 
-  /**
-   * Обязательные цели формируют основной процент.
-   * Цели с optional:true считаются бонусом и в процент не входят.
-   */
   function progress(game) {
     var goals = game.goals || [];
-    var req = { done: 0, total: 0 };
-    var opt = { done: 0, total: 0 };
+    var must  = { done: 0, total: 0 };
+    var worth = { done: 0, total: 0 };
+    var grind = { done: 0, total: 0 };
 
     goals.forEach(function (g) {
-      var bucket = g.optional ? opt : req;
+      var t = tier(g).id;
+      var bucket = t === 'must' ? must : (t === 'grind' ? grind : worth);
       bucket.total += 1;
       if (isDone(game, g)) bucket.done += 1;
     });
 
-    var pct = req.total ? Math.round((req.done / req.total) * 100) : 0;
+    var pct = must.total ? Math.round((must.done / must.total) * 100) : 0;
 
     return {
-      required: req,
-      optional: opt,
+      /* required оставлено как синоним must: на него опираются страницы. */
+      required: must,
+      must: must,
+      worth: worth,
+      grind: grind,
+      optional: worth,
       pct: pct,
-      all: { done: req.done + opt.done, total: req.total + opt.total },
-      /* «Закрыта на 100%» = все обязательные цели выполнены. */
-      perfect: req.total > 0 && req.done === req.total,
-      /* «Абсолют» = закрыты даже опциональные челленджи. */
-      absolute: req.total > 0 && req.done === req.total && opt.done === opt.total,
+      all: {
+        done: must.done + worth.done + grind.done,
+        total: must.total + worth.total + grind.total,
+      },
+      /* «Закрыта» = сделано всё обязательное. */
+      perfect: must.total > 0 && must.done === must.total,
+      /* «Абсолют» = не осталось вообще ничего, даже душнины. */
+      absolute: must.total > 0 &&
+        must.done === must.total &&
+        worth.done === worth.total &&
+        grind.done === grind.total,
     };
   }
 
@@ -337,10 +324,8 @@ window.Completionist = (function () {
     progress: progress,
     stats: stats,
     isDone: isDone,
-    setGoalLocal: setGoalLocal,
-    clearLocal: clearLocal,
-    overlayFor: overlayFor,
-    hasLocalChanges: hasLocalChanges,
+    TIERS: TIERS,
+    tier: tier,
     groupGoals: groupGoals,
     plural: plural,
     formatDate: formatDate,

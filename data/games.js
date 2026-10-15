@@ -101,28 +101,53 @@ window.COMPLETIONIST_DATA = {
         { kind: 'wiki', label: 'Fandom', url: 'https://cyberpunk.fandom.com/wiki/Cyberpunk_2077' },
       ],
 
+      /* tier: must — без этого игра не закрыта, worth — заметно
+         улучшает прохождение, grind — душнина, можно пропустить. */
       goals: [
-        { id: 'cp-main',     group: 'Сюжет',    title: 'Пройти основной сюжет',                   done: false },
-        { id: 'cp-endings',  group: 'Сюжет',    title: 'Открыть все концовки',                    done: false,
+        { id: 'cp-main',     group: 'Сюжет', tier: 'must',  title: 'Пройти основной сюжет', done: false },
+        { id: 'cp-endings',  group: 'Сюжет', tier: 'must',  title: 'Открыть все концовки',  done: false,
+          note: 'Панам, Ханако, Роуг, одиночка и секретная',
           link: 'https://cyberpunk.fandom.com/wiki/Endings_(Cyberpunk_2077)' },
-        { id: 'cp-pl',       group: 'DLC',      title: 'Пройти Phantom Liberty',                  done: false,
+        { id: 'cp-pl',       group: 'DLC',   tier: 'must',  title: 'Пройти Phantom Liberty', done: false,
           link: 'https://cyberpunk.fandom.com/wiki/Phantom_Liberty' },
-        { id: 'cp-pl-end',   group: 'DLC',      title: 'Обе концовки Phantom Liberty',            done: false,
+        { id: 'cp-pl-end',   group: 'DLC',   tier: 'must',  title: 'Обе концовки Phantom Liberty', done: false,
           link: 'https://cyberpunk.fandom.com/wiki/Phantom_Liberty' },
-        { id: 'cp-johnny',   group: 'NPC',      title: 'Максимум отношений с Джонни',             done: true,  note: 'Нужно для секретной концовки',
+
+        { id: 'cp-johnny',   group: 'Линии', tier: 'must',  title: 'Максимум отношений с Джонни', done: true,
+          note: 'Без этого секретная концовка не откроется',
           link: 'https://cyberpunk.fandom.com/wiki/Johnny_Silverhand' },
-        { id: 'cp-romance',  group: 'NPC',      title: 'Завершить романтическую линию',           done: true },
-        { id: 'cp-fixers',   group: 'Город',    title: 'Закрыть все заказы фиксеров',             done: false, note: '38 из 86',
-          link: 'https://cyberpunk.fandom.com/wiki/Fixer' },
-        { id: 'cp-ncpd',     group: 'Город',    title: 'Зачистить все точки NCPD',                done: false },
-        { id: 'cp-tarot',    group: 'Сбор',     title: 'Найти все граффити Таро',                 done: true,
+        { id: 'cp-judy',     group: 'Линии', tier: 'must',  title: 'Закрыть линию Джуди', done: true,
+          note: 'Только в акте 2 — после точки невозврата недоступна' },
+        { id: 'cp-panam',    group: 'Линии', tier: 'must',  title: 'Закрыть линию Панам', done: false,
+          note: 'Открывает одну из концовок' },
+        { id: 'cp-river',    group: 'Линии', tier: 'worth', title: 'Закрыть линию Ривера', done: false },
+        { id: 'cp-kerry',    group: 'Линии', tier: 'worth', title: 'Закрыть линию Керри',  done: false },
+
+        { id: 'cp-bosses',   group: 'Боссы', tier: 'must',  title: 'Победить Адама Смэшера', done: false,
+          link: 'https://cyberpunk.fandom.com/wiki/Adam_Smasher' },
+        { id: 'cp-chimera',  group: 'Боссы', tier: 'must',  title: 'Победить Химеру в Phantom Liberty', done: false,
+          link: 'https://cyberpunk.fandom.com/wiki/Militech_Chimera' },
+        { id: 'cp-hansen',   group: 'Боссы', tier: 'must',  title: 'Победить Курта Хансена', done: false,
+          link: 'https://cyberpunk.fandom.com/wiki/Kurt_Hansen' },
+        { id: 'cp-optboss',  group: 'Боссы', tier: 'worth', title: 'Встретить всех опциональных боссов', done: false,
+          note: 'Ройс, Вудман, Пласид — зависят от диалогов' },
+
+        { id: 'cp-tarot',    group: 'Сбор',  tier: 'worth', title: 'Найти все граффити Таро', done: true,
           link: 'https://cyberpunk.fandom.com/wiki/Fool_on_the_Hill' },
-        { id: 'cp-iconic',   group: 'Сбор',     title: 'Собрать всё иконическое оружие',          done: false },
-        { id: 'cp-vehicles', group: 'Сбор',     title: 'Купить все машины у Autofixer',           done: false },
-        { id: 'cp-cyber',    group: 'Прокачка', title: 'Прокачать все ветки навыков',             done: false },
-        { id: 'cp-maxlvl',   group: 'Прокачка', title: 'Достичь 60 уровня',                       done: false, note: 'Сейчас 43' },
-        { id: 'cp-plat',     group: 'Мета',     title: '100% достижений',                         done: false },
-        { id: 'cp-vhard',    group: 'Челлендж', title: 'Пройти на Very Hard',                     done: false, optional: true },
+        { id: 'cp-iconic',   group: 'Сбор',  tier: 'worth', title: 'Собрать иконическое оружие', done: false },
+        { id: 'cp-cyber',    group: 'Сбор',  tier: 'worth', title: 'Собрать билд на максимум', done: false,
+          note: 'Сейчас 43 уровень из 60' },
+
+        { id: 'cp-fixers',   group: 'Душнина', tier: 'grind', title: 'Закрыть все заказы фиксеров', done: false,
+          note: '38 из 86, задания повторяются',
+          link: 'https://cyberpunk.fandom.com/wiki/Fixer' },
+        { id: 'cp-ncpd',     group: 'Душнина', tier: 'grind', title: 'Зачистить все точки NCPD', done: false,
+          note: 'Больше сотни одинаковых точек' },
+        { id: 'cp-vehicles', group: 'Душнина', tier: 'grind', title: 'Купить все машины у Autofixer', done: false,
+          note: 'Чистый гринд денег' },
+        { id: 'cp-plat',     group: 'Душнина', tier: 'grind', title: '100% достижений', done: false },
+        { id: 'cp-vhard',    group: 'Душнина', tier: 'grind', title: 'Пройти на Very Hard', done: false,
+          note: 'Каноничная сложность — Hard' },
       ],
     },
 
@@ -246,9 +271,22 @@ window.COMPLETIONIST_DATA = {
       slug: 'fire-emblem-fortunes-weave',
       title: "Fire Emblem: Fortune's Weave",
       status: 'planned',
-      platform: 'Nintendo Switch',
-      year: null,
+      platform: 'Nintendo Switch 2',
+      year: 2026,
       developer: 'Intelligent Systems',
+      release: '2026-09-17',
+
+      /* Игры нет в Steam. Арт взят с вики серии — обложка и кадр.
+         Fandom отдаёт 403 на оригиналы, поэтому URL обязательно
+         с /scale-to-width-down/. */
+      art: {
+        capsule: 'https://static.wikia.nocookie.net/fireemblem/images/b/be/' +
+                 "Fire_Emblem_Fortune%27s_Weave_Box_Art.png" +
+                 '/revision/latest/scale-to-width-down/600',
+        hero: 'https://static.wikia.nocookie.net/fireemblem/images/4/46/' +
+              "Fire_Emblem_Fortune%27s_Weave_1.jpg" +
+              '/revision/latest/scale-to-width-down/1280',
+      },
 
       accent: '#8f6fd6',
       accentAlt: '#e0b457',
@@ -258,13 +296,17 @@ window.COMPLETIONIST_DATA = {
       finished: null,
       tags: ['Тактика', 'JRPG', 'Пошаговая'],
       verdict:
-        'Не в Steam — арт и ссылки добавим вручную. Цели пока заглушка, ' +
-        'жду правила прохождения.',
+        'Ещё не вышла — релиз 17 сентября 2026 на Switch 2. Цели появятся ' +
+        'после выхода, когда станет понятно, что в ней реально надо закрывать.',
+
+      links: [
+        { kind: 'wiki', label: 'Fire Emblem Wiki',
+          url: "https://fireemblem.fandom.com/wiki/Fire_Emblem:_Fortune%27s_Weave" },
+      ],
 
       goals: [
-        { id: 'fe-main',    group: 'Сюжет', title: 'Пройти основной сюжет', done: false },
-        { id: 'fe-support', group: 'NPC',   title: 'Открыть все support-диалоги',   done: false },
-        { id: 'fe-recruit', group: 'NPC',   title: 'Завербовать всех персонажей',   done: false },
+        { id: 'fe-main', group: 'Сюжет', title: 'Пройти основной сюжет', done: false,
+          note: 'Четыре протагониста: Кай, Дитрих, Теодора и Леда' },
       ],
     },
   ],

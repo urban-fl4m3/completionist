@@ -10,6 +10,7 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.cloudflare.steamstatic.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/hub.css">
@@ -20,7 +21,7 @@
 <canvas id="stars" aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
-<!-- ======================= Верхняя панель ======================= -->
+<!-- ===================== Верхняя панель ===================== -->
 <header class="topbar">
   <div class="shell topbar__inner">
     <a class="brand" href="./">
@@ -34,79 +35,15 @@
       <span class="brand__text">Completionist<span>.</span></span>
     </a>
 
-    <div class="topbar__spacer"></div>
-
-    <div class="topbar__meta" data-top-meta></div>
+    <!-- Вся статистика коллекции — одной компактной полосой -->
+    <div class="ticker" data-ticker></div>
   </div>
 </header>
 
 <main>
-  <!-- ========================== Шапка ========================== -->
-  <section class="shell hero">
-    <p class="hero__eyebrow"><i></i>Личный архив прохождений</p>
-
-    <h1 class="hero__title">
-      Всё, что <em>пройдено</em>,<br>и всё, что ещё ждёт
-    </h1>
-
-    <p class="hero__lede">
-      Каждая игра здесь — отдельная страница со своим оформлением и своим
-      списком целей комплишениста. Отмечай выполненное прямо на сайте:
-      прогресс пересчитывается сразу.
-    </p>
-
-    <!-- Статистика -->
-    <div class="stats">
-      <div class="panel gauge">
-        <span class="panel__label">Общий прогресс по целям</span>
-
-        <div class="gauge__ring" data-gauge-ring>
-          <div class="gauge__center">
-            <span class="gauge__pct" data-stat-pct>0</span>
-          </div>
-        </div>
-
-        <p class="gauge__caption">
-          Закрыто <b data-stat-goals-done>0</b> из
-          <b data-stat-goals-total>0</b> целей по всей коллекции
-        </p>
-      </div>
-
-      <div class="stats__side">
-        <div class="tiles">
-          <div class="tile" style="--tile-accent:#7c5cff">
-            <div class="tile__value" data-stat-total>0</div>
-            <div class="tile__label"><span data-stat-total-word>игр</span> в коллекции</div>
-          </div>
-
-          <div class="tile" style="--tile-accent:#3ddc97">
-            <div class="tile__value" data-stat-perfect>0</div>
-            <div class="tile__label">закрыто на 100%</div>
-          </div>
-
-          <div class="tile" style="--tile-accent:#ffb347">
-            <div class="tile__value" data-stat-hours>0</div>
-            <div class="tile__label"><span data-stat-hours-word>часов</span> в игре</div>
-          </div>
-
-          <div class="tile" style="--tile-accent:#4ddbff">
-            <div class="tile__value" data-stat-rating>—<small>/10</small></div>
-            <div class="tile__label">средняя оценка</div>
-          </div>
-        </div>
-
-        <div class="panel spread">
-          <span class="panel__label">Распределение по статусам</span>
-          <div class="spread__bar" data-spread-bar></div>
-          <div class="spread__legend" data-spread-legend></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====================== Фильтры и сетка ====================== -->
+  <!-- ======================== Коллекция ======================== -->
   <section class="shell">
-    <h2 class="sr-only">Коллекция</h2>
+    <h1 class="sr-only">Коллекция игр</h1>
 
     <div class="toolbar">
       <div class="filters" data-filters role="group" aria-label="Фильтр по статусу"></div>
@@ -142,11 +79,9 @@
 
 <footer class="footer">
   <div class="shell footer__inner">
+    <span>Completionist · <span data-visible-count>0 игр</span> в выборке</span>
     <span>
-      Completionist · <span data-visible-count>0 игр</span> в текущей выборке
-    </span>
-    <span>
-      Данные живут в
+      Данные —
       <a href="https://github.com/urban-fl4m3/completionist/blob/main/data/games.js"
          target="_blank" rel="noopener">data/games.js</a> ·
       <span data-year>2026</span>

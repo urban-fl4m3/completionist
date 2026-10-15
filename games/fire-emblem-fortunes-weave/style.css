@@ -435,12 +435,12 @@ body.has-logo .banner__title {
 
 .g-list { gap: 0.35rem; }
 
-.g-goal__toggle {
+.g-goal {
   border: 1px solid transparent;
   transition: background 0.3s, border-color 0.3s, transform 0.3s;
 }
 
-.g-goal__toggle:hover {
+.g-goal:hover {
   background: rgba(91, 74, 158, 0.055);
   border-color: rgba(91, 74, 158, 0.16);
   transform: translateX(3px);
@@ -489,7 +489,7 @@ body.has-logo .banner__title {
 .g-goal__link:hover { color: var(--gold); }
 
 /* Нить, протягивающаяся при закрытии цели (ставится из fx.js). */
-.g-goal.just-done .g-goal__toggle {
+.g-goal.just-done {
   animation: stitch 0.7s cubic-bezier(0.22, 1, 0.36, 1) 1;
 }
 

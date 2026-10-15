@@ -471,13 +471,13 @@ body.has-logo .gate__title {
 
 .g-list { gap: 0.4rem; }
 
-.g-goal__toggle {
+.g-goal {
   border: 1px solid transparent;
   border-radius: 13px;
   transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
 }
 
-.g-goal__toggle:hover {
+.g-goal:hover {
   background: rgba(127, 212, 232, 0.045);
   border-color: rgba(127, 212, 232, 0.18);
 }
@@ -500,7 +500,7 @@ body.has-logo .gate__title {
   box-shadow: 0 0 22px rgba(127, 212, 232, 0.85);
 }
 
-.g-goal.is-done .g-goal__toggle {
+.g-goal.is-done {
   background: rgba(127, 212, 232, 0.05);
   border-color: rgba(127, 212, 232, 0.2);
 }

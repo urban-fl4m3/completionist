@@ -89,18 +89,4 @@
     resize();
     requestAnimationFrame(frame);
   })();
-
-  /* ---------- 2. Искра при закрытии цели -------------------- */
-
-  document.addEventListener('completionist:toggle', function (e) {
-    if (reduced || !e.detail.done) return;
-
-    var item = e.detail.element;
-    item.classList.remove('just-done');
-    /* Форсируем перезапуск анимации. */
-    void item.offsetWidth;
-    item.classList.add('just-done');
-
-    setTimeout(function () { item.classList.remove('just-done'); }, 900);
-  });
 })();

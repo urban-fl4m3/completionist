@@ -500,14 +500,14 @@ body.has-logo .crest__title {
 
 .g-group__count b { color: var(--gold-hi); }
 
-.g-goal__toggle {
+.g-goal {
   position: relative;
   border: 1px solid transparent;
   border-left: 2px solid rgba(212, 164, 76, 0.18);
   transition: background 0.3s, border-color 0.3s, transform 0.3s;
 }
 
-.g-goal__toggle:hover {
+.g-goal:hover {
   background: rgba(212, 164, 76, 0.055);
   border-left-color: var(--gold);
   transform: translateX(3px);
@@ -563,7 +563,7 @@ body.has-logo .crest__title {
 .g-goal__link:hover { color: var(--gold-hi); }
 
 /* Искра, вспыхивающая при закрытии цели (ставится из fx.js). */
-.g-goal.just-done .g-goal__toggle::after {
+.g-goal.just-done::after {
   content: '';
   position: absolute;
   inset: -1px;

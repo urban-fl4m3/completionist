@@ -94,41 +94,4 @@
     resize();
     requestAnimationFrame(frame);
   })();
-
-  /* ---------- 2–3. Реакция на закрытие цели ----------------- */
-
-  var hits = 0;
-
-  document.addEventListener('completionist:toggle', function (e) {
-    if (reduced || !e.detail.done) return;
-
-    var item = e.detail.element;
-    item.classList.remove('just-done');
-    void item.offsetWidth;
-    item.classList.add('just-done');
-    setTimeout(function () { item.classList.remove('just-done'); }, 600);
-
-    /* Каждая третья закрытая цель даёт сбой развёртки всей страницы. */
-    hits += 1;
-    if (hits % 3 !== 0) return;
-
-    var sheet = document.createElement('div');
-    sheet.style.cssText =
-      'position:fixed;inset:0;z-index:90;pointer-events:none;' +
-      'background:linear-gradient(180deg,rgba(0,240,255,.14),rgba(255,0,85,.12));' +
-      'mix-blend-mode:screen';
-    document.body.appendChild(sheet);
-
-    var steps = 0;
-    var timer = setInterval(function () {
-      steps += 1;
-      sheet.style.transform =
-        'translate(' + (Math.random() * 10 - 5).toFixed(1) + 'px,' +
-        (Math.random() * 6 - 3).toFixed(1) + 'px)';
-      if (steps > 5) {
-        clearInterval(timer);
-        sheet.remove();
-      }
-    }, 45);
-  });
 })();
