@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starfield — Completionist</title>
+<meta name="description" content="Цели комплишениста по Starfield и причина, по которой прохождение остановлено.">
+<meta name="theme-color" content="#0a0c10">
+
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-game="starfield">
+
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="void" aria-hidden="true"></div>
+<div class="grid" aria-hidden="true"></div>
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <linearGradient id="sfGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#ff7a3d"/>
+      <stop offset="100%" stop-color="#9fb4c7"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<a class="back" href="../../">
+  <span aria-hidden="true">◂</span> COLLECTION
+</a>
+
+<!-- ========================= Панель миссии ========================= -->
+<header class="console">
+  <!-- Штамп прекращения миссии -->
+  <div class="stamp" aria-hidden="true">
+    <span class="stamp__line">MISSION</span>
+    <span class="stamp__line stamp__line--big">ABORTED</span>
+    <span class="stamp__date">02.04.2026</span>
+  </div>
+
+  <div class="console__inner">
+    <p class="console__id">
+      <span>REG</span> SF-2023 <span>/</span> BETHESDA <span>/</span> PC
+    </p>
+
+    <h1 class="console__title">STARFIELD</h1>
+
+    <div class="console__rule" aria-hidden="true">
+      <i></i><i></i><i></i>
+    </div>
+
+    <!-- Телеметрия миссии -->
+    <div class="console__grid">
+      <div class="readout">
+        <span class="readout__label">MISSION PROGRESS</span>
+
+        <div class="readout__gauge">
+          <div class="readout__ring" data-ring data-ring-size="150" data-ring-width="8"></div>
+          <div class="readout__core">
+            <span class="readout__pct" data-progress-pct>0</span>
+            <span class="readout__unit">PCT</span>
+          </div>
+        </div>
+
+        <span class="readout__sub">
+          <b data-progress-done>0</b> / <span data-progress-total>0</span> OBJECTIVES
+        </span>
+      </div>
+
+      <dl class="specs">
+        <div><dt>ELAPSED</dt><dd>27<span>h</span></dd></div>
+        <div><dt>RATING</dt><dd>5<span>/10</span></dd></div>
+        <div><dt>LAUNCH</dt><dd>11.03.26</dd></div>
+        <div><dt>ABORT</dt><dd class="is-alert">02.04.26</dd></div>
+      </dl>
+    </div>
+
+    <!-- Причина остановки -->
+    <section class="log">
+      <h2 class="log__head">
+        <span class="log__dot" aria-hidden="true"></span>
+        ABORT LOG
+      </h2>
+      <p class="log__text">
+        Загрузочные экраны между загрузочными экранами. Исследование оказалось
+        процедурной пустотой — через 27 часов понял, что мне просто скучно.
+      </p>
+      <p class="log__note">
+        Возможно, вернусь после пары крупных патчей.
+      </p>
+    </section>
+  </div>
+</header>
+
+<!-- ========================= Цели ========================= -->
+<main class="manifest">
+  <div class="manifest__head">
+    <h2 class="manifest__title">OBJECTIVE MANIFEST</h2>
+
+    <div class="manifest__tools">
+      <span class="local" data-local-badge hidden>
+        <i aria-hidden="true"></i>UNSAVED
+      </span>
+      <button type="button" class="btn" data-export>COPY STATE</button>
+      <button type="button" class="btn btn--ghost" data-reset>RESET</button>
+    </div>
+  </div>
+
+  <div class="manifest__bar" aria-hidden="true">
+    <div class="manifest__fill" data-progress-bar></div>
+  </div>
+
+  <div class="manifest__body" data-goals></div>
+</main>
+
+<footer class="foot">
+  <span>COMPLETIONIST // ARCHIVE</span>
+  <a href="../../">◂ RETURN TO COLLECTION</a>
+</footer>
+
+<script src="../../data/games.js"></script>
+<script src="../../assets/js/core.js"></script>
+<script src="../../assets/js/game.js"></script>
+<script src="fx.js"></script>
+</body>
+</html>

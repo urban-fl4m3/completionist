@@ -1,0 +1,527 @@
+/*  ============================================================
+ *  ELDEN RING — тёмное фэнтези: золото, угли, пергамент
+ *  ============================================================ */
+
+:root {
+  --gold:    #d4a44c;
+  --gold-hi: #f3d99b;
+  --ember:   #ff7b3d;
+  --ink:     #0b0804;
+  --ink-2:   #140e06;
+  --parch:   #e8dcc0;
+  --text:    #e4d9c2;
+  --muted:   #a1917a;
+  --faint:   #6d6050;
+}
+
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/*  ---------- Атмосфера ------------------------------------- */
+
+#embers {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Медленно ползущий туман у горизонта. */
+.fog {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 520px at 50% 112%, rgba(255, 123, 61, 0.17), transparent 68%),
+    radial-gradient(900px 600px at 12% -8%, rgba(212, 164, 76, 0.13), transparent 66%),
+    radial-gradient(760px 520px at 88% 4%, rgba(120, 80, 200, 0.08), transparent 66%),
+    linear-gradient(180deg, var(--ink-2), var(--ink) 55%, #060402);
+}
+
+.fog::after {
+  content: '';
+  position: absolute;
+  inset: -25%;
+  background: radial-gradient(
+    closest-side, rgba(255, 170, 90, 0.07), transparent 70%);
+  animation: drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  from { transform: translate(-7%, 4%) scale(1); }
+  to   { transform: translate(8%, -5%) scale(1.22); }
+}
+
+/* Тяжёлая виньетка — взгляд уводится в центр. */
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: inset 0 0 clamp(120px, 20vw, 260px) clamp(40px, 7vw, 90px) rgba(0, 0, 0, 0.92);
+}
+
+/*  ---------- Навигация назад ------------------------------- */
+
+.back {
+  position: fixed;
+  left: clamp(14px, 3vw, 32px);
+  top: clamp(14px, 3vw, 28px);
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 0.5rem 0.8rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+  background: rgba(11, 8, 4, 0.75);
+  border: 1px solid rgba(212, 164, 76, 0.26);
+  backdrop-filter: blur(8px);
+  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.back:hover {
+  color: var(--gold-hi);
+  border-color: rgba(212, 164, 76, 0.65);
+  box-shadow: 0 0 26px -6px rgba(212, 164, 76, 0.5);
+}
+
+.back svg { width: 15px; height: 15px; }
+
+/*  ---------- Герб / шапка ---------------------------------- */
+
+.crest {
+  position: relative;
+  z-index: 3;
+  padding: clamp(5rem, 12vh, 8rem) clamp(16px, 5vw, 40px) clamp(3rem, 6vw, 5rem);
+}
+
+.crest__inner {
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.crest__status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.crest__rule {
+  width: clamp(28px, 9vw, 68px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.crest__title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.6rem, 9vw, 5.6rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  background: linear-gradient(176deg, var(--gold-hi) 8%, var(--gold) 46%, #8a6420 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 26px rgba(212, 164, 76, 0.3));
+}
+
+.crest__sub {
+  font-size: 0.95rem;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+/*  ---------- Печать с прогрессом --------------------------- */
+
+.seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: clamp(1.2rem, 3vw, 2.2rem) 0 0.6rem;
+}
+
+.seal__frame { position: relative; }
+
+.seal__frame .ring__track { stroke: rgba(212, 164, 76, 0.13); }
+
+.seal__frame .ring__value {
+  stroke: url(#erGrad);
+  filter: drop-shadow(0 0 14px rgba(255, 140, 60, 0.75));
+}
+
+/* Внешнее тонкое кольцо-ореол. */
+.seal::before {
+  content: '';
+  position: absolute;
+  width: 232px;
+  height: 232px;
+  border: 1px solid rgba(212, 164, 76, 0.2);
+  border-radius: 50%;
+  animation: halo 9s ease-in-out infinite;
+}
+
+@keyframes halo {
+  0%, 100% { transform: scale(1);    opacity: 0.45; }
+  50%      { transform: scale(1.05); opacity: 0.9; }
+}
+
+.seal__core {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+}
+
+.seal__pct {
+  display: flex;
+  align-items: baseline;
+  font-family: 'Cinzel', serif;
+  font-size: 3.1rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--gold-hi);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 30px rgba(255, 150, 70, 0.55);
+}
+
+.seal__pct i {
+  font-style: normal;
+  font-size: 0.36em;
+  margin-left: 0.1em;
+  color: var(--gold);
+}
+
+.seal__sub {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.seal__sub b { color: var(--text); }
+
+/*  ---------- Книга учёта ----------------------------------- */
+
+.ledger {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 clamp(1.4rem, 4vw, 3rem);
+  margin-top: 0.8rem;
+  padding-top: 1.3rem;
+  border-top: 1px solid rgba(212, 164, 76, 0.16);
+}
+
+.ledger div { text-align: center; }
+
+.ledger dt {
+  font-family: 'Cinzel', serif;
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.ledger dd {
+  margin: 0.15rem 0 0;
+  font-size: 1.22rem;
+  color: var(--gold-hi);
+  font-variant-numeric: tabular-nums;
+}
+
+.ledger dd span { font-size: 0.6em; color: var(--faint); }
+
+.verdict {
+  max-width: 54ch;
+  margin: 0.9rem 0 0;
+  padding: 0 clamp(1rem, 4vw, 2rem);
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--muted);
+  border-left: 2px solid rgba(212, 164, 76, 0.3);
+  border-right: 2px solid rgba(212, 164, 76, 0.3);
+}
+
+/*  ---------- Свиток с целями ------------------------------- */
+
+.scroll {
+  position: relative;
+  z-index: 3;
+  max-width: 880px;
+  margin: 0 auto clamp(3rem, 8vw, 6rem);
+  padding: clamp(1.5rem, 4vw, 2.6rem) clamp(16px, 4vw, 36px) clamp(2rem, 5vw, 3rem);
+  background:
+    linear-gradient(180deg, rgba(232, 220, 192, 0.045), rgba(232, 220, 192, 0.012)),
+    rgba(11, 8, 4, 0.55);
+  border: 1px solid rgba(212, 164, 76, 0.22);
+  box-shadow:
+    0 40px 90px -40px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(243, 217, 155, 0.14);
+  backdrop-filter: blur(3px);
+}
+
+/* Золотые уголки свитка. */
+.scroll::before,
+.scroll::after {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--gold);
+  opacity: 0.55;
+}
+
+.scroll::before { left: -1px; top: -1px; border-width: 1px 0 0 1px; }
+.scroll::after  { right: -1px; bottom: -1px; border-width: 0 1px 1px 0; }
+
+.scroll__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+.scroll__title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.scroll__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.local {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--ember);
+}
+
+.local i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ember);
+  box-shadow: 0 0 10px var(--ember);
+}
+
+.btn {
+  padding: 0.44rem 0.95rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gold-hi);
+  background: rgba(212, 164, 76, 0.1);
+  border: 1px solid rgba(212, 164, 76, 0.38);
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.btn:hover {
+  background: rgba(212, 164, 76, 0.22);
+  border-color: var(--gold);
+}
+
+.btn.is-ok {
+  color: #0b0804;
+  background: var(--gold);
+}
+
+.btn--ghost {
+  color: var(--faint);
+  background: transparent;
+  border-color: rgba(212, 164, 76, 0.18);
+}
+
+.btn--ghost:hover { color: var(--muted); background: rgba(212, 164, 76, 0.08); }
+
+/* Общая полоса прогресса. */
+.scroll__bar {
+  height: 2px;
+  margin-bottom: 2rem;
+  background: rgba(212, 164, 76, 0.14);
+}
+
+.scroll__fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #8a6420, var(--gold), var(--gold-hi));
+  box-shadow: 0 0 16px rgba(243, 217, 155, 0.8);
+  transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*  ---------- Оформление целей ------------------------------ */
+
+.g-group__name {
+  font-family: 'Cinzel', serif;
+  color: var(--gold);
+  letter-spacing: 0.22em;
+}
+
+.g-group__head {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(212, 164, 76, 0.14);
+}
+
+.g-group__count {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  color: var(--faint);
+}
+
+.g-group__count b { color: var(--gold-hi); }
+
+.g-goal__toggle {
+  position: relative;
+  border: 1px solid transparent;
+  border-left: 2px solid rgba(212, 164, 76, 0.18);
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.g-goal__toggle:hover {
+  background: rgba(212, 164, 76, 0.055);
+  border-left-color: var(--gold);
+  transform: translateX(3px);
+}
+
+/* Ромбовидная «руна» вместо чекбокса. */
+.g-goal__box {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: 0.28rem;
+  color: var(--ink);
+  border: 1px solid rgba(212, 164, 76, 0.5);
+  transform: rotate(45deg);
+  transition: background 0.35s, border-color 0.35s, box-shadow 0.35s;
+}
+
+.g-goal__box svg { transform: rotate(-45deg) scale(0.4); }
+
+.g-goal.is-done .g-goal__box {
+  background: linear-gradient(140deg, var(--gold-hi), var(--gold));
+  border-color: var(--gold-hi);
+  box-shadow: 0 0 18px rgba(243, 217, 155, 0.65);
+}
+
+.g-goal.is-done .g-goal__box svg { transform: rotate(-45deg) scale(1); }
+
+.g-goal__title {
+  font-size: 1.04rem;
+  transition: color 0.3s;
+}
+
+.g-goal.is-done .g-goal__title {
+  color: var(--gold-hi);
+  text-shadow: 0 0 20px rgba(243, 217, 155, 0.22);
+}
+
+.g-goal__note { font-style: italic; color: var(--faint); }
+
+.g-goal__flag {
+  font-family: 'Cinzel', serif;
+  color: var(--ember);
+  background: rgba(255, 123, 61, 0.1);
+  border: 1px solid rgba(255, 123, 61, 0.3);
+}
+
+/* Искра, вспыхивающая при закрытии цели (ставится из fx.js). */
+.g-goal.just-done .g-goal__toggle::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(90deg,
+    transparent, rgba(243, 217, 155, 0.3), transparent);
+  animation: sparkSweep 0.75s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes sparkSweep {
+  from { transform: translateX(-100%); opacity: 1; }
+  to   { transform: translateX(100%);  opacity: 0; }
+}
+
+/*  ---------- Подвал --------------------------------------- */
+
+.foot {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem 1.4rem;
+  padding: 0 1.5rem clamp(2.5rem, 6vw, 4rem);
+  font-family: 'Cinzel', serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.foot a {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(212, 164, 76, 0.35);
+  transition: color 0.25s;
+}
+
+.foot a:hover { color: var(--gold-hi); }
+
+/*  ---------- «Закрыто полностью» --------------------------- */
+
+/* Когда все обязательные цели выполнены — усиливаем золото. */
+body.is-perfect .crest__title {
+  animation: triumph 5s ease-in-out infinite;
+}
+
+@keyframes triumph {
+  0%, 100% { filter: drop-shadow(0 4px 26px rgba(212, 164, 76, 0.3)); }
+  50%      { filter: drop-shadow(0 4px 40px rgba(255, 180, 90, 0.6)); }
+}
+
+/*  ---------- Адаптив ------------------------------------- */
+
+@media (max-width: 620px) {
+  .back span { display: none; }
+  .back { padding: 0.5rem; }
+  .seal::before { width: 196px; height: 196px; }
+  .seal__pct { font-size: 2.5rem; }
+  .verdict { border-right: 0; border-left-width: 2px; text-align: left; }
+}

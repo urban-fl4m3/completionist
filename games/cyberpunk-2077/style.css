@@ -1,0 +1,545 @@
+/*  ============================================================
+ *  CYBERPUNK 2077 — неон, глитч, сканлайны, терминал
+ *  ============================================================ */
+
+:root {
+  --yellow: #fcee0a;
+  --cyan:   #00f0ff;
+  --magenta:#ff0055;
+  --bg:     #07070a;
+  --bg-2:   #0c0c12;
+  --panel:  rgba(252, 238, 10, 0.035);
+  --text:   #d6dde3;
+  --muted:  #78818d;
+  --faint:  #4a525c;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/*  ---------- Атмосфера ------------------------------------- */
+
+#rain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(800px 500px at 82% -4%, rgba(0, 240, 255, 0.16), transparent 62%),
+    radial-gradient(760px 520px at 8% 8%,  rgba(252, 238, 10, 0.11), transparent 62%),
+    radial-gradient(900px 600px at 50% 110%, rgba(255, 0, 85, 0.12), transparent 64%),
+    linear-gradient(180deg, var(--bg-2), var(--bg));
+}
+
+/* Горизонтальные сканлайны + медленный сдвиг развёртки. */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0 2px,
+    rgba(0, 0, 0, 0.26) 2px 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    transparent 0%, rgba(0, 240, 255, 0.045) 50%, transparent 100%);
+  height: 40%;
+  animation: sweep 7s linear infinite;
+}
+
+@keyframes sweep {
+  from { transform: translateY(-110%); }
+  to   { transform: translateY(360%); }
+}
+
+/*  ---------- Навигация ------------------------------------- */
+
+.back {
+  position: fixed;
+  left: clamp(12px, 3vw, 28px);
+  top: clamp(12px, 3vw, 24px);
+  z-index: 70;
+  padding: 0.4rem 0.85rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  color: var(--bg);
+  background: var(--yellow);
+  clip-path: polygon(0 0, 100% 0, 100% 68%, 93% 100%, 0 100%);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.back:hover {
+  background: var(--cyan);
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.7);
+}
+
+/*  ---------- HUD-шапка ------------------------------------- */
+
+.hud {
+  position: relative;
+  z-index: 3;
+  padding: clamp(4.5rem, 11vh, 7rem) clamp(16px, 5vw, 40px) clamp(2rem, 5vw, 3.5rem);
+}
+
+.hud__frame {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: clamp(1.6rem, 4vw, 2.8rem);
+  background:
+    linear-gradient(135deg, rgba(252, 238, 10, 0.045), transparent 55%),
+    rgba(7, 7, 10, 0.62);
+  border: 1px solid rgba(252, 238, 10, 0.26);
+  backdrop-filter: blur(3px);
+}
+
+/* Угловые скобки HUD. */
+.hud__corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--cyan);
+}
+
+.hud__corner--tl { left: -2px;  top: -2px;    border-width: 2px 0 0 2px; }
+.hud__corner--tr { right: -2px; top: -2px;    border-width: 2px 2px 0 0; }
+.hud__corner--bl { left: -2px;  bottom: -2px; border-width: 0 0 2px 2px; }
+.hud__corner--br { right: -2px; bottom: -2px; border-width: 0 2px 2px 0; }
+
+.hud__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+  padding: 0.22rem 0.7rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--bg);
+  background: var(--yellow);
+}
+
+.hud__dot {
+  width: 7px;
+  height: 7px;
+  background: var(--magenta);
+  animation: blink 1.3s steps(2) infinite;
+}
+
+@keyframes blink { 50% { opacity: 0.15; } }
+
+/* --- Глитч-заголовок --- */
+
+.glitch {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.45em;
+  font-size: clamp(2.2rem, 8vw, 5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+.glitch b {
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 400;
+  color: var(--yellow);
+  text-shadow: 0 0 22px rgba(252, 238, 10, 0.55);
+}
+
+/* Два смещённых цветных дубля — классическое RGB-расщепление. */
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.glitch::before {
+  color: var(--cyan);
+  animation: glitchA 3.6s steps(2, end) infinite;
+  clip-path: inset(0 0 58% 0);
+}
+
+.glitch::after {
+  color: var(--magenta);
+  animation: glitchB 4.3s steps(2, end) infinite;
+  clip-path: inset(62% 0 0 0);
+}
+
+@keyframes glitchA {
+  0%, 92%, 100% { transform: none; opacity: 0; }
+  93% { transform: translate(-3px, -2px); opacity: 0.8; }
+  96% { transform: translate(2px, 1px);   opacity: 0.6; }
+}
+
+@keyframes glitchB {
+  0%, 90%, 100% { transform: none; opacity: 0; }
+  91% { transform: translate(3px, 2px);  opacity: 0.75; }
+  95% { transform: translate(-2px, -1px); opacity: 0.5; }
+}
+
+.hud__sub {
+  margin-top: 0.7rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+/* --- Сетка телеметрии --- */
+
+.hud__grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-top: clamp(1.6rem, 4vw, 2.4rem);
+  padding-top: clamp(1.4rem, 3vw, 2rem);
+  border-top: 1px solid rgba(0, 240, 255, 0.18);
+}
+
+.telemetry {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 1.1rem 1.4rem;
+}
+
+.telemetry dt {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  color: var(--faint);
+}
+
+.telemetry dd {
+  margin: 0.1rem 0 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cyan);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+}
+
+.telemetry dd span {
+  font-size: 0.5em;
+  font-weight: 500;
+  color: var(--faint);
+  text-shadow: none;
+}
+
+/* --- Кольцо --- */
+
+.meter {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.meter__ring .ring__track { stroke: rgba(0, 240, 255, 0.1); }
+
+.meter__ring .ring__value {
+  stroke: url(#cpGrad);
+  filter: drop-shadow(0 0 10px rgba(252, 238, 10, 0.7));
+}
+
+.meter__core {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.meter__pct {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 2.9rem;
+  line-height: 1;
+  color: var(--yellow);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 26px rgba(252, 238, 10, 0.6);
+}
+
+.meter__unit {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.meter__sub {
+  margin-top: 0.35rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+}
+
+.meter__sub b { color: var(--cyan); }
+
+.hud__note {
+  margin-top: 1.4rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/*  ---------- Список целей ---------------------------------- */
+
+.deck {
+  position: relative;
+  z-index: 3;
+  max-width: 1000px;
+  margin: 0 auto clamp(3rem, 8vw, 5rem);
+  padding: 0 clamp(16px, 5vw, 40px);
+}
+
+.deck__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.deck__title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+  letter-spacing: 0.17em;
+  color: var(--yellow);
+}
+
+.deck__title span { color: var(--magenta); }
+
+.deck__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.local {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--magenta);
+}
+
+.local i {
+  width: 6px;
+  height: 6px;
+  background: var(--magenta);
+  animation: blink 1s steps(2) infinite;
+}
+
+.btn {
+  padding: 0.38rem 0.85rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--yellow);
+  background: transparent;
+  border: 1px solid rgba(252, 238, 10, 0.4);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
+  color: var(--bg);
+  background: var(--yellow);
+  box-shadow: 0 0 20px rgba(252, 238, 10, 0.5);
+}
+
+.btn.is-ok {
+  color: var(--bg);
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.btn--ghost { color: var(--faint); border-color: rgba(120, 129, 141, 0.3); }
+
+.btn--ghost:hover {
+  color: var(--bg);
+  background: var(--muted);
+  box-shadow: none;
+}
+
+.deck__bar {
+  position: relative;
+  height: 4px;
+  margin-bottom: 2rem;
+  background: rgba(0, 240, 255, 0.1);
+  clip-path: polygon(0 0, 100% 0, 99.4% 100%, 0 100%);
+}
+
+.deck__fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--cyan), var(--yellow));
+  box-shadow: 0 0 14px rgba(252, 238, 10, 0.75);
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*  ---------- Оформление целей ------------------------------ */
+
+.g-group { position: relative; }
+
+.g-group__head {
+  padding: 0.35rem 0.7rem;
+  background: rgba(0, 240, 255, 0.07);
+  border-left: 3px solid var(--cyan);
+}
+
+.g-group__name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+}
+
+.g-group__count {
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--faint);
+}
+
+.g-group__count b { color: var(--yellow); }
+
+.g-list { gap: 0.3rem; }
+
+.g-goal__toggle {
+  position: relative;
+  padding: 0.7rem 0.9rem;
+  background: rgba(255, 255, 255, 0.018);
+  border-left: 2px solid rgba(120, 129, 141, 0.28);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.g-goal__toggle:hover {
+  background: rgba(0, 240, 255, 0.055);
+  border-left-color: var(--cyan);
+  transform: translateX(4px);
+}
+
+/* Квадратный «сокет» вместо чекбокса. */
+.g-goal__box {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: 0.15rem;
+  color: var(--bg);
+  border: 1px solid rgba(120, 129, 141, 0.5);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 76% 100%, 0 100%);
+  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+
+.g-goal.is-done .g-goal__box {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  box-shadow: 0 0 16px rgba(252, 238, 10, 0.75);
+}
+
+.g-goal.is-done .g-goal__toggle { border-left-color: var(--yellow); }
+
+.g-goal__title {
+  font-size: 1.02rem;
+  font-weight: 600;
+  transition: color 0.25s;
+}
+
+.g-goal.is-done .g-goal__title { color: var(--yellow); }
+
+.g-goal__note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.74rem;
+  color: var(--faint);
+}
+
+.g-goal__flag {
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--magenta);
+  border: 1px solid rgba(255, 0, 85, 0.45);
+}
+
+/* Глитч-вспышка при закрытии цели (ставится из fx.js). */
+.g-goal.just-done .g-goal__toggle {
+  animation: glitchHit 0.42s steps(3) 1;
+}
+
+@keyframes glitchHit {
+  0%   { transform: translateX(4px);  filter: none; }
+  33%  { transform: translateX(-7px); filter: hue-rotate(80deg) saturate(2.5); }
+  66%  { transform: translateX(6px);  filter: invert(0.18); }
+  100% { transform: translateX(4px);  filter: none; }
+}
+
+/*  ---------- Подвал --------------------------------------- */
+
+.foot {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.4rem clamp(16px, 5vw, 40px) clamp(2.5rem, 6vw, 4rem);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--faint);
+  border-top: 1px solid rgba(252, 238, 10, 0.14);
+}
+
+.foot a { color: var(--yellow); text-decoration: none; }
+.foot a:hover { color: var(--cyan); }
+
+/*  ---------- Адаптив ------------------------------------- */
+
+@media (max-width: 820px) {
+  .hud__grid { grid-template-columns: 1fr; justify-items: start; }
+  .meter { justify-self: center; }
+}
+
+@media (max-width: 560px) {
+  .glitch { font-size: clamp(1.9rem, 11vw, 3rem); }
+  .hud__corner { display: none; }
+}

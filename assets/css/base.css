@@ -1,0 +1,183 @@
+/*  ============================================================
+ *  BASE — общий фундамент для хаба и всех страниц игр
+ *  ============================================================
+ *  Здесь только сброс и КАРКАС чеклиста целей: сетка, отступы,
+ *  поведение. Никакой декорации — цвета, рамки, шрифты и эффекты
+ *  задаёт каждая страница игры самостоятельно в своём style.css.
+ *  ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+img, svg, video { display: block; max-width: 100%; }
+
+a { color: inherit; }
+
+/* Атрибут hidden должен побеждать любой display из классов. */
+[hidden] { display: none !important; }
+
+button {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+input, select { font: inherit; color: inherit; }
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* Доступный, но невидимый текст — для заголовков секций. */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*  ------------------------------------------------------------
+ *  КАРКАС ЧЕКЛИСТА ЦЕЛЕЙ
+ *  Разметку генерирует assets/js/game.js
+ *  ------------------------------------------------------------ */
+
+.g-group + .g-group { margin-top: 2rem; }
+
+.g-group__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.g-group__name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.g-group__count {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.g-list { display: grid; gap: 0.5rem; }
+
+.g-goal__toggle {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  text-align: left;
+}
+
+.g-goal__box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-top: 0.1rem;
+}
+
+/* Галочка прячется, пока цель не закрыта. */
+.g-goal__box svg {
+  width: 72%;
+  height: 72%;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.22s ease, transform 0.28s cubic-bezier(0.34, 1.7, 0.64, 1);
+}
+
+.g-goal.is-done .g-goal__box svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.g-goal__body { display: grid; gap: 0.2rem; min-width: 0; }
+
+.g-goal__title {
+  display: block;
+  line-height: 1.4;
+}
+
+.g-goal__note {
+  display: block;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  opacity: 0.62;
+}
+
+.g-goal__flag {
+  flex: none;
+  align-self: center;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0.75;
+}
+
+/*  ------------------------------------------------------------
+ *  КОЛЬЦО ПРОГРЕССА
+ *  SVG генерирует assets/js/game.js
+ *  ------------------------------------------------------------ */
+
+.ring { overflow: visible; }
+
+.ring__track { stroke: rgba(255, 255, 255, 0.08); }
+
+.ring__value {
+  stroke: var(--accent, #fff);
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*  ------------------------------------------------------------
+ *  УВАЖАЕМ НАСТРОЙКУ «УМЕНЬШИТЬ АНИМАЦИЮ»
+ *  ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/*  ------------------------------------------------------------
+ *  ПЕЧАТЬ — иногда удобно распечатать чеклист
+ *  ------------------------------------------------------------ */
+
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  canvas, .fx, [data-fx] { display: none !important; }
+}

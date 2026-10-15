@@ -1,0 +1,496 @@
+/*  ============================================================
+ *  HOLLOW KNIGHT — биолюминесценция, глубина, тишина
+ *  ============================================================ */
+
+:root {
+  --teal:   #7fd4e8;
+  --violet: #c9a0ff;
+  --pale:   #e6f3f8;
+  --abyss:  #050912;
+  --abyss-2:#0a1424;
+  --text:   #b9ccd9;
+  --muted:  #6f8599;
+  --faint:  #47586b;
+}
+
+body {
+  background: var(--abyss);
+  color: var(--text);
+  font-family: 'Quicksand', system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/*  ---------- Глубина --------------------------------------- */
+
+#spores {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.depths {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1000px 700px at 50% -12%, rgba(127, 212, 232, 0.15), transparent 62%),
+    radial-gradient(760px 620px at 14% 72%,  rgba(201, 160, 255, 0.11), transparent 64%),
+    radial-gradient(820px 560px at 88% 36%,  rgba(127, 212, 232, 0.07), transparent 62%),
+    linear-gradient(180deg, var(--abyss-2) 0%, var(--abyss) 48%, #02050c 100%);
+}
+
+/* Медленное «дыхание» глубины. */
+.depths::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    60% 45% at 50% 20%, rgba(127, 212, 232, 0.08), transparent 70%);
+  animation: breathe 14s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%      { opacity: 0.9;  transform: scale(1.12); }
+}
+
+/* Мягкий «фонарь», следующий за курсором (позиция — из fx.js). */
+.lantern {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    260px circle at var(--lx, 50%) var(--ly, 40%),
+    rgba(230, 243, 248, 0.055),
+    transparent 72%
+  );
+}
+
+/*  ---------- Навигация ------------------------------------- */
+
+.back {
+  position: fixed;
+  left: clamp(14px, 3vw, 32px);
+  top: clamp(14px, 3vw, 28px);
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.1rem 0.5rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  color: var(--muted);
+  background: rgba(10, 20, 36, 0.6);
+  border: 1px solid rgba(127, 212, 232, 0.16);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  transition: color 0.4s, border-color 0.4s, box-shadow 0.4s;
+}
+
+.back:hover {
+  color: var(--pale);
+  border-color: rgba(127, 212, 232, 0.5);
+  box-shadow: 0 0 30px -8px rgba(127, 212, 232, 0.6);
+}
+
+.back svg { width: 15px; height: 15px; }
+
+/*  ---------- Врата / шапка --------------------------------- */
+
+.gate {
+  position: relative;
+  z-index: 3;
+  padding: clamp(5rem, 13vh, 8rem) clamp(16px, 5vw, 40px) clamp(2.5rem, 6vw, 4rem);
+}
+
+.gate__inner {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.gate__status {
+  padding: 0.3rem 1rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid rgba(111, 133, 153, 0.22);
+  border-radius: 999px;
+}
+
+.gate__title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.8rem, 9vw, 5.4rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  color: var(--pale);
+  text-shadow:
+    0 0 40px rgba(127, 212, 232, 0.35),
+    0 0 90px rgba(201, 160, 255, 0.18);
+}
+
+.gate__sub {
+  font-size: 0.86rem;
+  letter-spacing: 0.17em;
+  text-transform: lowercase;
+  color: var(--muted);
+}
+
+/*  ---------- Сфера прогресса ------------------------------- */
+
+.orb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: clamp(1.4rem, 3.5vw, 2.4rem) 0 0.8rem;
+}
+
+/* Два расходящихся ореола — как круги на воде. */
+.orb__aura {
+  position: absolute;
+  width: 210px;
+  height: 210px;
+  border: 1px solid rgba(127, 212, 232, 0.3);
+  border-radius: 50%;
+  animation: ripple 5.5s ease-out infinite;
+}
+
+.orb__aura--slow { animation-delay: 2.75s; }
+
+@keyframes ripple {
+  from { transform: scale(0.88); opacity: 0.75; }
+  to   { transform: scale(1.5);  opacity: 0; }
+}
+
+.orb__ring .ring__track { stroke: rgba(127, 212, 232, 0.1); }
+
+.orb__ring .ring__value {
+  stroke: url(#hkGrad);
+  filter: drop-shadow(0 0 16px rgba(127, 212, 232, 0.8));
+}
+
+.orb__core {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+}
+
+.orb__pct {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 3.6rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--pale);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 34px rgba(127, 212, 232, 0.6);
+}
+
+.orb__unit {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.orb__sub {
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.orb__sub b { color: var(--teal); font-weight: 600; }
+
+.gate__quote {
+  max-width: 44ch;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/*  ---------- Руны-цифры ------------------------------------ */
+
+.runes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.runes div {
+  display: grid;
+  justify-items: center;
+  min-width: 92px;
+  padding: 0.8rem 1.1rem;
+  background: rgba(127, 212, 232, 0.035);
+  border: 1px solid rgba(127, 212, 232, 0.13);
+  border-radius: 14px;
+  transition: border-color 0.45s, background 0.45s, transform 0.45s;
+}
+
+.runes div:hover {
+  background: rgba(127, 212, 232, 0.08);
+  border-color: rgba(127, 212, 232, 0.35);
+  transform: translateY(-3px);
+}
+
+.runes dt {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.runes dd {
+  margin: 0.2rem 0 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--teal);
+}
+
+/*  ---------- Зал целей ------------------------------------- */
+
+.hall {
+  position: relative;
+  z-index: 3;
+  max-width: 820px;
+  margin: 0 auto clamp(3rem, 8vw, 5rem);
+  padding: 0 clamp(16px, 5vw, 36px);
+}
+
+.hall__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hall__title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: var(--pale);
+}
+
+.hall__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.local {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  color: var(--violet);
+}
+
+.local i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--violet);
+  box-shadow: 0 0 12px var(--violet);
+}
+
+.btn {
+  padding: 0.44rem 1rem;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--teal);
+  background: rgba(127, 212, 232, 0.07);
+  border: 1px solid rgba(127, 212, 232, 0.26);
+  border-radius: 999px;
+  transition: background 0.35s, border-color 0.35s, color 0.35s, box-shadow 0.35s;
+}
+
+.btn:hover {
+  color: var(--pale);
+  background: rgba(127, 212, 232, 0.16);
+  border-color: rgba(127, 212, 232, 0.55);
+  box-shadow: 0 0 24px -6px rgba(127, 212, 232, 0.6);
+}
+
+.btn.is-ok {
+  color: var(--abyss);
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.btn--ghost {
+  color: var(--faint);
+  background: transparent;
+  border-color: rgba(111, 133, 153, 0.2);
+}
+
+.btn--ghost:hover {
+  color: var(--muted);
+  background: rgba(111, 133, 153, 0.08);
+  box-shadow: none;
+}
+
+.hall__bar {
+  height: 1px;
+  margin-bottom: 2.2rem;
+  background: rgba(127, 212, 232, 0.12);
+}
+
+.hall__fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--violet), var(--teal));
+  box-shadow: 0 0 20px rgba(127, 212, 232, 0.9);
+  transition: width 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*  ---------- Оформление целей ------------------------------ */
+
+.g-group__head {
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(127, 212, 232, 0.1);
+}
+
+.g-group__name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.g-group__count { color: var(--faint); }
+.g-group__count b { color: var(--pale); font-weight: 600; }
+
+.g-list { gap: 0.4rem; }
+
+.g-goal__toggle {
+  border: 1px solid transparent;
+  border-radius: 13px;
+  transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+}
+
+.g-goal__toggle:hover {
+  background: rgba(127, 212, 232, 0.045);
+  border-color: rgba(127, 212, 232, 0.18);
+}
+
+/* Круглая «личинка света» вместо чекбокса. */
+.g-goal__box {
+  position: relative; /* якорь для волны .just-done */
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.2rem;
+  color: var(--abyss);
+  border: 1px solid rgba(127, 212, 232, 0.35);
+  border-radius: 50%;
+  transition: background 0.45s, border-color 0.45s, box-shadow 0.45s;
+}
+
+.g-goal.is-done .g-goal__box {
+  background: radial-gradient(circle at 35% 30%, var(--pale), var(--teal) 70%);
+  border-color: var(--pale);
+  box-shadow: 0 0 22px rgba(127, 212, 232, 0.85);
+}
+
+.g-goal.is-done .g-goal__toggle {
+  background: rgba(127, 212, 232, 0.05);
+  border-color: rgba(127, 212, 232, 0.2);
+}
+
+.g-goal__title { font-weight: 500; transition: color 0.4s; }
+.g-goal.is-done .g-goal__title { color: var(--pale); }
+
+.g-goal__note {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.96rem;
+  font-style: italic;
+  color: var(--faint);
+}
+
+.g-goal__flag {
+  color: var(--violet);
+  background: rgba(201, 160, 255, 0.1);
+  border: 1px solid rgba(201, 160, 255, 0.28);
+  border-radius: 999px;
+}
+
+/* Расходящаяся волна света при закрытии цели (ставится из fx.js). */
+.g-goal.just-done .g-goal__box::after {
+  content: '';
+  position: absolute;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid var(--pale);
+  border-radius: 50%;
+  animation: bloom 0.9s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes bloom {
+  from { transform: scale(1);   opacity: 0.9; }
+  to   { transform: scale(3.6); opacity: 0; }
+}
+
+/*  ---------- Подвал --------------------------------------- */
+
+.foot {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem 1.5rem;
+  padding: 0 1.5rem clamp(2.5rem, 6vw, 4rem);
+  font-size: 0.74rem;
+  letter-spacing: 0.2em;
+  text-transform: lowercase;
+  color: var(--faint);
+}
+
+.foot a {
+  color: var(--teal);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.foot a:hover { color: var(--pale); }
+
+/*  ---------- Адаптив ------------------------------------- */
+
+@media (max-width: 560px) {
+  .back span { display: none; }
+  .back { padding: 0.55rem; }
+  .orb__aura { width: 180px; height: 180px; }
+  .orb__pct { font-size: 3rem; }
+  .runes div { min-width: 78px; padding: 0.7rem 0.85rem; }
+}
