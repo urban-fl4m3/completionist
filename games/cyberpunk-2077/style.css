@@ -117,6 +117,126 @@ body {
   backdrop-filter: blur(3px);
 }
 
+/*  ---------- Кадр из игры как «видеопоток» ----------------
+ *  Арт приходит как --art-hero. Прогоняем его через
+ *  хроматический сдвиг и сканлайны, чтобы он выглядел
+ *  картинкой с монитора, а не вставленной иллюстрацией.
+ * --------------------------------------------------------- */
+
+.hud__feed {
+  position: relative;
+  margin-bottom: 1.4rem;
+  aspect-ratio: 32 / 9;
+  overflow: hidden;
+  background-image: var(--art-hero, none);
+  background-size: cover;
+  background-position: center 32%;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  filter: contrast(1.15) saturate(1.25) brightness(0.8);
+  opacity: 0;
+  animation: feedIn 1.3s steps(5) 0.2s forwards;
+}
+
+@keyframes feedIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Жёлто-бирюзовая засветка поверх кадра. */
+.hud__feed::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(252, 238, 10, 0.16), transparent 42%),
+    linear-gradient(270deg, rgba(0, 240, 255, 0.2), transparent 48%),
+    linear-gradient(180deg, transparent 55%, rgba(7, 7, 10, 0.92));
+}
+
+/* Собственные сканлайны «монитора». */
+.hud__feed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg, rgba(0, 0, 0, 0.34) 0 1px, transparent 1px 3px);
+}
+
+.hud__feed-label {
+  position: absolute;
+  left: 0.6rem;
+  bottom: 0.45rem;
+  z-index: 2;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.9);
+}
+
+/* Нет арта — прячем «монитор», а не показываем пустую рамку. */
+.hud__feed { display: none; }
+body.has-art .hud__feed { display: block; }
+
+/*  ---------- Логотип --------------------------------------- */
+
+.hud__logo { display: none; }
+
+body.has-logo .hud__logo {
+  display: block;
+  max-width: min(520px, 76vw);
+  margin-bottom: 0.3rem;
+  animation: feedIn 1s steps(4) 0.35s backwards;
+}
+
+body.has-logo .hud__logo .game-logo {
+  filter: drop-shadow(0 0 26px rgba(252, 238, 10, 0.45));
+}
+
+body.has-logo .glitch {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*  ---------- Ссылки по игре -------------------------------- */
+
+.hud__links { margin-top: 1rem; }
+
+.g-link {
+  padding: 0.34rem 0.8rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  background: rgba(0, 240, 255, 0.07);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  clip-path: polygon(0 0, 100% 0, 100% 66%, 94% 100%, 0 100%);
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.g-link:hover {
+  color: var(--bg);
+  background: var(--cyan);
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.65);
+}
+
+.g-link[data-kind='store'] {
+  color: var(--yellow);
+  background: rgba(252, 238, 10, 0.08);
+  border-color: rgba(252, 238, 10, 0.4);
+}
+
+.g-link[data-kind='store']:hover {
+  color: var(--bg);
+  background: var(--yellow);
+  box-shadow: 0 0 22px rgba(252, 238, 10, 0.6);
+}
+
 /* Угловые скобки HUD. */
 .hud__corner {
   position: absolute;
@@ -495,6 +615,19 @@ body {
   font-family: 'Share Tech Mono', monospace;
   color: var(--magenta);
   border: 1px solid rgba(255, 0, 85, 0.45);
+}
+
+/* Ссылка на вики у цели — как кнопка доступа к базе данных. */
+.g-goal__link {
+  color: var(--faint);
+  background: rgba(0, 240, 255, 0.04);
+}
+
+.g-goal:hover .g-goal__link { color: var(--cyan); }
+
+.g-goal__link:hover {
+  color: var(--bg);
+  background: var(--cyan);
 }
 
 /* Глитч-вспышка при закрытии цели (ставится из fx.js). */

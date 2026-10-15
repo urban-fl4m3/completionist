@@ -108,6 +108,98 @@ body {
   padding: clamp(5rem, 12vh, 8rem) clamp(16px, 5vw, 40px) clamp(3rem, 6vw, 5rem);
 }
 
+/*  ---------- Кадр из игры в шапке --------------------------
+ *  Арт приходит из data/games.js как --art-hero. Топим его
+ *  в сепии и темноте, чтобы он работал как фон, а не как
+ *  картинка: текст поверх должен читаться всегда.
+ * --------------------------------------------------------- */
+
+.crest__art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--art-hero, none);
+  background-size: cover;
+  background-position: center 28%;
+  /* Растворяем кадр к краям и к низу. */
+  mask-image:
+    radial-gradient(118% 88% at 50% 22%, #000 18%, transparent 74%),
+    linear-gradient(180deg, #000 42%, transparent 94%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    radial-gradient(118% 88% at 50% 22%, #000 18%, transparent 74%),
+    linear-gradient(180deg, #000 42%, transparent 94%);
+  -webkit-mask-composite: source-in;
+  filter: sepia(0.55) saturate(0.85) brightness(0.42) contrast(1.1);
+  opacity: 0;
+  transform: scale(1.06);
+  animation: artIn 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+
+@keyframes artIn {
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Золотая дымка поверх кадра — связывает его с палитрой страницы. */
+.crest__art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(212, 164, 76, 0.12), transparent 55%, rgba(11, 8, 4, 0.85));
+}
+
+/*  ---------- Логотип --------------------------------------- */
+
+.crest__logo { display: none; }
+
+body.has-logo .crest__logo {
+  display: block;
+  max-width: min(620px, 82vw);
+  margin: 0.2rem auto 0;
+  animation: artIn 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s backwards;
+}
+
+body.has-logo .crest__logo .game-logo {
+  filter: drop-shadow(0 6px 34px rgba(212, 164, 76, 0.45));
+}
+
+/* Текстовый заголовок остаётся для скринридеров и поиска. */
+body.has-logo .crest__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*  ---------- Ссылки по игре -------------------------------- */
+
+.crest__links { justify-content: center; margin-top: 0.3rem; }
+
+.g-link {
+  padding: 0.38rem 0.9rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  /* Подложка обязательна: ссылки лежат поверх кадра из игры. */
+  color: var(--text);
+  background: rgba(11, 8, 4, 0.72);
+  border: 1px solid rgba(212, 164, 76, 0.3);
+  backdrop-filter: blur(6px);
+  transition: color 0.3s, border-color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+
+.g-link:hover {
+  color: var(--gold-hi);
+  background: rgba(212, 164, 76, 0.18);
+  border-color: var(--gold);
+  box-shadow: 0 0 24px -6px rgba(212, 164, 76, 0.7);
+}
+
 .crest__inner {
   display: grid;
   justify-items: center;
@@ -460,6 +552,15 @@ body {
   background: rgba(255, 123, 61, 0.1);
   border: 1px solid rgba(255, 123, 61, 0.3);
 }
+
+/* Ссылка на вики у цели — как закладка в фолианте. */
+.g-goal__link {
+  color: var(--faint);
+  border-left: 1px solid rgba(212, 164, 76, 0.12);
+}
+
+.g-goal:hover .g-goal__link { color: var(--gold); }
+.g-goal__link:hover { color: var(--gold-hi); }
 
 /* Искра, вспыхивающая при закрытии цели (ставится из fx.js). */
 .g-goal.just-done .g-goal__toggle::after {

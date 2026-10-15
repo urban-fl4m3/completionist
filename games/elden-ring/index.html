@@ -42,6 +42,9 @@
 
 <!-- ========================= Шапка ========================= -->
 <header class="crest">
+  <!-- Кадр из игры, утопленный в золото и темноту -->
+  <div class="crest__art" aria-hidden="true"></div>
+
   <div class="crest__inner">
     <p class="crest__status">
       <span class="crest__rule" aria-hidden="true"></span>
@@ -49,9 +52,13 @@
       <span class="crest__rule" aria-hidden="true"></span>
     </p>
 
+    <!-- Официальный логотип подменяет текст, если загрузился -->
+    <div class="crest__logo" data-logo></div>
     <h1 class="crest__title">Elden Ring</h1>
 
     <p class="crest__sub">FromSoftware · 2022 · PC</p>
+
+    <nav class="crest__links" data-links aria-label="Ссылки по игре"></nav>
 
     <!-- Кольцо прогресса в золотой рамке -->
     <div class="seal">

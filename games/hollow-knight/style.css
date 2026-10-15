@@ -58,6 +58,82 @@ body {
   50%      { opacity: 0.9;  transform: scale(1.12); }
 }
 
+/*  ---------- Кадр из игры, утонувший в глубине -------------
+ *  Арт приходит как --art-hero. Уводим его почти в монохром
+ *  и в синеву, чтобы он читался как силуэт на дне, а не как
+ *  иллюстрация: страница должна остаться тихой.
+ * --------------------------------------------------------- */
+
+.gate__art {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 0;
+  height: min(78vh, 760px);
+  pointer-events: none;
+  background-image: var(--art-hero, none);
+  background-size: cover;
+  background-position: center 30%;
+  mask-image: radial-gradient(96% 76% at 50% 16%, #000 6%, transparent 72%);
+  -webkit-mask-image: radial-gradient(96% 76% at 50% 16%, #000 6%, transparent 72%);
+  filter: grayscale(0.62) brightness(0.3) contrast(1.15)
+          sepia(0.3) hue-rotate(166deg) saturate(1.5);
+  opacity: 0;
+  animation: surface 3.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+}
+
+@keyframes surface {
+  from { opacity: 0; transform: scale(1.08) translateY(-10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/*  ---------- Логотип --------------------------------------- */
+
+.gate__logo { display: none; }
+
+body.has-logo .gate__logo {
+  display: block;
+  max-width: min(560px, 80vw);
+  margin: 0.4rem auto 0;
+  animation: surface 2s cubic-bezier(0.22, 1, 0.36, 1) 0.45s backwards;
+}
+
+body.has-logo .gate__logo .game-logo {
+  filter: drop-shadow(0 0 40px rgba(127, 212, 232, 0.55))
+          drop-shadow(0 0 90px rgba(201, 160, 255, 0.3));
+}
+
+body.has-logo .gate__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*  ---------- Ссылки по игре -------------------------------- */
+
+.gate__links { justify-content: center; margin-top: 0.2rem; }
+
+.g-link {
+  padding: 0.38rem 1rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: rgba(10, 20, 36, 0.66);
+  border: 1px solid rgba(127, 212, 232, 0.18);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  transition: color 0.4s, border-color 0.4s, box-shadow 0.4s;
+}
+
+.g-link:hover {
+  color: var(--pale);
+  border-color: rgba(127, 212, 232, 0.55);
+  box-shadow: 0 0 28px -8px rgba(127, 212, 232, 0.7);
+}
+
 /* Мягкий «фонарь», следующий за курсором (позиция — из fx.js). */
 .lantern {
   position: fixed;
@@ -125,9 +201,12 @@ body {
   font-weight: 600;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--faint);
+  /* Подложка обязательна: плашка лежит поверх светлой части арта. */
+  color: var(--muted);
+  background: rgba(5, 9, 18, 0.72);
   border: 1px solid rgba(111, 133, 153, 0.22);
   border-radius: 999px;
+  backdrop-filter: blur(8px);
 }
 
 .gate__title {
@@ -441,6 +520,19 @@ body {
   background: rgba(201, 160, 255, 0.1);
   border: 1px solid rgba(201, 160, 255, 0.28);
   border-radius: 999px;
+}
+
+/* Ссылка на вики у цели — тихий огонёк на краю строки. */
+.g-goal__link {
+  color: var(--faint);
+  border-radius: 999px;
+}
+
+.g-goal:hover .g-goal__link { color: var(--teal); }
+
+.g-goal__link:hover {
+  color: var(--pale);
+  filter: drop-shadow(0 0 10px rgba(127, 212, 232, 0.9));
 }
 
 /* Расходящаяся волна света при закрытии цели (ставится из fx.js). */

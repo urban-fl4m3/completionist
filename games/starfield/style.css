@@ -182,6 +182,121 @@ body {
 .console__rule i:nth-child(2) { flex: 0 0 18px; opacity: 0.55; }
 .console__rule i:nth-child(3) { flex: 1; opacity: 0.18; }
 
+/*  ---------- Архивный кадр миссии --------------------------
+ *  Миссия прекращена, поэтому кадр подаётся как архивный
+ *  снимок: обесцвеченный, с технической подписью и сеткой —
+ *  документ, а не красивая картинка.
+ * --------------------------------------------------------- */
+
+.plate { display: none; margin: 0 0 1.1rem; }
+body.has-art .plate { display: block; }
+
+.plate__img {
+  position: relative;
+  aspect-ratio: 3 / 1;
+  background-image: var(--art-hero, none);
+  background-size: cover;
+  background-position: center 34%;
+  border: 1px solid var(--line);
+  /* Выцветание — визуальный след того, что миссия закрыта. */
+  filter: grayscale(0.72) contrast(1.12) brightness(0.62) sepia(0.18);
+  opacity: 0;
+  animation: plateIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+}
+
+@keyframes plateIn {
+  from { opacity: 0; clip-path: inset(0 0 100% 0); }
+  to   { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+/* Техническая сетка поверх снимка. */
+.plate__img::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(159, 180, 199, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(159, 180, 199, 0.09) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Перекрестье в центре кадра. */
+.plate__img::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border: 1px solid rgba(255, 122, 61, 0.55);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(10, 12, 16, 0.6);
+}
+
+.plate__caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.35rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: var(--faint);
+}
+
+.plate__caption span:first-child { color: var(--orange); }
+
+/*  ---------- Логотип --------------------------------------- */
+
+.console__logo { display: none; }
+
+body.has-logo .console__logo {
+  display: block;
+  max-width: min(480px, 74vw);
+  margin-bottom: 0.2rem;
+  /* Логотип тоже выцвел — миссия в архиве. */
+  filter: grayscale(0.35) brightness(0.95);
+  animation: plateIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s backwards;
+}
+
+body.has-logo .console__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*  ---------- Ссылки по игре -------------------------------- */
+
+.console__links { margin-bottom: 1.1rem; }
+
+.g-link {
+  padding: 0.3rem 0.8rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--steel);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  transition: color 0.25s, background 0.25s, border-color 0.25s;
+}
+
+.g-link:hover {
+  color: var(--void);
+  background: var(--steel);
+  border-color: var(--steel);
+}
+
+.g-link[data-kind='store']:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+}
+
 /* --- Сетка показаний --- */
 
 .console__grid {
@@ -490,6 +605,19 @@ body {
   font-family: 'IBM Plex Mono', monospace;
   color: var(--orange);
   border: 1px solid rgba(255, 122, 61, 0.4);
+}
+
+/* Ссылка на вики у цели — как кнопка вызова бортового архива. */
+.g-goal__link {
+  color: var(--faint);
+  border-left: 1px solid var(--line);
+}
+
+.g-goal:hover .g-goal__link { color: var(--steel); }
+
+.g-goal__link:hover {
+  color: var(--void);
+  background: var(--orange);
 }
 
 /* Импульс телеметрии при закрытии цели (ставится из fx.js). */

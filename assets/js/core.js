@@ -177,6 +177,82 @@ window.Completionist = (function () {
     };
   }
 
+  /* ---------- Корень сайта ---------------------------------
+   *  Хаб лежит в корне, страницы игр — на два уровня глубже.
+   *  Чтобы локальные пути к картинкам писались одинаково
+   *  («assets/img/...»), вычисляем префикс по пути самого
+   *  core.js. Работает и на GitHub Pages в подпапке, и локально
+   *  по file://.
+   * --------------------------------------------------------- */
+
+  var ROOT = (function () {
+    var tag = document.querySelector('script[src*="assets/js/core.js"]');
+    if (!tag) return '';
+    return tag.getAttribute('src').replace(/assets\/js\/core\.js.*$/, '');
+  })();
+
+  /** Внешние URL оставляем как есть, локальные — от корня сайта. */
+  function asset(path) {
+    if (!path) return null;
+    if (/^([a-z]+:)?\/\//i.test(path) || path.indexOf('data:') === 0) return path;
+    return ROOT + String(path).replace(/^\/+/, '');
+  }
+
+  /* ---------- Арты игры ------------------------------------
+   *  Три независимых источника, в порядке приоритета:
+   *
+   *  1. game.art = { hero, banner, capsule, logo }
+   *     Любые ссылки или локальные файлы. Работает всегда —
+   *     и для Fire Emblem, и для эмуляции, и для чего угодно.
+   *
+   *  2. game.steam = <appId>
+   *     Steam отдаёт предсказуемый набор по App ID без ключа,
+   *     включая ЛОГОТИП с прозрачным фоном. Удобно, но
+   *     применимо только к играм из Steam.
+   *
+   *  3. Ничего не указано — возвращаются null, и страница
+   *     рисует процедурный арт из акцентных цветов игры.
+   *     Сайт обязан оставаться красивым и без картинок.
+   * --------------------------------------------------------- */
+
+  var STEAM_CDN = 'https://cdn.cloudflare.steamstatic.com/steam/apps/';
+
+  function art(game) {
+    var custom = game.art || {};
+    var id = game.steam;
+
+    function steam(file) {
+      return id ? STEAM_CDN + id + '/' + file : null;
+    }
+
+    function pick(key, steamFile) {
+      return asset(custom[key]) || steam(steamFile);
+    }
+
+    return {
+      banner:  pick('banner',  'header.jpg'),          /* 460×215, для карточки */
+      hero:    pick('hero',    'library_hero.jpg'),    /* 1920×620, для шапки   */
+      capsule: pick('capsule', 'library_600x900.jpg'), /* портретная обложка    */
+      logo:    pick('logo',    'logo.png'),            /* прозрачный логотип    */
+    };
+  }
+
+  /** Ссылки игры. Магазин Steam подставляется сам, если задан App ID. */
+  function links(game) {
+    var out = (game.links || []).slice();
+
+    var hasStore = out.some(function (l) { return l.kind === 'store'; });
+    if (game.steam && !hasStore) {
+      out.unshift({
+        kind: 'store',
+        label: 'Steam',
+        url: 'https://store.steampowered.com/app/' + game.steam + '/',
+      });
+    }
+
+    return out;
+  }
+
   /* ---------- Утилиты оформления --------------------------- */
 
   /** Склонение русских существительных: plural(5, 'игра','игры','игр') */
@@ -250,6 +326,10 @@ window.Completionist = (function () {
   return {
     STATUSES: STATUSES,
     status: status,
+    ROOT: ROOT,
+    asset: asset,
+    art: art,
+    links: links,
     data: data,
     games: games,
     find: find,

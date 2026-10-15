@@ -233,6 +233,14 @@
     var p = C.progress(game);
     var accent = game.accent || st.accent;
     var alt = game.accentAlt || accent;
+    var art = C.art(game);
+
+    /* Баннер кладём поверх процедурного арта. Если картинки нет
+       или она не загрузилась — под ней остаётся градиент. */
+    var cover = art.banner
+      ? '<img class="card__cover" src="' + C.escapeHtml(art.banner) + '" alt="" ' +
+        'loading="lazy" decoding="async">'
+      : '';
 
     var meta = [];
     if (game.platform) meta.push('<span>' + C.escapeHtml(game.platform) + '</span>');
@@ -260,6 +268,8 @@
         '<div class="card__art">' +
           '<span class="card__glyph" aria-hidden="true">' +
             C.escapeHtml(game.title.charAt(0)) + '</span>' +
+          cover +
+          '<span class="card__scrim" aria-hidden="true"></span>' +
           '<span class="card__badge">' + C.escapeHtml(st.label) + '</span>' +
           (p.perfect ? '<span class="card__seal" title="Закрыта полностью">100%</span>' : '') +
         '</div>' +
@@ -340,6 +350,20 @@
 
   function attachCardBehaviour(host) {
     var cards = qsa('.card', host);
+
+    /* Баннер показываем только после успешной загрузки, иначе
+       убираем — под ним ждёт процедурный арт. */
+    qsa('.card__cover', host).forEach(function (img) {
+      function ok() { img.closest('.card').classList.add('has-cover'); }
+
+      if (img.complete) {
+        if (img.naturalWidth) ok();
+        else img.remove();
+        return;
+      }
+      img.addEventListener('load', ok);
+      img.addEventListener('error', function () { img.remove(); });
+    });
 
     /* Появление при попадании в вьюпорт. */
     if ('IntersectionObserver' in window && !C.reducedMotion()) {

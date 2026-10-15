@@ -86,14 +86,55 @@ input, select { font: inherit; color: inherit; }
 
 .g-list { display: grid; gap: 0.5rem; }
 
+/* Цель — это строка: кнопка-переключатель, метка «бонус» и ссылка.
+   Ссылка лежит СНАРУЖИ кнопки: <a> внутри <button> невалиден. */
+.g-goal {
+  display: flex;
+  align-items: stretch;
+  gap: 0.2rem;
+}
+
 .g-goal__toggle {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   align-items: start;
   gap: 0.9rem;
-  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
   padding: 0.85rem 1rem;
   text-align: left;
+}
+
+/* Ссылка на вики/гайд по этой цели. */
+.g-goal__link {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.3rem;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.g-goal__link svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Иконка проявляется при наведении на строку — и всегда
+   видна при навигации с клавиатуры. */
+.g-goal:hover .g-goal__link,
+.g-goal__link:focus-visible {
+  opacity: 0.75;
+}
+
+.g-goal__link:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+@media (hover: none) {
+  .g-goal__link { opacity: 0.6; }
 }
 
 .g-goal__box {
@@ -136,6 +177,7 @@ input, select { font: inherit; color: inherit; }
 .g-goal__flag {
   flex: none;
   align-self: center;
+  margin-left: 0.3rem;
   padding: 0.15rem 0.5rem;
   font-size: 0.64rem;
   font-weight: 600;
@@ -143,6 +185,38 @@ input, select { font: inherit; color: inherit; }
   text-transform: uppercase;
   white-space: nowrap;
   opacity: 0.75;
+}
+
+/*  ------------------------------------------------------------
+ *  ССЫЛКИ ИГРЫ и ЛОГОТИП
+ *  Разметку генерирует assets/js/game.js. Здесь только каркас —
+ *  вид задаёт каждая страница игры.
+ *  ------------------------------------------------------------ */
+
+[data-links] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.g-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.g-link svg {
+  flex: none;
+  width: 0.85em;
+  height: 0.85em;
+}
+
+/* Официальный логотип игры — вставляется, только если загрузился. */
+.game-logo {
+  max-width: 100%;
+  height: auto;
 }
 
 /*  ------------------------------------------------------------

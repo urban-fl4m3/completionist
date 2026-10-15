@@ -615,7 +615,7 @@ body {
     rgba(255, 255, 255, 0.055) 0 1px,
     transparent 1px 11px
   );
-  transition: transform 0.8s var(--ease);
+  transition: transform 0.8s var(--ease), opacity 0.5s var(--ease);
 }
 
 .card:hover .card__art::before { transform: scale(1.12) rotate(2deg); }
@@ -637,7 +637,47 @@ body {
 
 .card:hover .card__art::after { transform: translateX(120%); }
 
-/* Крупная «монограмма» игры. */
+/* --- Настоящий баннер игры (если есть) --- */
+
+.card__cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 0.7s var(--ease), transform 0.8s var(--ease);
+}
+
+.card.has-cover .card__cover {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.card.has-cover:hover .card__cover { transform: scale(1.07); }
+
+/* Затемнение снизу — чтобы бейдж и печать читались на любом арте. */
+.card__scrim {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 7, 13, 0.55) 0%,
+    rgba(6, 7, 13, 0.08) 42%,
+    rgba(6, 7, 13, 0.72) 100%
+  );
+  transition: opacity 0.7s var(--ease);
+}
+
+.card.has-cover .card__scrim { opacity: 1; }
+
+/* Когда баннер загрузился, монограмма и штриховка больше не нужны. */
+.card.has-cover .card__glyph { opacity: 0; }
+.card.has-cover .card__art::before { opacity: 0; }
+
+/* Крупная «монограмма» игры — запасной арт, когда картинки нет. */
 .card__glyph {
   position: absolute;
   right: -0.08em;
@@ -648,13 +688,23 @@ body {
   letter-spacing: -0.06em;
   color: rgba(255, 255, 255, 0.075);
   user-select: none;
-  transition: transform 0.7s var(--ease), color 0.4s;
+  transition: transform 0.7s var(--ease), color 0.4s, opacity 0.5s;
 }
 
 .card:hover .card__glyph {
   transform: translate(-6px, -4px);
   color: rgba(255, 255, 255, 0.12);
 }
+
+/* Без баннера монограмма — единственный арт, поэтому ярче
+   и крупнее: карточка должна выглядеть намеренной, а не пустой. */
+.card:not(.has-cover) .card__glyph {
+  font-size: 9rem;
+  color: rgba(255, 255, 255, 0.14);
+  text-shadow: 0 0 60px rgba(var(--card-rgb), 0.5);
+}
+
+.card:not(.has-cover):hover .card__glyph { color: rgba(255, 255, 255, 0.2); }
 
 .card__badge {
   position: absolute;
