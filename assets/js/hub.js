@@ -69,6 +69,62 @@
     }).join('');
   }
 
+  /* ---------- Витрина ---------------------------------------
+   *  Наверху — та игра, которую проходишь сейчас. Она подаётся
+   *  кадром во всю ширину, а не ещё одной плиткой в сетке.
+   * --------------------------------------------------------- */
+
+  function renderStage() {
+    var host = qs('[data-stage]');
+    if (!host) return;
+
+    var list = C.games();
+    var game = list.filter(function (g) { return g.status === 'in-progress'; })[0]
+            || list.filter(function (g) { return g.status === 'on-hold'; })[0];
+
+    if (!game) { host.hidden = true; return; }
+
+    var art = C.art(game);
+    var p = C.progress(game);
+    var st = C.status(game.status);
+
+    host.innerHTML =
+      '<a class="stage" href="games/' + encodeURIComponent(game.slug) + '/" ' +
+        'data-boot="' + C.escapeHtml(game.slug) + '" ' +
+        'style="--card-rgb:' + C.rgb(game.accent || st.accent) +
+        ';--card-status:' + st.accent + '">' +
+
+        (art.hero
+          ? '<img class="stage__scene" src="' + C.escapeHtml(art.hero) + '" alt="">'
+          : '') +
+        '<span class="stage__scrim" aria-hidden="true"></span>' +
+
+        '<div class="stage__body">' +
+          '<p class="stage__kicker">' + C.escapeHtml(st.label) + ' · продолжить</p>' +
+          (art.logo
+            ? '<img class="stage__logo" src="' + C.escapeHtml(art.logo) + '" alt="">'
+            : '') +
+          '<h2 class="stage__title">' + C.escapeHtml(game.title) + '</h2>' +
+          (game.verdict
+            ? '<p class="stage__note">' + C.escapeHtml(game.verdict) + '</p>'
+            : '') +
+          '<div class="stage__meter">' +
+            '<span class="stage__track"><i style="width:' + p.pct + '%"></i></span>' +
+            '<span class="stage__nums"><b>' + p.must.done + '</b>/' +
+              p.must.total + ' · ' + p.pct + '%</span>' +
+          '</div>' +
+        '</div>' +
+      '</a>';
+
+    var logo = qs('.stage__logo', host);
+    if (logo) {
+      logo.addEventListener('load', function () {
+        qs('.stage', host).classList.add('has-logo');
+      });
+      logo.addEventListener('error', function () { logo.remove(); });
+    }
+  }
+
   /* ---------- Фильтры --------------------------------------- */
 
   function renderFilters() {
@@ -138,6 +194,14 @@
     return 70 + (sum % 90);
   }
 
+  /* Размер плитки в мозаике. Пройденные и идущие игры крупнее:
+     сетка перестаёт быть однообразной, а иерархия читается. */
+  function tileSize(game, index) {
+    if (game.status === 'completed') return 'wide';
+    if (game.status === 'in-progress') return 'tall';
+    return index % 5 === 2 ? 'wide' : 'norm';
+  }
+
   function cardHtml(game, index) {
     var st = C.status(game.status);
     var p = C.progress(game);
@@ -153,11 +217,13 @@
     }
     if (typeof game.rating === 'number') meta.push('★ ' + game.rating);
 
-    /* Вертикальная обложка: она скомпонована как постер, в отличие
-       от library_hero, у которого центр намеренно пустой под
-       интерфейс библиотеки Steam. Если обложки нет — берём широкий
-       кадр, а если и его нет, остаётся процедурный градиент. */
-    var sceneSrc = art.capsule || art.hero || art.banner;
+    /* Арт выбирается под форму плитки: вертикальная обложка для
+       узких, широкий кадр — для растянутых. Иначе постер режется
+       пополам. Нет ничего — остаётся процедурный градиент. */
+    var size = tileSize(game, index);
+    var sceneSrc = size === 'wide'
+      ? (art.hero || art.banner || art.capsule)
+      : (art.capsule || art.hero || art.banner);
     var scene = sceneSrc
       ? '<img class="poster__scene" src="' + C.escapeHtml(sceneSrc) + '" alt="" ' +
         'loading="lazy" decoding="async">'
@@ -172,6 +238,8 @@
 
     return (
       '<a class="poster reveal" href="games/' + encodeURIComponent(game.slug) + '/" ' +
+        'data-boot="' + C.escapeHtml(game.slug) + '" ' +
+        'data-size="' + size + '" ' +
         'style="--card-rgb:' + C.rgb(accent) +
         ';--card-alt-rgb:' + C.rgb(alt) +
         ';--card-status:' + st.accent +
@@ -377,6 +445,7 @@
   function init() {
     loadPrefs();
     renderTicker();
+    renderStage();
     renderFilters();
     syncUI();
     renderCollection();
@@ -418,6 +487,9 @@
     if (year) year.textContent = new Date().getFullYear();
 
     initStars();
+
+    /* Клик по игре запускает её загрузочный экран. */
+    if (window.Boot) window.Boot.attach(document);
   }
 
   if (document.readyState === 'loading') {
