@@ -613,6 +613,18 @@ body {
 
   .band__side { justify-items: start; text-align: left; padding-top: 0; }
   .band__seal { display: none; }
+
+  /* На узком экране текст идёт ПОД артом, а не сбоку, поэтому
+     затемнение тоже должно идти сверху вниз: горизонтальная
+     подложка здесь просто гасила картинку. */
+  .band__scrim {
+    background: linear-gradient(180deg,
+      rgba(6, 7, 13, 0.25) 0%, rgba(6, 7, 13, 0.1) 26%,
+      rgba(6, 7, 13, 0.82) 62%, rgba(6, 7, 13, 0.96) 100%);
+  }
+
+  .band__art { object-position: var(--crop-m, 56% 26%); }
+  .band[data-skin='cyberpunk-2077'] { --crop-m: 64% 20%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
