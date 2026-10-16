@@ -69,62 +69,6 @@
     }).join('');
   }
 
-  /* ---------- Витрина ---------------------------------------
-   *  Наверху — та игра, которую проходишь сейчас. Она подаётся
-   *  кадром во всю ширину, а не ещё одной плиткой в сетке.
-   * --------------------------------------------------------- */
-
-  function renderStage() {
-    var host = qs('[data-stage]');
-    if (!host) return;
-
-    var list = C.games();
-    var game = list.filter(function (g) { return g.status === 'in-progress'; })[0]
-            || list.filter(function (g) { return g.status === 'on-hold'; })[0];
-
-    if (!game) { host.hidden = true; return; }
-
-    var art = C.art(game);
-    var p = C.progress(game);
-    var st = C.status(game.status);
-
-    host.innerHTML =
-      '<a class="stage" href="games/' + encodeURIComponent(game.slug) + '/" ' +
-        'data-boot="' + C.escapeHtml(game.slug) + '" ' +
-        'style="--card-rgb:' + C.rgb(game.accent || st.accent) +
-        ';--card-status:' + st.accent + '">' +
-
-        (art.hero
-          ? '<img class="stage__scene" src="' + C.escapeHtml(art.hero) + '" alt="">'
-          : '') +
-        '<span class="stage__scrim" aria-hidden="true"></span>' +
-
-        '<div class="stage__body">' +
-          '<p class="stage__kicker">' + C.escapeHtml(st.label) + ' · продолжить</p>' +
-          (art.logo
-            ? '<img class="stage__logo" src="' + C.escapeHtml(art.logo) + '" alt="">'
-            : '') +
-          '<h2 class="stage__title">' + C.escapeHtml(game.title) + '</h2>' +
-          (game.verdict
-            ? '<p class="stage__note">' + C.escapeHtml(game.verdict) + '</p>'
-            : '') +
-          '<div class="stage__meter">' +
-            '<span class="stage__track"><i style="width:' + p.pct + '%"></i></span>' +
-            '<span class="stage__nums"><b>' + p.must.done + '</b>/' +
-              p.must.total + ' · ' + p.pct + '%</span>' +
-          '</div>' +
-        '</div>' +
-      '</a>';
-
-    var logo = qs('.stage__logo', host);
-    if (logo) {
-      logo.addEventListener('load', function () {
-        qs('.stage', host).classList.add('has-logo');
-      });
-      logo.addEventListener('error', function () { logo.remove(); });
-    }
-  }
-
   /* ---------- Фильтры --------------------------------------- */
 
   function renderFilters() {
@@ -194,20 +138,20 @@
     return 70 + (sum % 90);
   }
 
-  /* Размер плитки в мозаике. Пройденные и идущие игры крупнее:
-     сетка перестаёт быть однообразной, а иерархия читается. */
-  function tileSize(game, index) {
-    if (game.status === 'completed') return 'wide';
-    if (game.status === 'in-progress') return 'tall';
-    return index % 5 === 2 ? 'wide' : 'norm';
-  }
+  /* ---------- Полоса игры ----------------------------------
+   *  Каждая игра — длинный баннер во всю ширину. Арт широкий
+   *  (ключевой или кадр), а не коробочная обложка: в полосе
+   *  обложка режется и теряет смысл.
+   *
+   *  data-skin включает оформление под конкретную игру:
+   *  рамки, углы и подсветка у каждой свои, см. hub.css.
+   * --------------------------------------------------------- */
 
-  function cardHtml(game, index) {
+  function bandHtml(game, index) {
     var st = C.status(game.status);
     var p = C.progress(game);
     var art = C.art(game);
     var accent = game.accent || st.accent;
-    var alt = game.accentAlt || accent;
 
     var meta = [];
     if (game.platform) meta.push(C.escapeHtml(game.platform));
@@ -217,62 +161,40 @@
     }
     if (typeof game.rating === 'number') meta.push('★ ' + game.rating);
 
-    /* Арт выбирается под форму плитки: вертикальная обложка для
-       узких, широкий кадр — для растянутых. Иначе постер режется
-       пополам. Нет ничего — остаётся процедурный градиент. */
-    var size = tileSize(game, index);
-    var sceneSrc = size === 'wide'
-      ? (art.hero || art.banner || art.capsule)
-      : (art.capsule || art.hero || art.banner);
-    var scene = sceneSrc
-      ? '<img class="poster__scene" src="' + C.escapeHtml(sceneSrc) + '" alt="" ' +
-        'loading="lazy" decoding="async">'
-      : '';
-
-    /* Логотип накладываем ТОЛЬКО когда обложки нет: вертикальная
-       обложка уже содержит логотип, и второй поверх — мусор. */
-    var logo = (!art.capsule && art.logo)
-      ? '<img class="poster__logo" src="' + C.escapeHtml(art.logo) + '" alt="" ' +
-        'loading="lazy" decoding="async">'
-      : '';
+    var wide = art.hero || art.banner;
 
     return (
-      '<a class="poster reveal" href="games/' + encodeURIComponent(game.slug) + '/" ' +
+      '<a class="band reveal" href="games/' + encodeURIComponent(game.slug) + '/" ' +
         'data-boot="' + C.escapeHtml(game.slug) + '" ' +
-        'data-size="' + size + '" ' +
+        'data-skin="' + C.escapeHtml(game.slug) + '" ' +
+        'data-status="' + C.escapeHtml(game.status) + '" ' +
         'style="--card-rgb:' + C.rgb(accent) +
-        ';--card-alt-rgb:' + C.rgb(alt) +
+        ';--card-alt-rgb:' + C.rgb(game.accentAlt || accent) +
         ';--card-status:' + st.accent +
-        ';--card-angle:' + angleFor(game.slug) + 'deg' +
-        ';transition-delay:' + Math.min(index * 60, 420) + 'ms">' +
+        ';transition-delay:' + Math.min(index * 70, 420) + 'ms">' +
 
-        '<div class="poster__frame">' +
-          '<span class="poster__glyph" aria-hidden="true">' +
-            C.escapeHtml(game.title.charAt(0)) + '</span>' +
-          scene +
-          '<span class="poster__scrim" aria-hidden="true"></span>' +
+        (wide
+          ? '<img class="band__art" src="' + C.escapeHtml(wide) + '" alt="" ' +
+            'loading="lazy" decoding="async">'
+          : '') +
+        '<span class="band__scrim" aria-hidden="true"></span>' +
+        '<span class="band__edge" aria-hidden="true"></span>' +
 
-          '<span class="poster__status">' + C.escapeHtml(st.label) + '</span>' +
-          (p.perfect
-            ? '<span class="poster__seal" title="Закрыта полностью">100%</span>'
+        '<div class="band__body">' +
+          '<p class="band__status">' + C.escapeHtml(st.label) + '</p>' +
+          (art.logo
+            ? '<img class="band__logo" src="' + C.escapeHtml(art.logo) + '" alt="">'
             : '') +
-
-          '<div class="poster__plate"' +
-              (sceneSrc ? ' data-has-art' : '') + '>' +
-            logo +
-            '<h2 class="poster__title">' + C.escapeHtml(game.title) + '</h2>' +
-            '<p class="poster__meta">' + meta.join('<i>·</i>') + '</p>' +
-          '</div>' +
+          '<h2 class="band__title">' + C.escapeHtml(game.title) + '</h2>' +
+          '<p class="band__meta">' + meta.join('<i>·</i>') + '</p>' +
         '</div>' +
 
-        '<div class="poster__foot">' +
-          '<div class="poster__track">' +
-            '<div class="poster__fill" data-fill="' + p.pct + '"></div>' +
-          '</div>' +
-          '<div class="poster__nums">' +
-            '<span><b>' + p.must.done + '</b>/' + p.must.total + ' обязательных</span>' +
-            '<span class="poster__pct">' + p.pct + '%</span>' +
-          '</div>' +
+        '<div class="band__side">' +
+          (p.perfect ? '<span class="band__seal">100%</span>' : '') +
+          '<span class="band__pct">' + p.pct + '<i>%</i></span>' +
+          '<span class="band__count"><b>' + p.must.done + '</b>/' +
+            p.must.total + ' обязательных</span>' +
+          '<span class="band__track"><i data-fill="' + p.pct + '"></i></span>' +
         '</div>' +
       '</a>'
     );
@@ -307,7 +229,7 @@
 
     list.sort(SORTERS[state.sort] || SORTERS.recent);
 
-    host.innerHTML = list.length ? list.map(cardHtml).join('') : EMPTY_HTML;
+    host.innerHTML = list.length ? list.map(bandHtml).join('') : EMPTY_HTML;
 
     var count = qs('[data-visible-count]');
     if (count) {
@@ -321,57 +243,54 @@
   /* ---------- Поведение карточек ---------------------------- */
 
   function attachCardBehaviour(host) {
-    /* Кадр и логотип показываем только после успешной загрузки. */
-    qsa('.poster__scene', host).forEach(function (img) {
-      function ok() { img.closest('.poster').classList.add('has-scene'); }
+    /* Арт и логотип показываем только после успешной загрузки —
+       иначе под ними остаётся процедурный фон полосы. */
+    qsa('.band__art', host).forEach(function (img) {
+      function ok() { img.closest('.band').classList.add('has-art'); }
       if (img.complete) { img.naturalWidth ? ok() : img.remove(); return; }
       img.addEventListener('load', ok);
       img.addEventListener('error', function () { img.remove(); });
     });
 
-    qsa('.poster__logo', host).forEach(function (img) {
-      function ok() { img.closest('.poster').classList.add('has-logo'); }
+    qsa('.band__logo', host).forEach(function (img) {
+      function ok() { img.closest('.band').classList.add('has-logo'); }
       if (img.complete) { img.naturalWidth ? ok() : img.remove(); return; }
       img.addEventListener('load', ok);
       img.addEventListener('error', function () { img.remove(); });
     });
 
-    var cards = qsa('.poster', host);
+    var bands = qsa('.band', host);
+
+    function fill(band) {
+      var bar = qs('.band__track i', band);
+      if (bar) bar.style.width = bar.getAttribute('data-fill') + '%';
+    }
 
     if ('IntersectionObserver' in window && !C.reducedMotion()) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (!entry.isIntersecting) return;
           entry.target.classList.add('is-in');
-          var fill = qs('.poster__fill', entry.target);
-          if (fill) fill.style.width = fill.getAttribute('data-fill') + '%';
+          fill(entry.target);
           io.unobserve(entry.target);
         });
-      }, { rootMargin: '0px 0px -6% 0px', threshold: 0.06 });
-
-      cards.forEach(function (card) { io.observe(card); });
+      }, { rootMargin: '0px 0px -5% 0px', threshold: 0.05 });
+      bands.forEach(function (b) { io.observe(b); });
     } else {
-      cards.forEach(function (card) {
-        card.classList.add('is-in');
-        var fill = qs('.poster__fill', card);
-        if (fill) fill.style.width = fill.getAttribute('data-fill') + '%';
-      });
+      bands.forEach(function (b) { b.classList.add('is-in'); fill(b); });
     }
 
     if (C.reducedMotion() || window.matchMedia('(hover: none)').matches) return;
 
-    /* Лёгкий параллакс кадра за курсором. */
-    cards.forEach(function (card) {
-      card.addEventListener('pointermove', function (e) {
-        var box = card.getBoundingClientRect();
+    /* Арт едет за курсором — полоса перестаёт быть статичной. */
+    bands.forEach(function (band) {
+      band.addEventListener('pointermove', function (e) {
+        var box = band.getBoundingClientRect();
         var px = (e.clientX - box.left) / box.width - 0.5;
-        var py = (e.clientY - box.top) / box.height - 0.5;
-        card.style.setProperty('--px', (px * 14).toFixed(2) + 'px');
-        card.style.setProperty('--py', (py * 10).toFixed(2) + 'px');
+        band.style.setProperty('--px', (px * 18).toFixed(1) + 'px');
       });
-      card.addEventListener('pointerleave', function () {
-        card.style.setProperty('--px', '0px');
-        card.style.setProperty('--py', '0px');
+      band.addEventListener('pointerleave', function () {
+        band.style.setProperty('--px', '0px');
       });
     });
   }
@@ -445,7 +364,6 @@
   function init() {
     loadPrefs();
     renderTicker();
-    renderStage();
     renderFilters();
     syncUI();
     renderCollection();

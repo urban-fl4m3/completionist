@@ -626,3 +626,88 @@ body.is-perfect .crest__title {
   .seal__pct { font-size: 2.5rem; }
   .verdict { border-right: 0; border-left-width: 2px; text-align: left; }
 }
+
+/*  ============================================================
+ *  ФУРНИТУРА: гравированные пластины и филигрань
+ *  Ничего скруглённого и ничего прямоугольного «по умолчанию»:
+ *  строка — это пластина с золотой засечкой и угловыми метками.
+ *  ============================================================ */
+
+/* Заголовок группы — гравированная плашка с фланкирующими линиями. */
+.g-group__head {
+  position: relative;
+  padding: 0.5rem 0 0.55rem;
+  border-bottom: 0;
+}
+
+.g-group__head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    var(--gold) 0, rgba(212, 164, 76, 0.35) 22%, transparent 70%);
+}
+
+.g-group__name {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+/* Ромб-засечка перед названием группы. */
+.g-group__name::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.42em;
+  width: 7px;
+  height: 7px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+
+/* Строка цели: золотой хребет слева и угловые метки. */
+.g-goal {
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.g-goal::before {
+  content: '';
+  position: absolute;
+  left: 0.55rem;
+  top: 0.9rem;
+  bottom: 0.9rem;
+  width: 1px;
+  background: linear-gradient(180deg,
+    transparent, rgba(212, 164, 76, 0.55), transparent);
+}
+
+.g-goal.is-done::before {
+  background: linear-gradient(180deg, transparent, var(--gold-hi), transparent);
+  box-shadow: 0 0 10px rgba(243, 217, 155, 0.7);
+}
+
+/* Угловые засечки проявляются при наведении — как тиснение. */
+.g-goal::after {
+  content: '';
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid var(--gold);
+  border-right: 1px solid var(--gold);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.g-goal:hover::after { opacity: 0.8; }
+
+/* Ссылки — не кнопки, а гравированные таблички с фаской. */
+.g-link {
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px),
+                     calc(100% - 8px) 100%, 0 100%, 0 8px);
+}

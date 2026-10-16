@@ -1,5 +1,8 @@
 /*  ============================================================
- *  HUB — коллекция. Игры занимают экран, статистика — полоску.
+ *  HUB — вертикальный список игр
+ *  ============================================================
+ *  Одна игра — одна длинная полоса во всю ширину с широким
+ *  артом. Статистика свёрнута в шапку и занимает минимум места.
  *  ============================================================ */
 
 :root {
@@ -22,9 +25,8 @@
   --st-planned:     #6aa6ff;
   --st-dropped:     #ff5f6d;
 
-  --radius: 20px;
-  --shell:  1480px;
-  --ease:   cubic-bezier(0.22, 1, 0.36, 1);
+  --shell: 1420px;
+  --ease:  cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 body {
@@ -45,20 +47,19 @@ body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(900px 560px at 10% -8%, rgba(124, 92, 255, 0.2), transparent 60%),
-    radial-gradient(760px 500px at 90% 4%,  rgba(77, 219, 255, 0.12), transparent 62%),
-    radial-gradient(1100px 760px at 50% 110%, rgba(61, 220, 151, 0.09), transparent 60%),
+    radial-gradient(900px 560px at 10% -8%, rgba(124, 92, 255, 0.18), transparent 60%),
+    radial-gradient(760px 500px at 90% 4%,  rgba(77, 219, 255, 0.1), transparent 62%),
     linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
 }
 
-#stars { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.8; }
+#stars { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.7; }
 
 .grain {
   position: fixed;
   inset: -200%;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.028;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain 7s steps(6) infinite;
 }
@@ -81,10 +82,7 @@ body {
   padding: 0 clamp(16px, 3.5vw, 44px);
 }
 
-/*  ---------- Шапка со статистикой --------------------------
- *  Вся сводка — одной строкой в topbar. Она не должна
- *  занимать первый экран вместо игр.
- * --------------------------------------------------------- */
+/*  ---------- Шапка со статистикой -------------------------- */
 
 .topbar {
   position: sticky;
@@ -99,7 +97,7 @@ body {
   display: flex;
   align-items: center;
   gap: clamp(1rem, 3vw, 2.5rem);
-  min-height: 66px;
+  min-height: 64px;
   padding-block: 0.5rem;
 }
 
@@ -116,15 +114,15 @@ body {
 .brand__mark {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 10px;
   background: linear-gradient(135deg, var(--brand), var(--brand-2));
   box-shadow: 0 6px 20px rgba(124, 92, 255, 0.4);
 }
 
-.brand__mark svg { width: 19px; height: 19px; }
-.brand__text { font-size: 1.02rem; }
+.brand__mark svg { width: 18px; height: 18px; }
+.brand__text { font-size: 1rem; }
 .brand__text span { color: var(--muted); font-weight: 600; }
 
 .ticker {
@@ -146,7 +144,7 @@ body {
 }
 
 .ticker__value {
-  font-size: 1.12rem;
+  font-size: 1.1rem;
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -155,9 +153,8 @@ body {
 }
 
 .ticker__label {
-  font-size: 0.68rem;
+  font-size: 0.67rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
   color: var(--faint);
   white-space: nowrap;
 }
@@ -171,12 +168,7 @@ body {
   overflow: hidden;
 }
 
-.ticker__bar i {
-  display: block;
-  height: 100%;
-  background: var(--tc);
-  box-shadow: 0 0 8px var(--tc);
-}
+.ticker__bar i { display: block; height: 100%; background: var(--tc); }
 
 /*  ---------- Панель фильтров ------------------------------- */
 
@@ -185,7 +177,7 @@ body {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.6rem;
-  margin: clamp(1.4rem, 3vw, 2.2rem) 0 clamp(1.1rem, 2.4vw, 1.6rem);
+  margin: clamp(1.3rem, 3vw, 2rem) 0 clamp(1rem, 2vw, 1.4rem);
 }
 
 .filters { display: flex; flex-wrap: wrap; gap: 0.4rem; }
@@ -271,83 +263,104 @@ body {
 
 .sort option { background: #12141f; color: var(--text); }
 
-/*  ---------- Полка постеров --------------------------------
- *  Карточка строится вокруг кадра из игры: крупно, во всю
- *  ширину ячейки, с логотипом поверх.
- * --------------------------------------------------------- */
+/*  ============================================================
+ *  ПОЛКА: вертикальный список длинных баннеров
+ *  ============================================================ */
 
-/*  ---------- Витрина: текущая игра -------------------------
- *  Кадр во всю ширину. Это не плитка — у неё своя композиция
- *  и свой масштаб, чтобы было видно, что идёт прямо сейчас.
- * --------------------------------------------------------- */
+.shelf {
+  display: grid;
+  gap: clamp(0.8rem, 1.6vw, 1.3rem);
+  padding-bottom: 4.5rem;
+}
 
-.stage {
+.band {
+  --px: 0px;
   position: relative;
-  display: block;
-  margin-top: clamp(1.2rem, 3vw, 2rem);
-  aspect-ratio: 21 / 9;
-  min-height: 300px;
-  border-radius: 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  height: clamp(185px, 21vw, 250px);
   overflow: hidden;
   text-decoration: none;
-  border: 1px solid var(--line);
-  transition: border-color 0.4s, box-shadow 0.5s var(--ease);
+  background: linear-gradient(110deg, #12141f, #0a0b12);
+  transition: box-shadow 0.45s var(--ease), transform 0.45s var(--ease);
 }
 
-.stage:hover {
-  border-color: rgba(var(--card-rgb), 0.6);
-  box-shadow: 0 34px 80px -34px rgba(0, 0, 0, 0.9),
-              0 0 80px -26px rgba(var(--card-rgb), 0.55);
+/* Текущая игра выше остальных — её видно первой. */
+.band[data-status='in-progress'] { height: clamp(240px, 28vw, 330px); }
+
+.band:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 26px 60px -26px rgba(0, 0, 0, 0.9),
+              0 0 70px -22px rgba(var(--card-rgb), 0.5);
 }
 
-.stage__scene {
+.band.reveal { opacity: 0; transform: translateY(18px); }
+
+.band.reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s var(--ease), transform 0.7s var(--ease);
+}
+
+.band__art {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 72% 32%;
-  transform: scale(1.02);
-  transition: transform 0.9s var(--ease);
+  object-position: var(--crop, 60% 34%);
+  opacity: 0;
+  transform: translate3d(var(--px), 0, 0) scale(1.04);
+  transition: opacity 0.7s var(--ease), transform 0.5s var(--ease);
 }
 
-.stage:hover .stage__scene { transform: scale(1.06); }
+.band.has-art .band__art { opacity: 1; }
 
-.stage__scrim {
+.band.has-art:hover .band__art {
+  transform: translate3d(var(--px), 0, 0) scale(1.08);
+}
+
+.band__scrim {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(6, 7, 13, 0.95) 6%, rgba(6, 7, 13, 0.45) 46%, transparent 76%),
-    linear-gradient(180deg, transparent 40%, rgba(6, 7, 13, 0.85));
+    linear-gradient(90deg, rgba(6, 7, 13, 0.9) 0%, rgba(6, 7, 13, 0.42) 34%,
+      rgba(6, 7, 13, 0) 58%, rgba(6, 7, 13, 0.35) 100%),
+    linear-gradient(180deg, rgba(6, 7, 13, 0.3), transparent 38%,
+      rgba(6, 7, 13, 0.45) 100%);
 }
 
-.stage__body {
-  position: absolute;
-  left: 0;
-  bottom: 0;
+/* Декоративная кромка — у каждой игры своя, см. скины ниже. */
+.band__edge { position: absolute; inset: 0; pointer-events: none; }
+
+.band__body {
+  position: relative;
+  z-index: 2;
   display: grid;
-  gap: 0.5rem;
-  max-width: min(560px, 76%);
-  padding: clamp(1.2rem, 3vw, 2.4rem);
+  gap: 0.35rem;
+  align-content: end;
+  min-width: 0;
+  padding: clamp(1.1rem, 2.4vw, 1.9rem);
 }
 
-.stage__kicker {
-  font-size: 0.72rem;
+.band__status {
+  font-size: 0.67rem;
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--card-status);
 }
 
-.stage__logo {
-  max-width: min(100%, 330px);
-  max-height: 92px;
+.band__logo {
+  max-width: min(100%, 290px);
+  max-height: 72px;
   object-fit: contain;
   object-position: left bottom;
-  filter: drop-shadow(0 4px 22px rgba(0, 0, 0, 0.9));
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.95));
 }
 
-.stage.has-logo .stage__title {
+.band.has-logo .band__title {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -355,309 +368,193 @@ body {
   clip-path: inset(50%);
 }
 
-.stage__title {
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
+.band__title {
+  font-size: clamp(1.4rem, 2.8vw, 2.1rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 1.05;
+  line-height: 1.1;
   color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.9);
 }
 
-.stage__note {
-  max-width: 46ch;
-  font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.76);
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
-}
-
-.stage__meter {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-top: 0.3rem;
-}
-
-.stage__track {
-  flex: 1 1 auto;
-  max-width: 280px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.stage__track i {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  background: var(--card-status);
-  box-shadow: 0 0 14px var(--card-status);
-}
-
-.stage__nums {
-  flex: none;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #fff;
-  font-variant-numeric: tabular-nums;
-}
-
-/*  ---------- Мозаика ---------------------------------------
- *  Плитки разного размера: пройденные и текущие крупнее.
- *  Сетка перестаёт быть однообразной таблицей.
- * --------------------------------------------------------- */
-
-.mosaic {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  grid-auto-rows: 10px;
-  gap: clamp(0.9rem, 1.6vw, 1.4rem);
-  padding-bottom: 4.5rem;
-}
-
-.poster[data-size='norm'] { grid-row: span 37; }
-.poster[data-size='tall'] { grid-row: span 44; }
-
-.poster[data-size='wide'] {
-  grid-column: span 2;
-  grid-row: span 37;
-}
-
-/* Широкая плитка показывает ландшафтный кадр, а не обрезок
-   вертикальной обложки. */
-.poster[data-size='wide'] .poster__frame { aspect-ratio: auto; flex: 1 1 auto; }
-.poster[data-size='wide'] .poster__scene { object-position: 70% 30%; }
-
-@media (max-width: 620px) {
-  .poster[data-size='wide'] { grid-column: span 1; }
-}
-
-.poster {
-  --px: 0px;
-  --py: 0px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  border-radius: var(--radius);
-  overflow: hidden;
-  text-decoration: none;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  transition: border-color 0.4s, box-shadow 0.5s var(--ease),
-              transform 0.5s var(--ease);
-}
-
-.poster:hover {
-  transform: translateY(-4px);
-  border-color: rgba(var(--card-rgb), 0.55);
-  box-shadow:
-    0 30px 60px -24px rgba(0, 0, 0, 0.9),
-    0 0 60px -18px rgba(var(--card-rgb), 0.5);
-}
-
-.poster.reveal { opacity: 0; transform: translateY(26px); }
-
-.poster.reveal.is-in {
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.65s var(--ease), transform 0.75s var(--ease);
-}
-
-/* --- Кадр --- */
-
-.poster__frame {
-  position: relative;
-  aspect-ratio: 2 / 3;
-  overflow: hidden;
-  background:
-    radial-gradient(130% 110% at 18% 0%, rgba(var(--card-rgb), 0.6), transparent 58%),
-    radial-gradient(120% 130% at 92% 100%, rgba(var(--card-alt-rgb), 0.45), transparent 60%),
-    linear-gradient(145deg, #15172a, #0a0b14);
-}
-
-/* Штриховка — запасной арт, у каждой игры свой угол. */
-.poster__frame::before {
-  content: '';
-  position: absolute;
-  inset: -30%;
-  background: repeating-linear-gradient(
-    var(--card-angle, 115deg),
-    rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 12px);
-  transition: opacity 0.5s var(--ease);
-}
-
-.poster.has-scene .poster__frame::before { opacity: 0; }
-
-.poster__scene {
-  position: absolute;
-  inset: -3%;
-  width: 106%;
-  height: 106%;
-  object-fit: cover;
-  opacity: 0;
-  transform: translate3d(var(--px), var(--py), 0) scale(1.02);
-  transition: opacity 0.8s var(--ease), transform 0.5s var(--ease);
-}
-
-.poster.has-scene .poster__scene { opacity: 1; }
-.poster.has-scene:hover .poster__scene { transform: translate3d(var(--px), var(--py), 0) scale(1.08); }
-
-.poster__scrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(6, 7, 13, 0.3) 0%,
-    rgba(6, 7, 13, 0.05) 30%,
-    rgba(6, 7, 13, 0.72) 72%,
-    rgba(6, 7, 13, 0.95) 100%);
-}
-
-/* Монограмма — единственный арт, если кадра нет. */
-.poster__glyph {
-  position: absolute;
-  right: -0.06em;
-  bottom: -0.28em;
-  font-size: 11rem;
-  font-weight: 800;
-  line-height: 0.8;
-  letter-spacing: -0.06em;
-  color: rgba(255, 255, 255, 0.1);
-  text-shadow: 0 0 70px rgba(var(--card-rgb), 0.55);
-  user-select: none;
-  transition: opacity 0.5s;
-}
-
-.poster.has-scene .poster__glyph { opacity: 0; }
-
-/* --- Плашка с названием --- */
-
-.poster__plate {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: grid;
-  gap: 0.35rem;
-  padding: 1.1rem 1.3rem;
-}
-
-.poster__logo {
-  max-width: min(74%, 290px);
-  max-height: 84px;
-  object-fit: contain;
-  object-position: left bottom;
-  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.9));
-}
-
-/* Обложка уже содержит название — текстовый заголовок прячем,
-   но оставляем в разметке для скринридеров и поиска. */
-.poster.has-scene .poster__plate[data-has-art] .poster__title,
-.poster.has-logo .poster__title {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
-
-.poster__title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
-  color: #fff;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85);
-}
-
-.poster__meta {
+.band__meta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  font-size: 0.8rem;
+  font-size: 0.79rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.72);
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
 }
 
-.poster__meta i { font-style: normal; opacity: 0.4; }
+.band__meta i { font-style: normal; opacity: 0.4; }
 
-/* --- Значки --- */
+/* --- Правая колонка с прогрессом --- */
 
-.poster__status {
-  position: absolute;
-  left: 1rem;
-  top: 1rem;
-  padding: 0.3rem 0.7rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #060710;
-  background: var(--card-status);
-  border-radius: 999px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-}
-
-.poster__seal {
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
+.band__side {
+  position: relative;
+  z-index: 2;
   display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  font-size: 0.64rem;
-  font-weight: 800;
-  color: var(--st-completed);
-  background: rgba(6, 7, 13, 0.72);
-  border: 1.5px solid var(--st-completed);
-  border-radius: 50%;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 0 20px rgba(61, 220, 151, 0.4);
+  justify-items: end;
+  align-content: end;
+  gap: 0.35rem;
+  padding: clamp(1.1rem, 2.4vw, 1.9rem);
+  text-align: right;
+  white-space: nowrap;
 }
 
-/* --- Подвал карточки --- */
+.band__pct {
+  font-size: clamp(1.8rem, 3.6vw, 2.7rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
+}
 
-.poster__foot { padding: 0.85rem 1.3rem 1rem; }
+.band__pct i { font-style: normal; font-size: 0.4em; color: var(--card-status); }
 
-.poster__track {
+.band__count {
+  font-size: 0.73rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+}
+
+.band__count b { color: #fff; }
+
+.band__track {
+  display: block;
+  width: clamp(110px, 15vw, 180px);
   height: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  margin-top: 0.3rem;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 999px;
   overflow: hidden;
 }
 
-.poster__fill {
-  height: 100%;
+.band__track i {
+  display: block;
   width: 0;
+  height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(var(--card-rgb), 0.9), var(--card-status));
-  box-shadow: 0 0 12px rgba(var(--card-rgb), 0.75);
+  background: var(--card-status);
+  box-shadow: 0 0 12px var(--card-status);
   transition: width 1.1s var(--ease);
 }
 
-.poster__nums {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  font-size: 0.78rem;
-  color: var(--muted);
+.band__seal {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.2rem;
+  font-size: 0.59rem;
+  font-weight: 800;
+  color: var(--st-completed);
+  border: 1.5px solid var(--st-completed);
+  border-radius: 50%;
+  background: rgba(6, 7, 13, 0.6);
+  box-shadow: 0 0 18px rgba(61, 220, 151, 0.4);
 }
 
-.poster__nums b { color: var(--text); font-variant-numeric: tabular-nums; }
+/*  ============================================================
+ *  СКИНЫ ПОЛОС — форма и подсветка под конкретную игру
+ *  ============================================================ */
 
-.poster__pct {
-  font-size: 0.92rem;
-  font-weight: 800;
-  color: var(--card-status);
-  font-variant-numeric: tabular-nums;
+/* --- Cyberpunk: срезанный угол, жёлтая засечка, развёртка --- */
+.band[data-skin='cyberpunk-2077'] {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px),
+                     calc(100% - 24px) 100%, 0 100%);
+}
+
+.band[data-skin='cyberpunk-2077'] .band__edge {
+  border-left: 3px solid #fcee0a;
+  background:
+    linear-gradient(90deg, rgba(252, 238, 10, 0.14), transparent 16%),
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0 2px, transparent 2px 4px);
+}
+
+.band[data-skin='cyberpunk-2077'] { --crop: 72% 28%; }
+
+.band[data-skin='cyberpunk-2077'] .band__status {
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 0.26em;
+}
+
+/* --- Elden Ring: золотая двойная рамка с угловыми засечками --- */
+.band[data-skin='elden-ring'] { --crop: 52% 38%; }
+
+.band[data-skin='elden-ring'] .band__edge {
+  box-shadow: inset 0 0 0 1px rgba(212, 164, 76, 0.4),
+              inset 0 0 0 5px rgba(6, 7, 13, 0.5),
+              inset 0 0 0 6px rgba(212, 164, 76, 0.2);
+}
+
+.band[data-skin='elden-ring'] .band__edge::before,
+.band[data-skin='elden-ring'] .band__edge::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #d4a44c;
+}
+
+.band[data-skin='elden-ring'] .band__edge::before {
+  left: 11px;
+  top: 11px;
+  border-width: 1px 0 0 1px;
+}
+
+.band[data-skin='elden-ring'] .band__edge::after {
+  right: 11px;
+  bottom: 11px;
+  border-width: 0 1px 1px 0;
+}
+
+/* --- Hollow Knight: мягкая форма и свечение из глубины --- */
+.band[data-skin='hollow-knight'] { border-radius: 18px; --crop: 62% 36%; }
+
+.band[data-skin='hollow-knight'] .band__edge {
+  border-radius: 18px;
+  box-shadow: inset 0 0 90px rgba(127, 212, 232, 0.18),
+              inset 0 0 0 1px rgba(127, 212, 232, 0.2);
+}
+
+/* --- Starfield: технические скобки по углам --- */
+.band[data-skin='starfield'] { --crop: 54% 44%; }
+
+.band[data-skin='starfield'] .band__edge {
+  box-shadow: inset 0 0 0 1px rgba(159, 180, 199, 0.2);
+  background-image:
+    linear-gradient(#ff7a3d, #ff7a3d), linear-gradient(#ff7a3d, #ff7a3d),
+    linear-gradient(#ff7a3d, #ff7a3d), linear-gradient(#ff7a3d, #ff7a3d);
+  background-repeat: no-repeat;
+  background-size: 20px 2px, 2px 20px, 20px 2px, 2px 20px;
+  background-position:
+    12px 12px, 12px 12px,
+    calc(100% - 12px) calc(100% - 12px), calc(100% - 12px) calc(100% - 12px);
+}
+
+/* --- Fire Emblem: витая кромка как у тканого полотна --- */
+.band[data-skin='fire-emblem-fortunes-weave'] { --crop: 50% 42%; }
+
+.band[data-skin='fire-emblem-fortunes-weave'] .band__edge {
+  box-shadow: inset 0 0 0 1px rgba(224, 180, 87, 0.28);
+}
+
+.band[data-skin='fire-emblem-fortunes-weave'] .band__edge::before {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #5b4a9e 0 10px, #e0b457 10px 20px);
+  opacity: 0.8;
 }
 
 /*  ---------- Пустое состояние ------------------------------ */
 
 .empty {
-  grid-column: 1 / -1;
   display: grid;
   place-items: center;
   gap: 0.6rem;
@@ -665,7 +562,7 @@ body {
   text-align: center;
   background: var(--surface);
   border: 1px dashed var(--line);
-  border-radius: var(--radius);
+  border-radius: 18px;
 }
 
 .empty svg { width: 38px; height: 38px; color: var(--faint); }
@@ -701,23 +598,25 @@ body {
 
 /*  ---------- Адаптив --------------------------------------- */
 
-@media (max-width: 1100px) {
-  .mosaic { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-}
-
 @media (max-width: 760px) {
   .topbar__inner { flex-wrap: wrap; }
   .ticker { margin-left: 0; width: 100%; padding-bottom: 0.3rem; }
   .ticker__cell:first-child { padding-left: 0; border-left: 0; }
-  .mosaic { grid-template-columns: repeat(2, 1fr); }
-  .stage { aspect-ratio: 4 / 3; }
-  .stage__body { max-width: 100%; }
   .search { flex-basis: 100%; order: 10; }
-  .poster__glyph { font-size: 8rem; }
+
+  .band,
+  .band[data-status='in-progress'] {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 220px;
+  }
+
+  .band__side { justify-items: start; text-align: left; padding-top: 0; }
+  .band__seal { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .grain { display: none; }
-  .poster.reveal { opacity: 1; transform: none; }
-  .poster__scene { transform: none !important; }
+  .band.reveal { opacity: 1; transform: none; }
+  .band__art { transform: none !important; }
 }

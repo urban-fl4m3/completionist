@@ -33,6 +33,14 @@ window.COMPLETIONIST_DATA = {
       developer: 'FromSoftware',
       steam: 1245620,
 
+      /* Официальный ключевой арт с вики — он сильнее, чем широкий
+         баннер из Steam. Коробочные обложки на сайте не
+         используются: они не работают в длинной полосе. */
+      art: {
+        hero: 'https://static.wikia.nocookie.net/eldenring/images/5/58/' +
+              'ER_KEY_ART.jpg/revision/latest/scale-to-width-down/1600',
+      },
+
       accent: '#d4a44c',
       accentAlt: '#ff7b3d',
       hours: 143,

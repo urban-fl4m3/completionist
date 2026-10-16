@@ -531,3 +531,67 @@ body.has-logo .banner__title {
   .loom__frame { width: 158px; height: 158px; }
   .loom__pct { font-size: 2.6rem; }
 }
+
+/*  ============================================================
+ *  ФУРНИТУРА: тканые ленты и прошитый край
+ *  Строка — не блок, а лента с прошивкой слева и бахромой
+ *  по нижней кромке группы.
+ *  ============================================================ */
+
+.g-goal {
+  position: relative;
+  padding-left: 1.6rem;
+  border: 0;
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.18) 60%, transparent);
+}
+
+/* Прошивка по левому краю ленты. */
+.g-goal::before {
+  content: '';
+  position: absolute;
+  left: 0.6rem;
+  top: 0.7rem;
+  bottom: 0.7rem;
+  width: 2px;
+  background: repeating-linear-gradient(180deg,
+    var(--indigo) 0 5px, transparent 5px 9px);
+  opacity: 0.55;
+  transition: opacity 0.35s, background 0.35s;
+}
+
+.g-goal.is-done::before {
+  opacity: 1;
+  background: repeating-linear-gradient(180deg,
+    var(--gold) 0 5px, transparent 5px 9px);
+}
+
+.g-goal:hover {
+  background: linear-gradient(90deg,
+    rgba(143, 111, 214, 0.14), rgba(255, 255, 255, 0.2) 60%, transparent);
+}
+
+/* Заголовок группы — лента с бахромой по нижнему краю. */
+.g-group__head {
+  position: relative;
+  border-bottom: 0;
+  padding-bottom: 0.65rem;
+}
+
+.g-group__head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg,
+    var(--indigo) 0 2px, transparent 2px 6px);
+  opacity: 0.4;
+}
+
+/* Метка «душнина/стоит» — ярлычок с острым правым краем. */
+.g-goal__flag {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 7px) 50%, 100% 100%, 0 100%);
+  padding-right: 0.85rem;
+}

@@ -586,3 +586,70 @@ body.has-logo .gate__title {
   .orb__pct { font-size: 3rem; }
   .runes div { min-width: 78px; padding: 0.7rem 0.85rem; }
 }
+
+/*  ============================================================
+ *  ФУРНИТУРА: капсулы света и нить, связывающая цели
+ *  Ничего угловатого: всё округлое, мягкое и светящееся изнутри.
+ *  ============================================================ */
+
+.g-list { position: relative; padding-left: 1.5rem; }
+
+/* Вертикальная нить, на которую нанизаны цели. */
+.g-list::before {
+  content: '';
+  position: absolute;
+  left: 0.62rem;
+  top: 1.1rem;
+  bottom: 1.1rem;
+  width: 1px;
+  background: linear-gradient(180deg,
+    transparent, rgba(127, 212, 232, 0.4), transparent);
+}
+
+.g-goal { position: relative; }
+
+/* Узелок на нити напротив каждой цели. */
+.g-goal::before {
+  content: '';
+  position: absolute;
+  left: -0.95rem;
+  top: 1.25rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(127, 212, 232, 0.5);
+  transition: background 0.4s, box-shadow 0.4s;
+}
+
+.g-goal.is-done::before {
+  background: var(--pale);
+  box-shadow: 0 0 12px rgba(230, 243, 248, 0.9);
+}
+
+/* Строка — капсула, а не прямоугольник. */
+.g-goal {
+  border-radius: 999px 18px 18px 999px;
+  padding-right: 1.3rem;
+}
+
+.g-goal.is-done {
+  box-shadow: inset 0 0 36px rgba(127, 212, 232, 0.14);
+}
+
+/* Заголовок группы — светящаяся дуга вместо линии. */
+.g-group__head {
+  position: relative;
+  border-bottom: 0;
+  padding-bottom: 0.75rem;
+}
+
+.g-group__head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10px;
+  border-top: 1px solid rgba(127, 212, 232, 0.25);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}

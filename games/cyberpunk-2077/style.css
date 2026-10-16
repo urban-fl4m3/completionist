@@ -673,3 +673,128 @@ body.has-logo .glitch {
   .path__step { grid-template-columns: 1fr; gap: 0.5rem; }
   .path__step::before { display: none; }
 }
+
+/*  ============================================================
+ *  ДВУХКОЛОННАЯ СТРУКТУРА
+ *  Слева — липкая панель, как боковое меню в самой игре.
+ *  ============================================================ */
+
+.net {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+.net__body { min-width: 0; }
+
+.rail {
+  position: sticky;
+  top: 2rem;
+  display: grid;
+  gap: 1.3rem;
+  padding: 1.1rem 0.9rem;
+  background: rgba(7, 7, 10, 0.72);
+  border: 1px solid rgba(0, 240, 255, 0.18);
+  border-left: 3px solid var(--yellow);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px),
+                     calc(100% - 18px) 100%, 0 100%);
+}
+
+.rail__chip {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--yellow);
+}
+
+.rail__pct { font-size: 2.3rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.rail__chip i { font-style: normal; font-size: 0.85rem; color: var(--muted); }
+
+.rail__nav { display: grid; gap: 1px; }
+
+.rail__nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.6rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 2px solid transparent;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.rail__nav a span { color: var(--faint); }
+
+.rail__nav a:hover {
+  color: var(--bg);
+  background: var(--cyan);
+  border-left-color: var(--yellow);
+}
+
+.rail__nav a:hover span { color: var(--bg); }
+
+.rail__foot {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.56rem;
+  line-height: 1.5;
+  letter-spacing: 0.16em;
+  text-align: center;
+  color: var(--faint);
+}
+
+/*  ============================================================
+ *  ФУРНИТУРА: срезанные углы вместо скруглений
+ *  В интерфейсе игры всё выглядит вырезанным из металлических
+ *  пластин — углы снимаются фаской, а не округляются.
+ *  ============================================================ */
+
+/* Строка цели — пластина со срезанным правым нижним углом. */
+.g-goal {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px),
+                     calc(100% - 10px) 100%, 0 100%);
+}
+
+/* Заголовок группы — лента с косым срезом справа. */
+.g-group__head {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+  padding-right: 1.6rem;
+}
+
+/* Карточка босса — срез по диагонали сверху справа. */
+.unit {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+}
+
+/* Блок разбора — засечка слева снизу. */
+.note {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+}
+
+/* Шестиугольный маркер шага маршрута вместо круга. */
+.path__num {
+  border-radius: 0;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  border: 0;
+  background: rgba(0, 240, 255, 0.14);
+}
+
+.path__step.is-done .path__num { background: var(--cyan); }
+.path__step.is-active .path__num { background: var(--yellow); }
+
+@media (max-width: 900px) {
+  .net { grid-template-columns: 1fr; }
+  .rail {
+    position: static;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+  }
+  .rail__nav { grid-auto-flow: column; }
+  .rail__foot { display: none; }
+}

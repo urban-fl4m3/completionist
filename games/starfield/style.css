@@ -669,3 +669,81 @@ body.has-logo .console__title {
 @media (max-width: 520px) {
   .console__title { font-size: clamp(2.4rem, 15vw, 3.4rem); }
 }
+
+/*  ============================================================
+ *  ФУРНИТУРА: строки бортового манифеста
+ *  Не карточки, а строки технической ведомости: скобка слева,
+ *  точечная линия-выноска, квадратная лампа состояния.
+ *  ============================================================ */
+
+.g-goal {
+  position: relative;
+  align-items: center;
+  padding-left: 1.5rem;
+  border: 0;
+  border-bottom: 1px solid rgba(159, 180, 199, 0.1);
+}
+
+/* Угловая скобка слева — маркер строки ведомости. */
+.g-goal::before {
+  content: '';
+  position: absolute;
+  left: 0.35rem;
+  top: 50%;
+  width: 7px;
+  height: 11px;
+  margin-top: -5.5px;
+  border-left: 1px solid rgba(159, 180, 199, 0.45);
+  border-top: 1px solid rgba(159, 180, 199, 0.45);
+  border-bottom: 1px solid rgba(159, 180, 199, 0.45);
+  transition: border-color 0.25s;
+}
+
+.g-goal.is-done::before { border-color: var(--orange); }
+
+.g-goal:hover { background: rgba(159, 180, 199, 0.04); }
+
+/* Точечная выноска между текстом и правым краем. */
+.g-goal__body { position: relative; }
+
+.g-goal__title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.42em;
+  z-index: -1;
+  border-bottom: 1px dotted rgba(159, 180, 199, 0.22);
+}
+
+.g-goal__title {
+  position: relative;
+  display: inline;
+  padding-right: 0.5rem;
+  background: var(--void);
+}
+
+/* Квадратная лампа вместо галочки. */
+.g-goal__box { border-radius: 0; }
+
+.g-goal.is-done .g-goal__box {
+  box-shadow: 0 0 12px rgba(255, 122, 61, 0.75),
+              inset 0 0 0 2px rgba(10, 12, 16, 0.5);
+}
+
+/* Заголовок группы — строка журнала с индексом. */
+.g-group__head {
+  position: relative;
+  padding-left: 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.g-group__head::before {
+  content: '';
+  position: absolute;
+  left: 0.35rem;
+  top: 50%;
+  width: 9px;
+  height: 2px;
+  background: var(--orange);
+}

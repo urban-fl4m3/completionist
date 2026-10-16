@@ -84,6 +84,21 @@
 </header>
 
 <main class="net">
+  <!-- Левая панель: держится при прокрутке, как боковое меню игры -->
+  <aside class="rail">
+    <div class="rail__chip">
+      <span class="rail__pct" data-progress-pct>0</span><i>%</i>
+    </div>
+    <nav class="rail__nav">
+      <a href="#brief"><span>01</span>Разбор</a>
+      <a href="#bosses"><span>02</span>Боссы</a>
+      <a href="#route"><span>03</span>Маршрут</a>
+      <a href="#goals"><span>04</span>Цели</a>
+    </nav>
+    <p class="rail__foot">NIGHT CITY<br>NET&nbsp;//&nbsp;2077</p>
+  </aside>
+
+  <div class="net__body">
 
   <!-- ======================= Как закрыть игру ======================= -->
   <section class="brief" id="brief">
@@ -351,6 +366,7 @@
     <div data-goals></div>
   </section>
 
+  </div>
 </main>
 
 <footer class="foot">
