@@ -364,7 +364,7 @@ body.has-logo .crest__title {
 .scroll {
   position: relative;
   z-index: 3;
-  max-width: 880px;
+  max-width: 1180px;
   margin: 0 auto clamp(3rem, 8vw, 6rem);
   padding: clamp(1.5rem, 4vw, 2.6rem) clamp(16px, 4vw, 36px) clamp(2rem, 5vw, 3rem);
   background:
@@ -500,79 +500,6 @@ body.has-logo .crest__title {
 
 .g-group__count b { color: var(--gold-hi); }
 
-.g-goal {
-  position: relative;
-  border: 1px solid transparent;
-  border-left: 2px solid rgba(212, 164, 76, 0.18);
-  transition: background 0.3s, border-color 0.3s, transform 0.3s;
-}
-
-.g-goal:hover {
-  background: rgba(212, 164, 76, 0.055);
-  border-left-color: var(--gold);
-  transform: translateX(3px);
-}
-
-/* Ромбовидная «руна» вместо чекбокса. */
-.g-goal__box {
-  width: 1.15rem;
-  height: 1.15rem;
-  margin-top: 0.28rem;
-  color: var(--ink);
-  border: 1px solid rgba(212, 164, 76, 0.5);
-  transform: rotate(45deg);
-  transition: background 0.35s, border-color 0.35s, box-shadow 0.35s;
-}
-
-.g-goal__box svg { transform: rotate(-45deg) scale(0.4); }
-
-.g-goal.is-done .g-goal__box {
-  background: linear-gradient(140deg, var(--gold-hi), var(--gold));
-  border-color: var(--gold-hi);
-  box-shadow: 0 0 18px rgba(243, 217, 155, 0.65);
-}
-
-.g-goal.is-done .g-goal__box svg { transform: rotate(-45deg) scale(1); }
-
-.g-goal__title {
-  font-size: 1.04rem;
-  transition: color 0.3s;
-}
-
-.g-goal.is-done .g-goal__title {
-  color: var(--gold-hi);
-  text-shadow: 0 0 20px rgba(243, 217, 155, 0.22);
-}
-
-.g-goal__note { font-style: italic; color: var(--faint); }
-
-.g-goal__flag {
-  font-family: 'Cinzel', serif;
-  color: var(--ember);
-  background: rgba(255, 123, 61, 0.1);
-  border: 1px solid rgba(255, 123, 61, 0.3);
-}
-
-/* Ссылка на вики у цели — как закладка в фолианте. */
-.g-goal__link {
-  color: var(--faint);
-  border-left: 1px solid rgba(212, 164, 76, 0.12);
-}
-
-.g-goal:hover .g-goal__link { color: var(--gold); }
-.g-goal__link:hover { color: var(--gold-hi); }
-
-/* Искра, вспыхивающая при закрытии цели (ставится из fx.js). */
-.g-goal.just-done::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  background: linear-gradient(90deg,
-    transparent, rgba(243, 217, 155, 0.3), transparent);
-  animation: sparkSweep 0.75s ease-out forwards;
-  pointer-events: none;
-}
-
 @keyframes sparkSweep {
   from { transform: translateX(-100%); opacity: 1; }
   to   { transform: translateX(100%);  opacity: 0; }
@@ -668,46 +595,110 @@ body.is-perfect .crest__title {
   transform: rotate(45deg);
 }
 
-/* Строка цели: золотой хребет слева и угловые метки. */
-.g-goal {
-  position: relative;
-  padding-left: 1.4rem;
-}
-
-.g-goal::before {
-  content: '';
-  position: absolute;
-  left: 0.55rem;
-  top: 0.9rem;
-  bottom: 0.9rem;
-  width: 1px;
-  background: linear-gradient(180deg,
-    transparent, rgba(212, 164, 76, 0.55), transparent);
-}
-
-.g-goal.is-done::before {
-  background: linear-gradient(180deg, transparent, var(--gold-hi), transparent);
-  box-shadow: 0 0 10px rgba(243, 217, 155, 0.7);
-}
-
-/* Угловые засечки проявляются при наведении — как тиснение. */
-.g-goal::after {
-  content: '';
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
-  width: 10px;
-  height: 10px;
-  border-top: 1px solid var(--gold);
-  border-right: 1px solid var(--gold);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.g-goal:hover::after { opacity: 0.8; }
-
 /* Ссылки — не кнопки, а гравированные таблички с фаской. */
 .g-link {
   clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px),
                      calc(100% - 8px) 100%, 0 100%, 0 8px);
 }
+/*  ============================================================
+ *  КАРТОЧКИ ЦЕЛЕЙ — гравированные пластины
+ *  ============================================================ */
+
+.g-group__name { color: var(--gold); position: relative; padding-left: 1.1rem; }
+
+.g-group__name::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.42em;
+  width: 7px;
+  height: 7px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+
+.g-group__head { position: relative; padding-bottom: 0.55rem; }
+
+.g-group__head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold) 0,
+    rgba(212, 164, 76, 0.3) 24%, transparent 72%);
+}
+
+.g-group__count { font-family: 'Cinzel', serif; color: var(--faint); }
+.g-group__count b { color: var(--gold-hi); }
+
+.g-card {
+  background: linear-gradient(180deg, rgba(232, 220, 192, 0.04), transparent);
+  border: 1px solid rgba(212, 164, 76, 0.2);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px),
+                     calc(100% - 14px) 100%, 0 100%, 0 14px);
+  transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
+}
+
+.g-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  box-shadow: 0 20px 44px -22px rgba(0, 0, 0, 0.95),
+              0 0 40px -16px rgba(212, 164, 76, 0.55);
+}
+
+.g-card__art img { filter: sepia(0.35) saturate(0.9) brightness(0.78); }
+.g-card.is-done .g-card__art img { filter: sepia(0.2) saturate(1.05) brightness(0.95); }
+
+.g-card__veil {
+  background: linear-gradient(180deg, rgba(11, 8, 4, 0.15), rgba(11, 8, 4, 0.92));
+  box-shadow: inset 0 0 0 1px rgba(212, 164, 76, 0.12);
+}
+
+.g-card__glyph {
+  font-family: 'Cinzel', serif;
+  color: rgba(212, 164, 76, 0.16);
+}
+
+/* Номер — ромбовидная печать. */
+.g-card__no {
+  font-family: 'Cinzel', serif;
+  color: var(--ink);
+  background: linear-gradient(140deg, var(--gold-hi), var(--gold));
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  min-width: 2.3rem;
+  height: 2.3rem;
+}
+
+.g-card__title { font-family: 'EB Garamond', serif; font-size: 1.06rem; }
+.g-card.is-done .g-card__title { color: var(--gold-hi); }
+.g-card__note { font-style: italic; color: var(--faint); }
+
+.g-card__state {
+  font-family: 'Cinzel', serif;
+  color: var(--faint);
+  border: 1px solid rgba(212, 164, 76, 0.25);
+}
+
+.g-card.is-done .g-card__state {
+  color: var(--ink);
+  background: var(--gold);
+  border-color: var(--gold-hi);
+}
+
+.g-card__flag {
+  font-family: 'Cinzel', serif;
+  color: var(--ember);
+  border: 1px solid rgba(255, 123, 61, 0.35);
+}
+
+.g-card__link { color: var(--faint); }
+.g-card__link:hover { color: var(--gold-hi); }
+
+/* Сводка */
+.sum__row + .sum__row { border-color: rgba(212, 164, 76, 0.16); }
+.sum__name { color: var(--muted); }
+.sum__num { font-family: 'Cinzel', serif; color: var(--gold-hi); }
+.sum__dots { color: var(--gold); }
+.sum__dots i { border-radius: 0; transform: rotate(45deg); }

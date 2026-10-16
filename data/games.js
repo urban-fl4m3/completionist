@@ -59,27 +59,41 @@ window.COMPLETIONIST_DATA = {
       goals: [
         { id: 'er-main',      group: 'Сюжет',    title: 'Пройти основной сюжет',                  done: true },
         { id: 'er-endings',   group: 'Сюжет',    title: 'Открыть все 6 концовок',                 done: true, note: 'Через NG+ и NG++',
-          link: 'https://eldenring.wiki.fextralife.com/Endings' },
+          link: 'https://eldenring.wiki.fextralife.com/Endings',
+          art: 'https://static.wikia.nocookie.net/eldenring/images/f/f0/Promised_Consort_Radahn_CloseUp.jpg' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'er-remem',     group: 'Боссы',    title: 'Победить всех боссов воспоминаний',       done: true,
-          link: 'https://eldenring.wiki.fextralife.com/Bosses' },
+          link: 'https://eldenring.wiki.fextralife.com/Bosses',
+          art: 'https://static.wikia.nocookie.net/eldenring/images/4/43/ER_Godrick_the_Grafted.jpg' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'er-optional',  group: 'Боссы',    title: 'Закрыть всех опциональных боссов',        done: true, note: 'Включая Малению',
-          link: 'https://eldenring.wiki.fextralife.com/Malenia+Blade+of+Miquella' },
+          link: 'https://eldenring.wiki.fextralife.com/Malenia+Blade+of+Miquella',
+          art: 'https://static.wikia.nocookie.net/eldenring/images/5/54/Elden_Ring_Screenshot_07.jpg' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'er-legacy',    group: 'Карта',    title: 'Зачистить все Legacy Dungeon',            done: true,
           link: 'https://eldenring.wiki.fextralife.com/Legacy+Dungeons' },
         { id: 'er-map',       group: 'Карта',    title: 'Собрать все фрагменты карты',             done: true },
         { id: 'er-graces',    group: 'Карта',    title: 'Найти 100% мест благодати',               done: true,
           link: 'https://eldenring.wiki.fextralife.com/Sites+of+Grace' },
         { id: 'er-ashes',     group: 'Сбор',     title: 'Собрать все Spirit Ashes',                done: true,
-          link: 'https://eldenring.wiki.fextralife.com/Spirit+Ashes' },
+          link: 'https://eldenring.wiki.fextralife.com/Spirit+Ashes',
+          art: 'https://static.wikia.nocookie.net/eldenring/images/a/ae/ER_Inventory_Menu_Icon_Ashes.png' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'er-spells',    group: 'Сбор',     title: 'Собрать все заклинания и молитвы',        done: true,
           link: 'https://eldenring.wiki.fextralife.com/Sorceries' },
         { id: 'er-talismans', group: 'Сбор',     title: 'Собрать все талисманы',                   done: true,
-          link: 'https://eldenring.wiki.fextralife.com/Talismans' },
+          link: 'https://eldenring.wiki.fextralife.com/Talismans',
+          art: 'https://static.wikia.nocookie.net/eldenring/images/3/34/ER_Inventory_Menu_Icon_Talismans.png' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'er-weapons',   group: 'Сбор',     title: 'Собрать все уникальные оружия',           done: true,
           link: 'https://eldenring.wiki.fextralife.com/Weapons' },
         { id: 'er-quests',    group: 'NPC',      title: 'Довести до конца все линейки NPC',        done: true, note: 'Самое муторное — Ранни и Нефели',
-          link: 'https://eldenring.wiki.fextralife.com/Ranni+the+Witch' },
-        { id: 'er-plat',      group: 'Мета',     title: 'Платина / 100% ачивок',                   done: true },
+          link: 'https://eldenring.wiki.fextralife.com/Ranni+the+Witch',
+          art: 'https://static.wikia.nocookie.net/eldenring/images/7/77/ER_snow_witch.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'er-plat',      group: 'Мета',     title: 'Платина / 100% ачивок',                   done: true,
+          art: 'https://static.wikia.nocookie.net/eldenring/images/8/8d/Radagon-of-the-golden-order-boss-elden-ring-wiki-guide.jpg' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'er-nodeath',   group: 'Челлендж', title: 'Пройти без смертей',                      done: false, optional: true, note: 'Отдельный ран на будущее' },
       ],
     },
@@ -123,7 +137,9 @@ window.COMPLETIONIST_DATA = {
 
         { id: 'cp-johnny',   group: 'Линии', tier: 'must',  title: 'Максимум отношений с Джонни', done: true,
           note: 'Без этого секретная концовка не откроется',
-          link: 'https://cyberpunk.fandom.com/wiki/Johnny_Silverhand' },
+          link: 'https://cyberpunk.fandom.com/wiki/Johnny_Silverhand',
+          art: 'https://static.wikia.nocookie.net/cyberpunk/images/6/63/Char_profile_placide.png' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'cp-judy',     group: 'Линии', tier: 'must',  title: 'Закрыть линию Джуди', done: true,
           note: 'Только в акте 2 — после точки невозврата недоступна' },
         { id: 'cp-panam',    group: 'Линии', tier: 'must',  title: 'Закрыть линию Панам', done: false,
@@ -132,13 +148,21 @@ window.COMPLETIONIST_DATA = {
         { id: 'cp-kerry',    group: 'Линии', tier: 'worth', title: 'Закрыть линию Керри',  done: false },
 
         { id: 'cp-bosses',   group: 'Боссы', tier: 'must',  title: 'Победить Адама Смэшера', done: false,
-          link: 'https://cyberpunk.fandom.com/wiki/Adam_Smasher' },
+          link: 'https://cyberpunk.fandom.com/wiki/Adam_Smasher',
+          art: 'https://static.wikia.nocookie.net/cyberpunk/images/7/78/Adam_Smasher_Database_CP2077.png' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'cp-chimera',  group: 'Боссы', tier: 'must',  title: 'Победить Химеру в Phantom Liberty', done: false,
-          link: 'https://cyberpunk.fandom.com/wiki/Militech_Chimera' },
+          link: 'https://cyberpunk.fandom.com/wiki/Militech_Chimera',
+          art: 'https://static.wikia.nocookie.net/cyberpunk/images/5/54/Screenshot_008_CP2077PL.jpeg' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'cp-hansen',   group: 'Боссы', tier: 'must',  title: 'Победить Курта Хансена', done: false,
-          link: 'https://cyberpunk.fandom.com/wiki/Kurt_Hansen' },
+          link: 'https://cyberpunk.fandom.com/wiki/Kurt_Hansen',
+          art: 'https://static.wikia.nocookie.net/cyberpunk/images/1/11/Screenshot_005_CP2077PL.jpeg' +
+               '/revision/latest/scale-to-width-down/600' },
         { id: 'cp-optboss',  group: 'Боссы', tier: 'worth', title: 'Встретить всех опциональных боссов', done: false,
-          note: 'Ройс, Вудман, Пласид — зависят от диалогов' },
+          note: 'Ройс, Вудман, Пласид — зависят от диалогов',
+          art: 'https://static.wikia.nocookie.net/cyberpunk/images/c/c3/Royce_Database_CP2077.png' +
+               '/revision/latest/scale-to-width-down/600' },
 
         { id: 'cp-tarot',    group: 'Сбор',  tier: 'worth', title: 'Найти все граффити Таро', done: true,
           link: 'https://cyberpunk.fandom.com/wiki/Fool_on_the_Hill' },
@@ -185,27 +209,45 @@ window.COMPLETIONIST_DATA = {
       ],
 
       goals: [
-        { id: 'hk-main',     group: 'Сюжет',    title: 'Пройти игру (любая концовка)',            done: false },
-        { id: 'hk-endings',  group: 'Сюжет',    title: 'Открыть все 5 концовок',                  done: false },
-        { id: 'hk-112',      group: 'Мета',     title: 'Довести завершение до 112%',              done: false, note: 'Главная цель комплишениста' },
-        { id: 'hk-charms',   group: 'Сбор',     title: 'Собрать все 45 амулетов',                 done: false,
-          link: 'https://hollowknight.fandom.com/wiki/Charms' },
-        { id: 'hk-nail',     group: 'Сбор',     title: 'Полностью улучшить гвоздь',               done: false,
+        { id: 'hk-main',     tier: 'must', group: 'Сюжет',    title: 'Пройти игру (любая концовка)',            done: false,
+          art: 'https://static.wikia.nocookie.net/hollowknight/images/0/05/Forgotten_Crossroads_Hot_Spring.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'hk-endings',  tier: 'must', group: 'Сюжет',    title: 'Открыть все 5 концовок',                  done: false,
+          art: 'https://static.wikia.nocookie.net/hollowknight/images/5/52/Ending_H.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'hk-112',      tier: 'must', group: 'Мета',     title: 'Довести завершение до 112%',              done: false, note: 'Главная цель комплишениста',
+          art: 'https://static.wikia.nocookie.net/hollowknight/images/b/ba/Screenshot_HK_Godhome_01.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'hk-charms',   tier: 'must', group: 'Сбор',     title: 'Собрать все 45 амулетов',                 done: false,
+          link: 'https://hollowknight.fandom.com/wiki/Charms',
+          art: 'https://static.wikia.nocookie.net/hollowknight/images/9/9e/Charms_Set_1.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'hk-nail',     tier: 'must', group: 'Сбор',     title: 'Полностью улучшить гвоздь',               done: false,
           link: 'https://hollowknight.fandom.com/wiki/Nail' },
-        { id: 'hk-mask',     group: 'Сбор',     title: 'Собрать все осколки маски и души',        done: false,
+        { id: 'hk-mask',     tier: 'worth', group: 'Сбор',     title: 'Собрать все осколки маски и души',        done: false,
           link: 'https://hollowknight.fandom.com/wiki/Mask_Shard' },
-        { id: 'hk-journal',  group: 'Сбор',     title: 'Заполнить журнал охотника на 100%',       done: false,
+        { id: 'hk-journal',  tier: 'worth', group: 'Сбор',     title: 'Заполнить журнал охотника на 100%',       done: false,
           link: 'https://hollowknight.fandom.com/wiki/Hunter%27s_Journal' },
-        { id: 'hk-grimm',    group: 'DLC',      title: 'Закрыть линию Grimm Troupe',              done: false,
-          link: 'https://hollowknight.fandom.com/wiki/The_Grimm_Troupe' },
-        { id: 'hk-pantheon', group: 'DLC',      title: 'Пройти все 5 Пантеонов Hallownest',       done: false, note: 'Godhome',
-          link: 'https://hollowknight.fandom.com/wiki/Godhome' },
-        { id: 'hk-pure',     group: 'Челлендж', title: 'Получить Pure Completion (Steel Soul)',   done: false,
-          link: 'https://hollowknight.fandom.com/wiki/Steel_Soul_Mode' },
-        { id: 'hk-radiance', group: 'Челлендж', title: 'Победить Absolute Radiance',              done: false,
-          link: 'https://hollowknight.fandom.com/wiki/Absolute_Radiance' },
-        { id: 'hk-p5',       group: 'Челлендж', title: 'Pantheon of Hallownest без привязок',     done: false, optional: true,
-          link: 'https://hollowknight.fandom.com/wiki/Godhome' },
+        { id: 'hk-grimm',    tier: 'worth', group: 'DLC',      title: 'Закрыть линию Grimm Troupe',              done: false,
+          link: 'https://hollowknight.fandom.com/wiki/The_Grimm_Troupe',
+          art: 'https://static.wikia.nocookie.net/hollowknight/images/1/18/Screenshot_HK_Grimm_01.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'hk-pantheon', tier: 'must', group: 'DLC',      title: 'Пройти все 5 Пантеонов Hallownest',       done: false, note: 'Godhome',
+          link: 'https://hollowknight.fandom.com/wiki/Godhome',
+          art: 'https://static.wikia.nocookie.net/hollowknight/images/b/ba/Screenshot_HK_Godhome_01.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'hk-pure',     tier: 'grind', group: 'Челлендж', title: 'Получить Pure Completion (Steel Soul)',   done: false,
+          link: 'https://hollowknight.fandom.com/wiki/Steel_Soul_Mode',
+          art: 'https://static.wikia.nocookie.net/hollowknight/images/c/cb/Beta_hk_promo.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'hk-radiance', tier: 'must', group: 'Челлендж', title: 'Победить Absolute Radiance',              done: false,
+          link: 'https://hollowknight.fandom.com/wiki/Absolute_Radiance',
+          art: 'https://static.wikia.nocookie.net/hollowknight/images/5/52/B_Radiance.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'hk-p5',       tier: 'grind', group: 'Челлендж', title: 'Pantheon of Hallownest без привязок',     done: false, optional: true,
+          link: 'https://hollowknight.fandom.com/wiki/Godhome',
+          art: 'https://static.wikia.nocookie.net/hollowknight/images/9/98/Screenshot_HK_Nightmare_King_Grimm_01.png' +
+               '/revision/latest/scale-to-width-down/600' },
       ],
     },
 
@@ -304,8 +346,8 @@ window.COMPLETIONIST_DATA = {
       finished: null,
       tags: ['Тактика', 'JRPG', 'Пошаговая'],
       verdict:
-        'Ещё не вышла — релиз 17 сентября 2026 на Switch 2. Цели появятся ' +
-        'после выхода, когда станет понятно, что в ней реально надо закрывать.',
+        'Вышла 17 сентября 2026. Четыре пути по двенадцать глав, которые ' +
+        'сходятся в общей войне, — за один ран всю игру не закрыть.',
 
       links: [
         { kind: 'wiki', label: 'Fire Emblem Wiki',
@@ -313,8 +355,75 @@ window.COMPLETIONIST_DATA = {
       ],
 
       goals: [
-        { id: 'fe-main', group: 'Сюжет', title: 'Пройти основной сюжет', done: false,
-          note: 'Четыре протагониста: Кай, Дитрих, Теодора и Леда' },
+        { id: 'fe-prologue', group: 'Пролог', tier: 'must',
+          title: 'Пройти пролог «Нисхождение»',
+          note: 'Две главы: «Белая птица» и «Разорённая земля»',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/4/46/Fire_Emblem_Fortune%27s_Weave_1.jpg' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-cai', group: 'Четыре пути', tier: 'must',
+          title: 'Путь Кая — Обелиск Лисы',
+          note: '12 глав, финал «Всего одно желание»',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/1/1c/Artwork_Cai.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-dietrich', group: 'Четыре пути', tier: 'must',
+          title: 'Путь Дитриха — Обелиск Льва',
+          note: '12 глав, финал «Марс, Вестник Войны»',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/5/5c/Artwork_Dietrich.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-theodora', group: 'Четыре пути', tier: 'must',
+          title: 'Путь Теодоры — Обелиск Волка',
+          note: '12 глав, финал «Война Занбара»',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/7/7e/Artwork_Theodora.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-leda', group: 'Четыре пути', tier: 'must',
+          title: 'Путь Леды — Обелиск Орла',
+          note: '12 глав, финал «Конец мести»',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/b/b0/Artwork_Leda.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-part2', group: 'Война и спасение', tier: 'must',
+          title: 'Часть II: Война — Обелиск Раздора',
+          note: 'Шесть глав от Равнин Клитиуса до Воплощения Преисподней',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/a/af/Dagda_map.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-part3', group: 'Война и спасение', tier: 'must',
+          title: 'Часть III: Спасение — Врата Судьбы',
+          note: 'Шесть глав, финал «К краю сумерек»',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/6/63/Eshmel_Artwork.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-cetus', group: 'Боссы', tier: 'worth',
+          title: 'Цетус, Морской Тиран',
+          note: 'Глава 8 на пути Дитриха',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/d/d4/CetusFE18Portrait.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-dagda', group: 'Боссы', tier: 'must',
+          title: 'Божественный Император Дагда',
+          note: 'Часть II, глава 5' },
+        { id: 'fe-under', group: 'Боссы', tier: 'must',
+          title: 'Воплощение Преисподней',
+          note: 'Часть II, глава 6 — конец войны' },
+        { id: 'fe-para-orchel', group: 'Паралоги', tier: 'worth',
+          title: 'Паралог «Сожаление Орхель»',
+          note: 'Единственный, доступный на всех путях',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/c/c1/Artwork_Orchel.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-para-rest', group: 'Паралоги', tier: 'worth',
+          title: 'Закрыть остальные восемь паралогов',
+          note: 'Часть привязана к конкретным обелискам — за один ран все не собрать',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/7/79/Artwork_Talimun.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-recruit', group: 'Отряд', tier: 'worth',
+          title: 'Завербовать всех доступных персонажей',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/4/49/Artwork_Bertrand.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-classes', group: 'Отряд', tier: 'worth',
+          title: 'Открыть все классы',
+          art: 'https://static.wikia.nocookie.net/fireemblem/images/f/fc/Artwork_Anatolia.png' +
+               '/revision/latest/scale-to-width-down/600' },
+        { id: 'fe-supports', group: 'Душнина', tier: 'grind',
+          title: 'Открыть все support-диалоги',
+          note: 'Классический гринд серии: требует нескольких прохождений' },
+        { id: 'fe-weapons', group: 'Душнина', tier: 'grind',
+          title: 'Собрать все оружие' },
       ],
     },
   ],

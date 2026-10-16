@@ -559,59 +559,6 @@ body.has-logo .glitch {
 
 .g-list { gap: 0.25rem; }
 
-.g-goal {
-  background: rgba(255, 255, 255, 0.016);
-  border-left: 2px solid rgba(120, 129, 141, 0.25);
-  transition: background 0.2s, border-color 0.2s;
-}
-
-.g-goal:hover { background: rgba(0, 240, 255, 0.04); }
-
-/* Квадратный «сокет» состояния. */
-.g-goal__box {
-  display: grid;
-  place-items: center;
-  width: 1.2rem;
-  height: 1.2rem;
-  color: var(--bg);
-  border: 1px solid rgba(120, 129, 141, 0.5);
-  clip-path: polygon(0 0, 100% 0, 100% 72%, 76% 100%, 0 100%);
-}
-
-.g-goal.is-done .g-goal__box {
-  background: var(--yellow);
-  border-color: var(--yellow);
-  box-shadow: 0 0 14px rgba(252, 238, 10, 0.7);
-}
-
-.g-goal.is-done { border-left-color: var(--yellow); }
-
-.g-goal__title { font-size: 1.02rem; font-weight: 600; }
-.g-goal.is-done .g-goal__title { color: var(--yellow); }
-
-.g-goal__note {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.74rem;
-  color: var(--faint);
-}
-
-/* Градация целей: «стоит того» и «душнина» видны сразу. */
-.g-goal__flag {
-  font-family: 'Share Tech Mono', monospace;
-  border: 1px solid currentColor;
-}
-
-.g-goal__flag[data-tier='worth'] { color: var(--cyan); }
-.g-goal__flag[data-tier='grind'] { color: var(--magenta); }
-
-.g-goal[data-tier='grind'] { opacity: 0.62; }
-.g-goal[data-tier='grind'] .g-goal__title { font-weight: 500; }
-.g-goal[data-tier='grind']:hover { opacity: 1; }
-
-.g-goal__link { color: var(--faint); }
-.g-goal:hover .g-goal__link { color: var(--cyan); }
-.g-goal__link:hover { color: var(--bg); background: var(--cyan); }
-
 /*  ---------- Ссылки игры ----------------------------------- */
 
 .g-link {
@@ -749,18 +696,6 @@ body.has-logo .glitch {
   color: var(--faint);
 }
 
-/*  ============================================================
- *  ФУРНИТУРА: срезанные углы вместо скруглений
- *  В интерфейсе игры всё выглядит вырезанным из металлических
- *  пластин — углы снимаются фаской, а не округляются.
- *  ============================================================ */
-
-/* Строка цели — пластина со срезанным правым нижним углом. */
-.g-goal {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px),
-                     calc(100% - 10px) 100%, 0 100%);
-}
-
 /* Заголовок группы — лента с косым срезом справа. */
 .g-group__head {
   clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
@@ -798,3 +733,89 @@ body.has-logo .glitch {
   .rail__nav { grid-auto-flow: column; }
   .rail__foot { display: none; }
 }
+/*  ============================================================
+ *  КАРТОЧКИ ЦЕЛЕЙ — пластины со срезанными фасками
+ *  ============================================================ */
+
+.g-group__name { font-family: 'Share Tech Mono', monospace; color: var(--cyan); }
+.g-group__count { font-family: 'Share Tech Mono', monospace; color: var(--faint); }
+.g-group__count b { color: var(--yellow); }
+
+.g-group__head {
+  padding: 0.4rem 1.6rem 0.4rem 0.7rem;
+  background: rgba(0, 240, 255, 0.07);
+  border-left: 3px solid var(--cyan);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
+}
+
+.g-card {
+  background: rgba(255, 255, 255, 0.022);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px,
+                     100% 100%, 18px 100%, 0 calc(100% - 18px));
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.g-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan);
+  box-shadow: 0 20px 44px -22px rgba(0, 0, 0, 0.95),
+              0 0 40px -16px rgba(0, 240, 255, 0.55);
+}
+
+.g-card__art img { filter: contrast(1.12) saturate(1.2) brightness(0.84); }
+
+.g-card__veil {
+  background:
+    linear-gradient(180deg, transparent 42%, rgba(7, 7, 10, 0.94)),
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0 1px, transparent 1px 3px);
+}
+
+.g-card__glyph {
+  font-family: 'Share Tech Mono', monospace;
+  color: rgba(252, 238, 10, 0.14);
+}
+
+.g-card__no {
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--bg);
+  background: var(--yellow);
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 78% 100%, 0 100%);
+}
+
+.g-card__title { font-weight: 600; }
+.g-card.is-done .g-card__title { color: var(--yellow); }
+.g-card__note { font-family: 'Share Tech Mono', monospace; font-size: 0.76rem; }
+
+.g-card__state {
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--faint);
+  border: 1px solid rgba(120, 129, 141, 0.4);
+}
+
+.g-card.is-done .g-card__state {
+  color: var(--bg);
+  background: var(--yellow);
+  border-color: var(--yellow);
+}
+
+.g-card__flag {
+  font-family: 'Share Tech Mono', monospace;
+  border: 1px solid currentColor;
+}
+
+.g-card__flag[data-tier='worth'] { color: var(--cyan); }
+.g-card__flag[data-tier='grind'] { color: var(--magenta); }
+
+.g-card[data-tier='grind'] { opacity: 0.62; }
+.g-card[data-tier='grind']:hover { opacity: 1; }
+
+.g-card__link { color: var(--faint); }
+.g-card__link:hover { color: var(--bg); background: var(--cyan); }
+
+/* Сводка */
+.sum__row + .sum__row { border-color: rgba(0, 240, 255, 0.15); }
+.sum__name { color: var(--muted); font-family: 'Share Tech Mono', monospace; font-size: 0.74rem; }
+.sum__num { font-family: 'Share Tech Mono', monospace; color: var(--yellow); }
+.sum__dots { color: var(--cyan); }
+.sum__dots i { border-radius: 0; }

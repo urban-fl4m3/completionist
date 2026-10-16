@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fire Emblem: Fortune's Weave — Completionist</title>
-<meta name="description" content="Цели комплишениста по Fire Emblem: Fortune's Weave.">
+<meta name="description" content="Разбор прохождения Fire Emblem: Fortune's Weave: четыре обелиска, война, боссы и цели комплишениста.">
 <meta name="theme-color" content="#f4efe4">
 
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://static.wikia.nocookie.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Spectral:ital,wght@0,300;0,400;0,600;1,300&display=swap">
 <link rel="stylesheet" href="../../assets/css/base.css">
 <link rel="stylesheet" href="../../assets/css/boot.css">
@@ -17,7 +18,6 @@
 </head>
 <body class="arrive" data-game="fire-emblem-fortunes-weave">
 
-<!-- Золотые нити судьбы, сплетающиеся на холсте -->
 <canvas id="threads" aria-hidden="true"></canvas>
 <div class="weave" aria-hidden="true"></div>
 <div class="tactics" aria-hidden="true"></div>
@@ -39,10 +39,12 @@
   <span>К коллекции</span>
 </a>
 
-<!-- ========================= Гобелен ========================= -->
+<!-- ======================== Гобелен-шапка ======================== -->
 <header class="banner">
+  <!-- Кадр из игры, вплетённый в полотно -->
+  <div class="banner__art" aria-hidden="true"></div>
+
   <div class="banner__inner">
-    <!-- Герб: процедурный, картинок у этой игры нет -->
     <div class="sigil" aria-hidden="true">
       <svg viewBox="0 0 100 120">
         <path class="sigil__shield" d="M50 4 94 20v44c0 28-20 44-44 52C26 108 6 92 6 64V20z"/>
@@ -56,11 +58,10 @@
     <div class="banner__logo" data-logo></div>
     <h1 class="banner__title">Fire&nbsp;Emblem<span>Fortune's&nbsp;Weave</span></h1>
 
-    <p class="banner__sub">Intelligent Systems · Nintendo Switch</p>
+    <p class="banner__sub">Intelligent Systems · Nintendo Switch 2 · 17 сентября 2026</p>
 
     <nav class="banner__links" data-links aria-label="Ссылки по игре"></nav>
 
-    <!-- Станок: кольцо прогресса вплетено в раму -->
     <div class="loom">
       <span class="loom__frame" aria-hidden="true"></span>
       <div class="loom__ring" data-ring data-ring-size="188" data-ring-width="6"></div>
@@ -68,30 +69,117 @@
         <span class="loom__pct" data-progress-pct>0</span>
         <span class="loom__unit">процентов</span>
         <span class="loom__sub">
-          <b data-progress-done>0</b> из <span data-progress-total>0</span> целей
+          <b data-progress-done>0</b> из <span data-progress-total>0</span> обязательных
         </span>
       </div>
     </div>
-
-    <p class="banner__note">
-      Игры нет в Steam, поэтому обложки и кадры подставим вручную.
-      Список целей — заглушка: настоящий появится, когда будут правила прохождения.
-    </p>
   </div>
 </header>
 
-<!-- ========================= Цели ========================= -->
-<main class="tapestry">
-  <div class="tapestry__head">
-    <h2 class="tapestry__title">Полотно целей</h2>
+<main class="loomroom">
 
-  </div>
+  <!-- ========================= Разбор ========================= -->
+  <section class="brief">
+    <h2 class="h">Как закрыть игру</h2>
 
-  <div class="tapestry__bar" aria-hidden="true">
-    <div class="tapestry__fill" data-progress-bar></div>
-  </div>
+    <div class="brief__grid">
+      <article class="weft weft--ok">
+        <h3>Каноничная сложность</h3>
+        <p>
+          <b>Hard / Classic.</b> Серия держит баланс именно на вечной смерти:
+          без неё тактика превращается в перебор ходов. Maddening ломает
+          ранние главы и вынуждает гриндить — это уже не про сюжет.
+        </p>
+      </article>
 
-  <div class="tapestry__body" data-goals></div>
+      <article class="weft weft--must">
+        <h3>Что обязательно</h3>
+        <p>
+          Пролог, <b>все четыре пути</b> Части I, затем Часть II и Часть III.
+          За один ран игру не закрыть: обелиски взаимоисключающие, и каждый
+          ведёт к своей версии войны.
+        </p>
+      </article>
+
+      <article class="weft weft--grind">
+        <h3>Что душно</h3>
+        <p>
+          Полный сбор support-диалогов и всего оружия. Для этого нужны лишние
+          прохождения ради цифр в журнале — помечено как душнина и
+          пропускается без потерь.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ====================== Четыре обелиска ====================== -->
+  <section class="paths">
+    <h2 class="h">Четыре обелиска</h2>
+    <p class="h__sub">
+      После пролога игра расходится на четыре пути по двенадцать глав.
+      Выбор обелиска — это выбор протагониста, союзников и финала Части I.
+    </p>
+
+    <ol class="obelisks">
+      <li class="ob" style="--ob:#c2703f">
+        <h3>Обелиск Лисы</h3>
+        <p class="ob__who">Кай</p>
+        <p class="ob__end">Финал: «Всего одно желание»</p>
+      </li>
+      <li class="ob" style="--ob:#b8893a">
+        <h3>Обелиск Льва</h3>
+        <p class="ob__who">Дитрих</p>
+        <p class="ob__end">Финал: «Марс, Вестник Войны»</p>
+      </li>
+      <li class="ob" style="--ob:#5b4a9e">
+        <h3>Обелиск Волка</h3>
+        <p class="ob__who">Теодора</p>
+        <p class="ob__end">Финал: «Война Занбара»</p>
+      </li>
+      <li class="ob" style="--ob:#8f6fd6">
+        <h3>Обелиск Орла</h3>
+        <p class="ob__who">Леда</p>
+        <p class="ob__end">Финал: «Конец мести»</p>
+      </li>
+    </ol>
+
+    <p class="paths__note">
+      Части II и III общие для всех путей: Обелиск Раздора и Врата Судьбы,
+      по шесть глав каждая.
+    </p>
+  </section>
+
+  <!-- ========================== Цели ========================== -->
+  <section class="tapestry">
+    <div class="tapestry__head">
+      <h2 class="tapestry__title">Полотно целей</h2>
+      <p class="tapestry__hint">Процент считается только по обязательным.</p>
+    </div>
+
+    <div class="tapestry__bar" aria-hidden="true">
+      <div class="tapestry__fill" data-progress-bar></div>
+    </div>
+
+    <div class="tapestry__grid">
+      <div class="tapestry__body" data-goals></div>
+
+      <!-- Сводка держится при прокрутке -->
+      <aside class="sum">
+        <div class="sum__crown" aria-hidden="true">
+          <svg viewBox="0 0 100 100">
+            <rect x="22" y="22" width="56" height="56" transform="rotate(45 50 50)"/>
+            <circle cx="50" cy="50" r="10"/>
+          </svg>
+        </div>
+        <p class="sum__total">
+          <b data-goals-done>0</b><i>/</i><span data-goals-all>0</span>
+        </p>
+        <p class="sum__caption">целей закрыто</p>
+        <div data-summary></div>
+      </aside>
+    </div>
+  </section>
+
 </main>
 
 <footer class="foot">

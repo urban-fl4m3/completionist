@@ -306,7 +306,7 @@ body.has-logo .banner__title {
 .tapestry {
   position: relative;
   z-index: 3;
-  max-width: 860px;
+  max-width: 1180px;
   margin: 0 auto clamp(3rem, 8vw, 5rem);
   padding: clamp(1.4rem, 4vw, 2.4rem) clamp(16px, 4vw, 34px) clamp(1.8rem, 5vw, 2.6rem);
   background: rgba(255, 255, 255, 0.52);
@@ -435,64 +435,6 @@ body.has-logo .banner__title {
 
 .g-list { gap: 0.35rem; }
 
-.g-goal {
-  border: 1px solid transparent;
-  transition: background 0.3s, border-color 0.3s, transform 0.3s;
-}
-
-.g-goal:hover {
-  background: rgba(91, 74, 158, 0.055);
-  border-color: rgba(91, 74, 158, 0.16);
-  transform: translateX(3px);
-}
-
-/* Ромб-кристалл вместо чекбокса — отсылка к клеткам поля. */
-.g-goal__box {
-  width: 1.15rem;
-  height: 1.15rem;
-  margin-top: 0.26rem;
-  color: var(--ivory);
-  background: rgba(255, 255, 255, 0.7);
-  border: 1.5px solid rgba(91, 74, 158, 0.45);
-  transform: rotate(45deg);
-  transition: background 0.35s, border-color 0.35s, box-shadow 0.35s;
-}
-
-.g-goal__box svg { transform: rotate(-45deg) scale(0.4); }
-
-.g-goal.is-done .g-goal__box {
-  background: linear-gradient(140deg, var(--violet), var(--indigo));
-  border-color: var(--indigo);
-  box-shadow: 0 0 0 3px rgba(143, 111, 214, 0.18);
-}
-
-.g-goal.is-done .g-goal__box svg { transform: rotate(-45deg) scale(1); }
-
-.g-goal__title { font-size: 1.02rem; transition: color 0.3s; }
-
-.g-goal.is-done .g-goal__title {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-.g-goal__note { font-style: italic; color: var(--faint); }
-
-.g-goal__flag {
-  color: var(--gold);
-  background: rgba(224, 180, 87, 0.16);
-  border: 1px solid rgba(184, 137, 58, 0.4);
-}
-
-/* Ссылка на вики у цели. */
-.g-goal__link { color: var(--faint); }
-.g-goal:hover .g-goal__link { color: var(--indigo); }
-.g-goal__link:hover { color: var(--gold); }
-
-/* Нить, протягивающаяся при закрытии цели (ставится из fx.js). */
-.g-goal.just-done {
-  animation: stitch 0.7s cubic-bezier(0.22, 1, 0.36, 1) 1;
-}
-
 @keyframes stitch {
   0%   { background: rgba(143, 111, 214, 0.28); }
   100% { background: transparent; }
@@ -532,45 +474,6 @@ body.has-logo .banner__title {
   .loom__pct { font-size: 2.6rem; }
 }
 
-/*  ============================================================
- *  ФУРНИТУРА: тканые ленты и прошитый край
- *  Строка — не блок, а лента с прошивкой слева и бахромой
- *  по нижней кромке группы.
- *  ============================================================ */
-
-.g-goal {
-  position: relative;
-  padding-left: 1.6rem;
-  border: 0;
-  background: linear-gradient(90deg,
-    rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.18) 60%, transparent);
-}
-
-/* Прошивка по левому краю ленты. */
-.g-goal::before {
-  content: '';
-  position: absolute;
-  left: 0.6rem;
-  top: 0.7rem;
-  bottom: 0.7rem;
-  width: 2px;
-  background: repeating-linear-gradient(180deg,
-    var(--indigo) 0 5px, transparent 5px 9px);
-  opacity: 0.55;
-  transition: opacity 0.35s, background 0.35s;
-}
-
-.g-goal.is-done::before {
-  opacity: 1;
-  background: repeating-linear-gradient(180deg,
-    var(--gold) 0 5px, transparent 5px 9px);
-}
-
-.g-goal:hover {
-  background: linear-gradient(90deg,
-    rgba(143, 111, 214, 0.14), rgba(255, 255, 255, 0.2) 60%, transparent);
-}
-
 /* Заголовок группы — лента с бахромой по нижнему краю. */
 .g-group__head {
   position: relative;
@@ -589,9 +492,364 @@ body.has-logo .banner__title {
     var(--indigo) 0 2px, transparent 2px 6px);
   opacity: 0.4;
 }
+/*  ============================================================
+ *  КАРТОЧКИ ЦЕЛЕЙ — тканые панели
+ *  Светлая страница: карточка это кусок полотна с прошивкой
+ *  по краю, а не тёмный блок.
+ *  ============================================================ */
 
-/* Метка «душнина/стоит» — ярлычок с острым правым краем. */
-.g-goal__flag {
+.g-group__name {
+  font-family: 'Marcellus SC', serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--indigo);
+}
+
+.g-group__head { position: relative; padding-bottom: 0.65rem; }
+
+.g-group__head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg,
+    var(--indigo) 0 2px, transparent 2px 6px);
+  opacity: 0.4;
+}
+
+.g-group__count { color: var(--faint); }
+.g-group__count b { color: var(--gold); font-weight: 600; }
+
+.g-card {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(91, 74, 158, 0.18);
+  box-shadow: 0 14px 34px -24px rgba(42, 33, 64, 0.6);
+  transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
+}
+
+/* Прошивка по левому краю полотна. */
+.g-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: 3px;
+  background: repeating-linear-gradient(180deg,
+    var(--indigo) 0 6px, transparent 6px 11px);
+  opacity: 0.5;
+  transition: opacity 0.35s, background 0.35s;
+}
+
+.g-card.is-done::before {
+  opacity: 1;
+  background: repeating-linear-gradient(180deg,
+    var(--gold) 0 6px, transparent 6px 11px);
+}
+
+.g-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(91, 74, 158, 0.5);
+  box-shadow: 0 22px 44px -22px rgba(42, 33, 64, 0.5);
+}
+
+.g-card__art img { filter: saturate(1.05) brightness(1.02); }
+
+/* Светлая вуаль вместо тёмной: страница не тёмная. */
+.g-card__veil {
+  background: linear-gradient(180deg,
+    transparent 46%, rgba(244, 239, 228, 0.92));
+}
+
+.g-card__glyph {
+  font-family: 'Marcellus SC', serif;
+  color: rgba(91, 74, 158, 0.16);
+}
+
+/* Номер — кристалл-ромб. */
+.g-card__no {
+  font-family: 'Marcellus SC', serif;
+  color: var(--ivory);
+  background: linear-gradient(140deg, var(--violet), var(--indigo));
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  min-width: 2.3rem;
+  height: 2.3rem;
+}
+
+.g-card__title { color: var(--ink); font-size: 1.02rem; }
+.g-card.is-done .g-card__title { font-weight: 600; }
+.g-card__note { font-style: italic; color: var(--muted); opacity: 1; }
+
+.g-card__state {
+  font-family: 'Marcellus SC', serif;
+  color: var(--faint);
+  border: 1px solid rgba(154, 144, 173, 0.4);
+}
+
+.g-card.is-done .g-card__state {
+  color: var(--ivory);
+  background: var(--indigo);
+  border-color: var(--indigo);
+}
+
+.g-card__flag {
+  color: var(--gold);
+  background: rgba(224, 180, 87, 0.18);
+  border: 1px solid rgba(184, 137, 58, 0.45);
   clip-path: polygon(0 0, 100% 0, calc(100% - 7px) 50%, 100% 100%, 0 100%);
-  padding-right: 0.85rem;
+  padding-right: 0.8rem;
+}
+
+.g-card__link { color: var(--faint); }
+.g-card__link:hover { color: var(--gold); }
+
+/* Сводка */
+.sum__row + .sum__row { border-color: rgba(91, 74, 158, 0.16); }
+.sum__name { color: var(--muted); }
+.sum__num { font-family: 'Marcellus SC', serif; color: var(--indigo); }
+.sum__dots { color: var(--indigo); }
+.sum__dots i { border-radius: 0; transform: rotate(45deg); }
+
+/* На светлой странице пустой арт сливается с фоном — даём
+   карточке собственную подложку, чтобы она была видна всегда. */
+.g-card__art {
+  background: linear-gradient(145deg,
+    rgba(91, 74, 158, 0.22), rgba(224, 180, 87, 0.18));
+}
+
+.g-card__art img { mix-blend-mode: normal; }
+
+/*  ============================================================
+ *  ШАПКА С КАДРОМ, РАЗБОР, ОБЕЛИСКИ И СВОДКА
+ *  ============================================================ */
+
+.banner { position: relative; z-index: 3; }
+
+/* Кадр вплетается в полотно: светлая страница, поэтому он
+   осветляется, а не затемняется. */
+.banner__art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--art-hero, none);
+  background-size: cover;
+  background-position: center 30%;
+  mask-image: radial-gradient(112% 84% at 50% 18%, #000 10%, transparent 72%);
+  -webkit-mask-image: radial-gradient(112% 84% at 50% 18%, #000 10%, transparent 72%);
+  filter: saturate(0.75) brightness(1.18) contrast(0.88);
+  opacity: 0;
+  animation: weaveIn 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+}
+
+.banner__art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(244, 239, 228, 0.45), rgba(244, 239, 228, 0.9) 72%, var(--ivory));
+}
+
+@keyframes weaveIn {
+  from { opacity: 0; transform: scale(1.05); }
+  to   { opacity: 0.55; transform: none; }
+}
+
+.loomroom {
+  position: relative;
+  z-index: 3;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 34px);
+}
+
+.loomroom > section { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+
+.h {
+  font-family: 'Marcellus SC', serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+
+.h__sub {
+  max-width: 62ch;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* --- Разбор --- */
+
+.brief__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.9rem;
+  margin-top: 1.3rem;
+}
+
+.weft {
+  padding: 1.1rem 1.2rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(91, 74, 158, 0.14);
+  border-top: 3px solid var(--wc, var(--indigo));
+}
+
+.weft h3 {
+  font-family: 'Marcellus SC', serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--wc, var(--indigo));
+}
+
+.weft p { margin-top: 0.5rem; font-size: 0.95rem; color: var(--text); }
+.weft p b { color: var(--ink); }
+
+.weft--ok    { --wc: #4a7c59; }
+.weft--must  { --wc: var(--indigo); }
+.weft--grind { --wc: var(--gold); }
+
+/* --- Обелиски --- */
+
+.obelisks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.9rem;
+  margin-top: 1.3rem;
+}
+
+.ob {
+  position: relative;
+  padding: 1.6rem 1.1rem 1.1rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(91, 74, 158, 0.16);
+  transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s;
+}
+
+/* Ромб-навершие обелиска. */
+.ob::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  background: var(--ob);
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 4px var(--ivory);
+}
+
+.ob:hover {
+  transform: translateY(-4px);
+  border-color: var(--ob);
+  box-shadow: 0 18px 38px -22px rgba(42, 33, 64, 0.55);
+}
+
+.ob h3 {
+  font-family: 'Marcellus SC', serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.1em;
+  color: var(--ob);
+}
+
+.ob__who {
+  margin-top: 0.3rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.ob__end {
+  margin-top: 0.25rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.paths__note {
+  max-width: 62ch;
+  margin-top: 1.1rem;
+  padding-left: 0.9rem;
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--muted);
+  border-left: 2px solid var(--gold);
+}
+
+/* --- Полотно целей со сводкой --- */
+
+.tapestry__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.tapestry__hint { font-size: 0.86rem; font-style: italic; color: var(--muted); }
+
+.tapestry__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: clamp(1.2rem, 2.6vw, 2rem);
+  align-items: start;
+}
+
+.sum {
+  position: sticky;
+  top: 1.5rem;
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  padding: 1.3rem 1.1rem;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(91, 74, 158, 0.18);
+  box-shadow: 0 18px 40px -26px rgba(42, 33, 64, 0.5);
+}
+
+.sum__crown { width: 62px; opacity: 0.85; }
+.sum__crown svg { width: 100%; height: auto; }
+
+.sum__crown rect {
+  fill: none;
+  stroke: var(--indigo);
+  stroke-width: 2.5;
+}
+
+.sum__crown circle { fill: var(--gold-hi); }
+
+.sum__total {
+  display: flex;
+  align-items: baseline;
+  font-family: 'Marcellus SC', serif;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.sum__total b { color: var(--indigo); font-weight: 400; }
+.sum__total i { font-style: normal; margin: 0 0.1em; color: var(--faint); }
+.sum__total span { font-size: 0.55em; color: var(--muted); }
+
+.sum__caption {
+  margin-bottom: 0.6rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.sum [data-summary] { width: 100%; }
+
+@media (max-width: 920px) {
+  .tapestry__grid { grid-template-columns: 1fr; }
+  .sum { position: static; order: -1; }
 }

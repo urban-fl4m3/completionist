@@ -559,72 +559,6 @@ body.has-logo .console__title {
 
 .g-list { gap: 0.25rem; }
 
-.g-goal {
-  padding: 0.6rem 0.8rem;
-  border: 1px solid transparent;
-  transition: background 0.22s, border-color 0.22s;
-}
-
-.g-goal:hover {
-  background: rgba(159, 180, 199, 0.05);
-  border-color: var(--line);
-}
-
-/* Квадратный индикатор-лампа. */
-.g-goal__box {
-  width: 1.1rem;
-  height: 1.1rem;
-  margin-top: 0.22rem;
-  color: var(--void);
-  background: rgba(159, 180, 199, 0.06);
-  border: 1px solid rgba(159, 180, 199, 0.35);
-  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
-}
-
-.g-goal.is-done .g-goal__box {
-  background: var(--orange);
-  border-color: var(--orange);
-  box-shadow: 0 0 14px rgba(255, 122, 61, 0.7);
-}
-
-.g-goal__title {
-  font-size: 1.08rem;
-  font-weight: 500;
-  transition: color 0.25s;
-}
-
-.g-goal.is-done .g-goal__title { color: var(--ice); }
-
-.g-goal__note {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.72rem;
-  color: var(--faint);
-}
-
-.g-goal__flag {
-  font-family: 'IBM Plex Mono', monospace;
-  color: var(--orange);
-  border: 1px solid rgba(255, 122, 61, 0.4);
-}
-
-/* Ссылка на вики у цели — как кнопка вызова бортового архива. */
-.g-goal__link {
-  color: var(--faint);
-  border-left: 1px solid var(--line);
-}
-
-.g-goal:hover .g-goal__link { color: var(--steel); }
-
-.g-goal__link:hover {
-  color: var(--void);
-  background: var(--orange);
-}
-
-/* Импульс телеметрии при закрытии цели (ставится из fx.js). */
-.g-goal.just-done {
-  animation: telemetry 0.6s ease-out 1;
-}
-
 @keyframes telemetry {
   0%   { background: rgba(255, 122, 61, 0.3); border-color: var(--orange); }
   100% { background: transparent; border-color: transparent; }
@@ -670,67 +604,6 @@ body.has-logo .console__title {
   .console__title { font-size: clamp(2.4rem, 15vw, 3.4rem); }
 }
 
-/*  ============================================================
- *  ФУРНИТУРА: строки бортового манифеста
- *  Не карточки, а строки технической ведомости: скобка слева,
- *  точечная линия-выноска, квадратная лампа состояния.
- *  ============================================================ */
-
-.g-goal {
-  position: relative;
-  align-items: center;
-  padding-left: 1.5rem;
-  border: 0;
-  border-bottom: 1px solid rgba(159, 180, 199, 0.1);
-}
-
-/* Угловая скобка слева — маркер строки ведомости. */
-.g-goal::before {
-  content: '';
-  position: absolute;
-  left: 0.35rem;
-  top: 50%;
-  width: 7px;
-  height: 11px;
-  margin-top: -5.5px;
-  border-left: 1px solid rgba(159, 180, 199, 0.45);
-  border-top: 1px solid rgba(159, 180, 199, 0.45);
-  border-bottom: 1px solid rgba(159, 180, 199, 0.45);
-  transition: border-color 0.25s;
-}
-
-.g-goal.is-done::before { border-color: var(--orange); }
-
-.g-goal:hover { background: rgba(159, 180, 199, 0.04); }
-
-/* Точечная выноска между текстом и правым краем. */
-.g-goal__body { position: relative; }
-
-.g-goal__title::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.42em;
-  z-index: -1;
-  border-bottom: 1px dotted rgba(159, 180, 199, 0.22);
-}
-
-.g-goal__title {
-  position: relative;
-  display: inline;
-  padding-right: 0.5rem;
-  background: var(--void);
-}
-
-/* Квадратная лампа вместо галочки. */
-.g-goal__box { border-radius: 0; }
-
-.g-goal.is-done .g-goal__box {
-  box-shadow: 0 0 12px rgba(255, 122, 61, 0.75),
-              inset 0 0 0 2px rgba(10, 12, 16, 0.5);
-}
-
 /* Заголовок группы — строка журнала с индексом. */
 .g-group__head {
   position: relative;
@@ -747,3 +620,98 @@ body.has-logo .console__title {
   height: 2px;
   background: var(--orange);
 }
+/*  ============================================================
+ *  КАРТОЧКИ ЦЕЛЕЙ — карточки бортовой ведомости
+ *  ============================================================ */
+
+.g-group__name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  color: var(--steel);
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.g-group__name::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 10px;
+  height: 2px;
+  background: var(--orange);
+}
+
+.g-group__head { border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
+.g-group__count { font-family: 'IBM Plex Mono', monospace; color: var(--faint); }
+.g-group__count b { color: var(--orange); }
+
+.g-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  transition: border-color 0.25s, background 0.25s, transform 0.25s;
+}
+
+.g-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 122, 61, 0.55);
+  background: rgba(159, 180, 199, 0.06);
+}
+
+.g-card__art img { filter: grayscale(0.45) contrast(1.1) brightness(0.72); }
+.g-card.is-done .g-card__art img { filter: grayscale(0.15) brightness(0.9); }
+
+/* Техническая сетка и перекрестье поверх кадра. */
+.g-card__veil {
+  background-image:
+    linear-gradient(rgba(159, 180, 199, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(159, 180, 199, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, transparent 45%, rgba(10, 12, 16, 0.95));
+  background-size: 28px 28px, 28px 28px, 100% 100%;
+}
+
+.g-card__glyph { font-family: 'IBM Plex Mono', monospace; color: rgba(255, 122, 61, 0.16); }
+
+/* Номер — прямоугольная бирка с индексом. */
+.g-card__no {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--void);
+  background: var(--orange);
+  border-radius: 0;
+  letter-spacing: 0.08em;
+}
+
+.g-card__title { font-weight: 500; font-size: 1.05rem; }
+.g-card.is-done .g-card__title { color: var(--ice); }
+.g-card__note { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; }
+
+.g-card__state {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--faint);
+  border: 1px solid var(--line);
+  border-radius: 0;
+}
+
+.g-card.is-done .g-card__state {
+  color: var(--void);
+  background: var(--orange);
+  border-color: var(--orange);
+}
+
+.g-card__flag {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--orange);
+  border: 1px solid rgba(255, 122, 61, 0.4);
+}
+
+.g-card__link { color: var(--faint); }
+.g-card__link:hover { color: var(--void); background: var(--orange); }
+
+/* Сводка */
+.sum__row + .sum__row { border-color: var(--line); }
+.sum__name { color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; }
+.sum__num { font-family: 'IBM Plex Mono', monospace; color: var(--orange); }
+.sum__dots { color: var(--steel); }
+.sum__dots i { border-radius: 0; }

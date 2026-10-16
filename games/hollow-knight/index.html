@@ -4,12 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hollow Knight — Completionist</title>
-<meta name="description" content="Цели комплишениста по Hollow Knight: 112%, амулеты, Пантеоны и Steel Soul.">
+<meta name="description" content="Разбор прохождения Hollow Knight: путь к 112%, Пантеоны, концовки и цели комплишениста.">
 <meta name="theme-color" content="#050912">
 
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://static.wikia.nocookie.net">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Quicksand:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../../assets/css/base.css">
 <link rel="stylesheet" href="../../assets/css/boot.css">
@@ -39,7 +40,7 @@
   <span>к коллекции</span>
 </a>
 
-<!-- ========================= Шапка ========================= -->
+<!-- ========================= Врата ========================= -->
 <header class="gate">
   <div class="gate__inner">
     <p class="gate__status">ещё не начато</p>
@@ -51,7 +52,6 @@
 
     <nav class="gate__links" data-links aria-label="Ссылки по игре"></nav>
 
-    <!-- Спящее кольцо прогресса -->
     <div class="orb">
       <span class="orb__aura" aria-hidden="true"></span>
       <span class="orb__aura orb__aura--slow" aria-hidden="true"></span>
@@ -62,36 +62,170 @@
         <span class="orb__pct" data-progress-pct>0</span>
         <span class="orb__unit">процентов</span>
         <span class="orb__sub">
-          <b data-progress-done>0</b> из <span data-progress-total>0</span> целей
+          <b data-progress-done>0</b> из <span data-progress-total>0</span> обязательных
         </span>
       </div>
     </div>
 
-    <p class="gate__quote">
-      Стоит в библиотеке третий год. Пора.
-    </p>
-
-    <dl class="runes">
-      <div><dt>цель</dt><dd>112%</dd></div>
-      <div><dt>амулетов</dt><dd>45</dd></div>
-      <div><dt>концовок</dt><dd>5</dd></div>
-      <div><dt>пантеонов</dt><dd>5</dd></div>
-    </dl>
+    <p class="gate__quote">Стоит в библиотеке третий год. Пора.</p>
   </div>
 </header>
 
-<!-- ========================= Цели ========================= -->
 <main class="hall">
-  <div class="hall__head">
-    <h2 class="hall__title">Путь</h2>
 
-  </div>
+  <!-- ========================= Разбор ========================= -->
+  <section class="brief">
+    <h2 class="h">Как закрыть игру</h2>
 
-  <div class="hall__bar" aria-hidden="true">
-    <div class="hall__fill" data-progress-bar></div>
-  </div>
+    <div class="brief__grid">
+      <article class="vial vial--ok">
+        <h3>Каноничная сложность</h3>
+        <p>
+          Выбора нет: <b>в игре одна сложность</b>. Трудность задаётся тем,
+          как глубоко ты лезешь — Godhome и Steel Soul существуют именно
+          как добровольный верхний предел.
+        </p>
+      </article>
 
-  <div class="hall__body" data-goals></div>
+      <article class="vial vial--must">
+        <h3>Что обязательно</h3>
+        <p>
+          <b>112% завершения</b>, все пять концовок и Пантеоны Godhome.
+          Это и есть полное прохождение: карта, амулеты, гвоздь, журнал
+          охотника и оба дополнения.
+        </p>
+      </article>
+
+      <article class="vial vial--grind">
+        <h3>Что душно</h3>
+        <p>
+          Steel Soul с вечной смертью и Пантеон Hallownest без привязок —
+          это испытание на терпение, а не на понимание игры.
+          Помечено как душнина.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ====================== Ключевые боссы ====================== -->
+  <section class="bestiary">
+    <h2 class="h">Кого придётся победить</h2>
+    <p class="h__sub">
+      В игре больше сорока боссов. Здесь те, кто определяет путь
+      к полному завершению.
+    </p>
+
+    <div class="swarm">
+      <article class="bug">
+        <div class="bug__shot">
+          <img src="https://static.wikia.nocookie.net/hollowknight/images/1/16/Hornet_Idle.png/revision/latest/scale-to-width-down/420"
+               alt="Хорнет" loading="lazy" decoding="async">
+        </div>
+        <h3>Хорнет</h3>
+        <p class="bug__where">Зелёная тропа · Королевский перевал</p>
+        <p class="bug__text">
+          Встречается дважды и задаёт планку: первый бой учит дэшу,
+          второй — терпению.
+        </p>
+      </article>
+
+      <article class="bug">
+        <div class="bug__shot">
+          <img src="https://static.wikia.nocookie.net/hollowknight/images/2/2d/B_Mantis_Lords-2.png/revision/latest/scale-to-width-down/420"
+               alt="Владыки богомолов" loading="lazy" decoding="async">
+        </div>
+        <h3>Владыки богомолов</h3>
+        <p class="bug__where">Деревня богомолов</p>
+        <p class="bug__text">
+          Трое против одного. Победа открывает проход и меняет отношение
+          всей деревни.
+        </p>
+      </article>
+
+      <article class="bug">
+        <div class="bug__shot">
+          <img src="https://static.wikia.nocookie.net/hollowknight/images/2/2c/B_Traitor_Lord.png/revision/latest/scale-to-width-down/420"
+               alt="Предатель" loading="lazy" decoding="async">
+        </div>
+        <h3>Лорд-предатель</h3>
+        <p class="bug__where">Королевские сады</p>
+        <p class="bug__text">
+          Один из самых жёстких боссов основной игры. Нужен для линии
+          Белой Леди и концовок.
+        </p>
+      </article>
+
+      <article class="bug bug--dlc">
+        <div class="bug__shot">
+          <img src="https://static.wikia.nocookie.net/hollowknight/images/9/98/Screenshot_HK_Nightmare_King_Grimm_01.png/revision/latest/scale-to-width-down/420"
+               alt="Король кошмаров Гримм" loading="lazy" decoding="async">
+        </div>
+        <h3>Король кошмаров Гримм</h3>
+        <p class="bug__where">Grimm Troupe</p>
+        <p class="bug__text">
+          Вершина дополнения и проверка на чистое исполнение: ошибок
+          он почти не прощает.
+        </p>
+      </article>
+
+      <article class="bug bug--final">
+        <div class="bug__shot">
+          <img src="https://static.wikia.nocookie.net/hollowknight/images/5/52/B_Radiance.png/revision/latest/scale-to-width-down/420"
+               alt="Сияние" loading="lazy" decoding="async">
+        </div>
+        <h3>Сияние</h3>
+        <p class="bug__where">Истинная концовка</p>
+        <p class="bug__text">
+          Настоящий финал игры. Открывается только после линии Мотылька
+          и сломанной печати.
+        </p>
+      </article>
+
+      <article class="bug bug--final">
+        <div class="bug__shot">
+          <img src="https://static.wikia.nocookie.net/hollowknight/images/b/ba/Screenshot_HK_Godhome_01.png/revision/latest/scale-to-width-down/420"
+               alt="Godhome" loading="lazy" decoding="async">
+        </div>
+        <h3>Абсолютное Сияние</h3>
+        <p class="bug__where">Пантеон Hallownest · Godhome</p>
+        <p class="bug__text">
+          Последний бой пятого Пантеона и самый сложный момент игры.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ========================== Цели ========================== -->
+  <section class="path">
+    <div class="path__head">
+      <h2 class="h">Путь</h2>
+      <p class="h__sub">Процент считается только по обязательным целям.</p>
+    </div>
+
+    <div class="path__bar" aria-hidden="true">
+      <div class="path__fill" data-progress-bar></div>
+    </div>
+
+    <div class="path__grid">
+      <div data-goals></div>
+
+      <aside class="sum">
+        <div class="sum__crown" aria-hidden="true">
+          <svg viewBox="0 0 100 120">
+            <path d="M50 6c18 0 30 16 30 38 0 26-14 46-30 70C34 90 20 70 20 44 20 22 32 6 50 6z"/>
+            <ellipse class="eye" cx="37" cy="44" rx="7" ry="11"/>
+            <ellipse class="eye" cx="63" cy="44" rx="7" ry="11"/>
+          </svg>
+        </div>
+        <p class="sum__total">
+          <b data-goals-done>0</b><i>/</i><span data-goals-all>0</span>
+        </p>
+        <p class="sum__caption">целей закрыто</p>
+        <div data-summary></div>
+      </aside>
+    </div>
+  </section>
+
 </main>
 
 <footer class="foot">
